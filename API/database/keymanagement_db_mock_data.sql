@@ -11,11 +11,6 @@ VALUES (111, "first property", 5, "123 First Ave", "Seattle", "Washington", "981
 	(112, "second property", 4, "243 Second Ave", "Burien", "Washington", "98109", "USA"),
 	(113, "third property", 1, "2 Third Ave", "Auburn", "Washington", "98110", "USA"); 
 
-INSERT INTO keybundletype (keybundle_type)
-VALUES("unit"), 
-("storage"), 
-("utility"), 
-("exterior");
 
 INSERT INTO keybundlestatus (keybundle_status)
 VALUES("checked in"), 
@@ -33,9 +28,9 @@ VALUES ("Alberto", "Stein Rios", "info@umanopm.com", 2066863661, 1),
 	("Brian", "Birch", "brian@birch.com", 222222, 3),
 	("Candy", "Cypress", "candy@cypress.com", 123454232, 2);
     
-INSERT INTO keybundle (keybundle_id, keybundle_type_id, keybundle_status_id, property_id, keyholder_id)
-VALUES (101, 1, 1, 111, 1),
-(102, 4, 1, 111, 1),
-(103, 3, 1, 112, 1),
-(104, 4, 1, 113, 1);
+INSERT INTO keybundle (keybundle_id, keybundle_status_id, property_id, keyholder_id)
+VALUES (101, 1, 111, 1),
+(102, 1, 111, 1),
+(103, 1, 112, 1),
+(104, 1, 113, 1);
 

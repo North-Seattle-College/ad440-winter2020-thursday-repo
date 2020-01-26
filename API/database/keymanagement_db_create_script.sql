@@ -41,12 +41,6 @@ CREATE TABLE keyholder(
         ON DELETE NO ACTION
 );
 
-CREATE TABLE keybundletype(
-	keybundle_type_id INT NOT NULL AUTO_INCREMENT,
-    keybundle_type VARCHAR(250) NOT NULL,
-    PRIMARY KEY (keybundle_type_id)
-);
-
 CREATE TABLE keybundlestatus(
 	keybundle_status_id INT NOT NULL AUTO_INCREMENT,
     keybundle_status VARCHAR(250) NOT NULL,
@@ -55,7 +49,6 @@ CREATE TABLE keybundlestatus(
 
 CREATE TABLE keybundle(
    keybundle_id INT NOT NULL,
-   keybundle_type_id INT NOT NULL,
    keybundle_status_id INT NOT NULL,
    property_id INT NOT NULL,
    keyholder_id INT NOT NULL DEFAULT 1,
@@ -70,8 +63,5 @@ CREATE TABLE keybundle(
         ON DELETE NO ACTION,
 	FOREIGN KEY (keybundle_status_id)
         REFERENCES keybundlestatus(keybundle_status_id)
-        ON DELETE NO ACTION,
-	FOREIGN KEY (keybundle_type_id)
-        REFERENCES keybundletype(keybundle_type_id)
         ON DELETE NO ACTION
 );
