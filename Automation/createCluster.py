@@ -12,9 +12,11 @@ securityGroupId = sys.argv[3]
 github_branch = sys.argv[4]
 dbClusterIdentifier = ''
 
+
+
 # regex objects for compliant branch names
 development_exp = re.compile(r"development$")
-feature_exp = re.compile(r"feature-branch[1-6]-[a-zA-Z]{1,}$")
+feature_exp = re.compile(r"feature-sprint[1-6]-[a-zA-Z]{1,}$")
 
 # check if branch name is correct format
 # branch needs to either be development or feature-branchx-username
@@ -38,8 +40,10 @@ if development_exp.match(github_branch) or feature_exp.match(github_branch):
         VpcSecurityGroupIds=[
             securityGroupId,
         ],
+        DBSubnetGroupName='db-subnet-group',
         Engine="aurora",
-        Port=3306
+        Port=3306,
+        SourceRegion='us-west-2'
       )
 
       print(response)
