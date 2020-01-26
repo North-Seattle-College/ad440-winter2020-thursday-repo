@@ -49,7 +49,7 @@ CREATE TABLE keybundletype(
 
 CREATE TABLE keybundlestatus(
 	keybundle_status_id INT NOT NULL AUTO_INCREMENT,
-    keybundle_status VARCHAR(250) NOT NULL DEFAULT "checked in",
+    keybundle_status VARCHAR(250) NOT NULL,
     PRIMARY KEY (keybundle_status_id)
 );
 
