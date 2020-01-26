@@ -29,7 +29,7 @@ if development_exp.match(github_branch) or feature_exp.match(github_branch):
     if len(branch_components) == 1:
         dbClusterIdentifier = "dev-db-cluster"
     else:
-        dbClusterIdentifier = "feature-cluster-" + branch_components[1] + "-" + branch_components[2]
+        dbClusterIdentifier = "feature-" + branch_components[1] + "-cluster-" + branch_components[2]
 
     #print(dbClusterIdentifier)
     try:
