@@ -31,7 +31,7 @@ if development_exp.match(github_branch) or feature_exp.match(github_branch):
     try:
       response = rds.create_db_instance(
         DBClusterIdentifier=dbClusterIdentifier,
-        DBInstanceClass='db.t3.small',
+        DBInstanceClass='db.t2.medium',
         DBInstanceIdentifier=dbInstanceIdentifier,
         Engine="aurora",
       )
