@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.sideMenu {
+  max-width: 240px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
