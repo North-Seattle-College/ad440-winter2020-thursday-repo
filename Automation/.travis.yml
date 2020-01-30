@@ -1,0 +1,9 @@
+deploy:
+  provider: s3
+branches:
+  only:
+  - feature-sprint1-mglanz 
+  bucket: bucketostuffs
+  acl: bucket_owner_full_control
+  region: us-west-2
+  skip_cleanup: true
