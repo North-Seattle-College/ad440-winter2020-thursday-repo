@@ -1,5 +1,6 @@
-exports.handler = async (event) => {
-    console.log(event)
+exports.handler = async (event, context, callback) => {
+	console.log("EVENT : ", JSON.stringify(event));
+	console.log("\nCONTEXT : ", JSON.stringify(context));
     try {
         let response = {
             headers: {},
@@ -7,16 +8,15 @@ exports.handler = async (event) => {
             statusCode: null
         };
         
-        // const propertyId = event.pathParameters.Pid;
-        // const keyId = event.pathParameters.KeyID;
+        // const propertyId = event.pathParams['Pid'];
+        // const keyId = event.pathParams.KeyID;
         
-        if (event) { // .context['http-method'] === 'PUT') {
+        if (event.method === 'PUT') {
             response = {
                 headers: {},
-                body: JSON.stringify("Checked out property key"),
+                body: JSON.stringify("Checked out property key : ", event.pathParams),
                 statusCode: 200
             };
-            // console.log('\nPid: ', propertyId, '\nKeyID: ', keyId)
             // TODO: parse and store data accordingly aka key checked out
         } else { 
             // TODO: add data + key that does not exist when db
@@ -29,5 +29,5 @@ exports.handler = async (event) => {
 
     } catch (e) {
         console.log('\n\nError:\n', e, '\n');
-    }
+    };
 };
