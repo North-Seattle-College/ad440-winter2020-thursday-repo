@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FormAddKey from "./FormAddKey";
 
-export class addkey extends Component {
+export class Addkey extends Component {
   state = {
     step: 1,
     id: "",
@@ -78,4 +78,4 @@ export class addkey extends Component {
   }
 }
 
-export default addkey;
+export default Addkey;
