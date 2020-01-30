@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-//import MuiThemeProvider from "material-ui/styels/MuiThemeProvider";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 
@@ -16,29 +16,31 @@ export class FormAddKey extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
-      <React.Fragment>
-        <TextField
-          hintText="Enter Id"
-          floatingLabelText="ID"
-          onChange={handleChange("id")}
-          defaultValue={values.id}
-        />
-        <br />
-        <TextField
-          hintText="Enter Property"
-          floatingLabelText="Property"
-          onChange={handleChange("property")}
-          defaultValue={values.property}
-        />
-        />
-        <br />
-        <RaisedButton
-          label="Continue"
-          primary={true}
-          styles={styles.button}
-          onClick={this.continue}
-        />
-      </React.Fragment>
+      <MuiThemeProvider >
+        <React.Fragment>
+          <TextField
+            hintText="Enter Id"
+            floatingLabelText="ID"
+            onChange={handleChange("id")}
+            defaultValue={values.id}
+          />
+          <br />
+          <TextField
+            hintText="Enter Property"
+            floatingLabelText="Property"
+            onChange={handleChange("property")}
+            defaultValue={values.property}
+          />
+          />
+          <br />
+          <RaisedButton
+            label="Continue"
+            primary={true}
+            styles={styles.button}
+            onClick={this.continue}
+          />
+        </React.Fragment>
+      </MuiThemeProvider>
     );
   }
 }

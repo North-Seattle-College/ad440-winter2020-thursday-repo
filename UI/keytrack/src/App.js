@@ -73,7 +73,9 @@ class App extends Component {
         <div class="fixed">
           <SideMenu items={items} />
         </div>
-        
+        <div class="fixed">
+          <AddKey />
+        </div>
         <div className="flex-item">
           <div className="container">
             <Input label="Search" onChange={this.onchange} />
