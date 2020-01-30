@@ -1,28 +1,18 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
-<<<<<<< HEAD
-import './App.css';
-import keyholderList from './Components/keyholder.json'
-import Navbar from './Components/navbar';
-import Home from './Components/home';
-import Account from './Components/account';
-import Logout from './Components/logout';
-import SideMenu from "./Components/SideBar";
-=======
 import "./App.css";
 import keyholderList from "./Components/keyholder.json";
 import Navbar from "./Components/navbar";
 import Home from "./Components/home";
 import Account from "./Components/account";
 import Logout from "./Components/logout";
-import SideMenu from "./Components/SideMenu";
->>>>>>> 4810beb05626c45c4380a3e94a4ec17b1d91b222
+import SideMenu from "./Components/SideBar";
 //import SearchBar from "./Components/searchBar";
 
 //for search demo
 import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
-import addkey from "./Components/addkey";
+import AddKey from "./Components/AddKey";
 //for side menu
 const items = [
   { name: "Ckeckout Key", label: "Ckeckout Key" },
@@ -80,35 +70,10 @@ class App extends Component {
           </div>
         </BrowserRouter>
 
-<<<<<<< HEAD
-            <div class="fixed">
-              <SideMenu items={items}/>
-
-            </div>
-            <div className="sideitems">
-              <h>add key</h>
-            </div>
-            <div className="flex-item">
-              <div className="container">
-                <Input
-                  label="Search"
-                  onChange={this.onchange}
-                />
-              </div>
-              <div className="flex-item">
-                {filteredKeyholder.map(keyholder => {
-                  return this.renderKeyholder(keyholder);
-                })}
-              </div>
-            </div>
-            </div>
-          );
-        }
-      }
-=======
         <div class="fixed">
           <SideMenu items={items} />
         </div>
+        
         <div className="flex-item">
           <div className="container">
             <Input label="Search" onChange={this.onchange} />
@@ -123,6 +88,5 @@ class App extends Component {
     );
   }
 }
->>>>>>> 4810beb05626c45c4380a3e94a4ec17b1d91b222
 
 export default App;
