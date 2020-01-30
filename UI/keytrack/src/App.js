@@ -12,7 +12,7 @@ import SideMenu from "./Components/SideBar";
 
 //for search demo
 import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
-import AddKey from "./Components/AddKey";
+import AddKey from "./Components/Addkey";
 //for side menu
 const items = [
   { name: "Ckeckout Key", label: "Ckeckout Key" },
