@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const Home = (props) => {
+const Logout = (props) => {
     return (
         <div className="main-content">
             <div className="container">
@@ -18,4 +18,4 @@ const Home = (props) => {
     );
 }
 
-export default Home;
+export default Logout;

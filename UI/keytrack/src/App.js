@@ -7,7 +7,7 @@ import Navbar from "./Components/navbar";
 import Home from "./Components/home";
 import Account from "./Components/account";
 import Logout from "./Components/logout";
-import SideMenu from "./Components/SideBar";
+import SideBar from "./Components/SideBar";
 //import SearchBar from "./Components/searchBar";
 
 //for search demo
@@ -71,11 +71,9 @@ class App extends Component {
         </BrowserRouter>
 
         <div class="fixed">
-          <SideMenu items={items} />
+          <SideBar />
         </div>
-        <div class="fixed">
-          <AddKey />
-        </div>
+
         <div className="flex-item">
           <div className="container">
             <Input label="Search" onChange={this.onchange} />
