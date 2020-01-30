@@ -7,14 +7,14 @@ exports.handler = async (event, context, callback) => {
             body: null,
             statusCode: null
         };
-        
-        // const propertyId = event.pathParams['Pid'];
-        // const keyId = event.pathParams.KeyID;
-        
+        let propertyId = null;
+        let keyId = null;
         if (event.method === 'PUT') {
+            propertyId = parseInt(event.pathParams.Pid);
+            keyId = parseInt(event.pathParams.KeyID);
             response = {
                 headers: {},
-                body: JSON.stringify("Checked out property key : ", event.pathParams),
+                body: JSON.stringify({"OUT":keyId}),
                 statusCode: 200
             };
             // TODO: parse and store data accordingly aka key checked out
