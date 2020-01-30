@@ -1,5 +1,5 @@
 //skeleton side menu
-//not get installed material-ui.
+//not get installed material-ui
 
 import React from "react";
 import List from "@material-ui/core/List";

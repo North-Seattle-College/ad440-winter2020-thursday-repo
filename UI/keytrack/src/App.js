@@ -7,7 +7,7 @@ import Navbar from './Components/navbar';
 import Home from './Components/home';
 import Account from './Components/account';
 import Logout from './Components/logout';
-import SideMenu from "./Components/SideMenu";
+import SideMenu from "./Components/SideBar";
 //import SearchBar from "./Components/searchBar";
 
 //for search demo
@@ -68,6 +68,10 @@ class App extends Component {
 
             <div class="fixed">
               <SideMenu items={items}/>
+
+            </div>
+            <div className="sideitems">
+              <h>add key</h>
             </div>
             <div className="flex-item">
               <div className="container">
