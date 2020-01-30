@@ -25,6 +25,10 @@ body {
     display: flex;
     justify-content: space-between;
     background-color: #282c34;
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    z-index: -1;
+
 
 }
 .nav-menu {
@@ -45,6 +49,25 @@ body {
 }
 
 /*end top navbar*/
-.App-link {
-  color: #61dafb;
+.fixed{
+    width: 200px;
+}
+.flex-item{
+    flex-grow: 1;
+}
+.container{
+    text-align: center;
+
+}
+
+/*for sidebar*/
+.sidebar {
+  max-width: 240px;
+  height: 100vh;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.img{
+  width: 30%;
+  max-width: 200px;
 }
