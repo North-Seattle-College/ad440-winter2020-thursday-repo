@@ -33,7 +33,7 @@ CREATE TABLE keyholder(
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    phone INT(12) NOT NULL,
+    phone VARCHAR(14) NOT NULL,
     keyholder_type_id int NOT NULL,
     PRIMARY KEY (keyholder_id),
     FOREIGN KEY (keyholder_type_id)
@@ -52,7 +52,7 @@ CREATE TABLE keybundle(
    keybundle_status_id INT NOT NULL,
    property_id INT NOT NULL,
    keyholder_id INT NOT NULL DEFAULT 1,
-   keybundle_chechout_date DATE,
+   keybundle_checkout_date DATE,
    keybundle_due_date DATE,
    PRIMARY KEY (keybundle_id),
    FOREIGN KEY (property_id)

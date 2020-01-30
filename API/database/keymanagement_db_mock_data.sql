@@ -23,10 +23,10 @@ VALUES ("owner"),
 ("cleaner");
 
 INSERT INTO keyholder (first_name, last_name, email, phone, keyholder_type_id)
-VALUES ("Alberto", "Stein Rios", "info@umanopm.com", 2066863661, 1),
-	("Alice", "Allium", "alice@tree.com", 123456, 2),
-	("Brian", "Birch", "brian@birch.com", 222222, 3),
-	("Candy", "Cypress", "candy@cypress.com", 123454232, 2);
+VALUES ("Alberto", "Stein Rios", "info@umanopm.com", "2066863661", 1),
+	("Alice", "Allium", "alice@tree.com", "123456", 2),
+	("Brian", "Birch", "brian@birch.com", "222222", 3),
+	("Candy", "Cypress", "candy@cypress.com", "123454232", 2);
     
 INSERT INTO keybundle (keybundle_id, keybundle_status_id, property_id, keyholder_id)
 VALUES (101, 1, 111, 1),
