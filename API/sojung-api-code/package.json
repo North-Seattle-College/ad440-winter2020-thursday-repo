@@ -1,0 +1,20 @@
+{
+  "name": "ad440-winter2020-thursday-repo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo.git"
+  },
+  "keywords": [],
+  "author": "Sojung Choi <sojc31@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/issues"
+  },
+  "homepage": "https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo#readme"
+}
