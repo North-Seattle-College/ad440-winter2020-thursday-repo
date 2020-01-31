@@ -18,10 +18,7 @@ exports.handler = async (event, context, callback) => {
             // TODO: parse and store data accordingly aka key checked out
         } else { 
             // TODO: add data + key that does not exist when db
-            response = {
-                body: JSON.stringify("Bad server!"),
-                statusCode: 500,
-            };
+            response = "Bad server!";      
         };
         return response;
     } catch (e) {
