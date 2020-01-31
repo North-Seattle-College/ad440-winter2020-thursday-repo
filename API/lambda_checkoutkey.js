@@ -2,23 +2,25 @@ exports.handler = async (event, context, callback) => {
     try {
         let response = {
             propertyId: null,
-            keyId: null,
-            keyholderId: null,
+            keyholderId: 1,
             keybundleId: null,
-            keybundleStatusId: null,
+            keybundleStatusId: 1,
             keybundleCheckoutDate: null,
             keybundleDueDate: null,
         };
         const date = new Date(Date.now());
         if (event.method === 'PUT') {
             response.propertyId = parseInt(event.pathParams.Pid);
-            response.keyId = parseInt(event.pathParams.KeyID);
+            response.keybundleId = parseInt(event.pathParams.KeyID);
             response.keybundleCheckoutDate = date.toString();
             response.keybundleDueDate = date.addDays(14).toString();
             // TODO: parse and store data accordingly aka key checked out
         } else { 
             // TODO: add data + key that does not exist when db
-            response = "Bad server!";      
+            response = {
+                body: JSON.stringify("Bad server!"),
+                statusCode: 500,
+            };
         };
         return response;
     } catch (e) {
