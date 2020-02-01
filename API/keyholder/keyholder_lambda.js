@@ -1,4 +1,4 @@
-exports.handler = async (event) => {
+exports.handler = async (event, context, callback) => {
     var response = {
         statusCode: null,
         body: null
@@ -38,7 +38,7 @@ exports.handler = async (event) => {
             
         }
     }
-    return response;
+    callback(JSON.stringify(response));
 };
 
 function isEmptyJSON(json) {
