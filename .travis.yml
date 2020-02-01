@@ -1,6 +1,4 @@
-language: node_js
-node_js:
-  - node
+language: generic
 deploy:
   provider: s3
   access_key_id: AWS_ACCESS_KEY_ID
