@@ -1,4 +1,9 @@
-language: generic
+language: node_js
+node_js:
+  - node
+script:
+  - npm test
+  - npm run build
 deploy:
   provider: s3
   access_key_id: AWS_ACCESS_KEY_ID
