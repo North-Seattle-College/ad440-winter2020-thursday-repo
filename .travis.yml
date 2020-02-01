@@ -1,3 +1,9 @@
+language: node_js
+node_js:
+- node
+script:
+- npm test
+- npm run build
 deploy:
   skip_cleanup: true
   provider: s3
@@ -12,3 +18,4 @@ deploy:
 branches:
   only:
   - feature-sprint1-michael
+  local_dir: build
