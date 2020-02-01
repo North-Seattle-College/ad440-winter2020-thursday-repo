@@ -1,10 +1,15 @@
 language: generic
 deploy:
   provider: s3
-  bucket: bucketostuffs
+  access_key_id: AWS_ACCESS_KEY_ID
+  secret_access_key: AWS_SECRET_ACCESS_KEY
+  bucket: S3_BUCKET
   acl: public_read
   region: us-west-2
   skip_cleanup: true
+  on:
+    repo: glanzmichael25/ad440-winter2020-thursday-repo
+    branch: feature-sprint1-michael
 branches:
   only:
   - feature-sprint1-michael
