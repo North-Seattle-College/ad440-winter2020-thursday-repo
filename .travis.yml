@@ -5,16 +5,17 @@ script:
   - npm test
   - npm run build
 deploy:
+  skip_cleanup: true
   provider: s3
   access_key_id: AWS_ACCESS_KEY_ID
   secret_access_key: AWS_SECRET_ACCESS_KEY
   bucket: S3_BUCKET
   acl: public_read
   region: us-west-2
-  skip_cleanup: true
   on:
     repo: North-Seattle-College/ad440-winter2020-thursday-repo
     branch: feature-sprint1-michael
+  local_dir: build
 branches:
   only:
   - feature-sprint1-michael
