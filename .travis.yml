@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-  - node
+- node
 script:
-  - npm test
-  - npm run build
+- npm test
+- npm run build
 deploy:
   skip_cleanup: true
   provider: s3
@@ -19,3 +19,6 @@ branches:
   only:
   - feature-sprint1-michael
   local_dir: build
+env:
+  global:
+  - secure: exPzeiTydEKiVH8ue2AJGO5ycyVIvXXwH6pqbC/bzWeOPrQEbEX+GTELCYsTS1Wk42eoOyBqo0dsm4ap29nLa8grShlTSRtkib1f1GhV4bZbk9bPrcfCIqi3nBcUf+AgwYR3iB+4i2sFhq3EZWyntYSKNZbrctJb2NkCRYH2ijKKtZT4QgQc4t6TppUiAMM2D5eNOF5gIbULKVIRdv4HyRdoz9rd5z1+MLVAH9jgH7jgSjKZFETiECoPHJB8kb7/9Xzv2Jwmhyz7MX0h2uf2pCyqwkBo3LOax8O66fK2CJMAlDkdXtTOYTxvDJZVANNCW0i/jiyfzntO/+gP5foIrviVvtlNcubQ5z6Evei/AfEKIk5/nwaRx8jTfUuAAzSrETPovQqZkZxVo67Ib7e3Al+t8HC/gIoJeICDiPKYF8IRcTZeoNRxW0EAz8ehyJJhanXlN7X5LJrsnuVfQl4in8OX74ozdgX8XWA5fWBU403IOxh7oTU8AWLAf44tmuT+4FDVNKh9FOnWiAQwi5qr6VtjXuIa1W4pmGbOu4eLZ0KZoMPUrHUX8ZIwn0ud6d7ozlGsiuYlPIrNLtX6H2rhvkilOt4hDHieHUwSrYtNRTgpjMoOA4i8owMGhmEmp36z+ud4FJ1ub9MYoSQbYsyXwTwHdpFSatmXF+5kxMD+BYQ=
