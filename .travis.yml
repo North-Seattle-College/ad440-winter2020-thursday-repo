@@ -16,4 +16,3 @@ deploy:
 branches:
   only:
   - feature-sprint1-michael
-  local_dir: build
