@@ -11,9 +11,9 @@ deploy:
   secret_access_key: "$AWS_SECRET_ACCESS_KEY"
   bucket: bucketostuffs
   acl: bucket_owner_full_control
+  region: us-west-2
   on:
     repo: North-Seattle-College/ad440-winter2020-thursday-repo
-    branch: feature-sprint1-michael
 branches:
   only:
   - feature-sprint1-michael
