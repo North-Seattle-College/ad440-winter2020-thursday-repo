@@ -9,7 +9,7 @@ deploy:
   provider: s3
   access_key_id: "$AWS_ACCESS_KEY_ID"
   secret_access_key: "$AWS_SECRET_ACCESS_KEY"
-  bucket: www.2edusite.com
+  bucket: travistestuniquebucketname
   acl: bucket_owner_full_control
   region: us-west-2
   on:
