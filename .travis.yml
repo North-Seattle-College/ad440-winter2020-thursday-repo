@@ -9,7 +9,7 @@ deploy:
   provider: s3
   access_key_id: "$AWS_ACCESS_KEY_ID"
   secret_access_key: "$AWS_SECRET_ACCESS_KEY"
-  bucket: travistestuniquebucketname
+  bucket: www.bucketostuffs.com
   acl: public_read
   region: us-west-2
   on:
