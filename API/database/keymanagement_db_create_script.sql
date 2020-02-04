@@ -8,14 +8,14 @@ CREATE TABLE propertytype(
 );
 
 CREATE TABLE property(
-   property_id INT NOT NULL,
+   property_id INT NOT NULL AUTO_INCREMENT,
    property_name VARCHAR(100),
    property_type_id int NOT NULL,
    property_address VARCHAR(250) NOT NULL,
    property_city VARCHAR(100) NOT NULL,
    property_state VARCHAR(50) NOT NULL,
-   property_zip INT NOT NULL,
-   property_country VARCHAR(100) NOT NULL,
+   property_zip CHAR(5) NOT NULL,
+   property_country CHAR(3) NOT NULL,
    PRIMARY KEY (property_id),
    FOREIGN KEY (property_type_id)
         REFERENCES propertytype(property_type_id)
