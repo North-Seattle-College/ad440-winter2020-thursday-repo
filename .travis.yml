@@ -12,6 +12,7 @@ deploy:
   bucket: travistestuniquebucketname
   acl: bucket_owner_full_control
   region: us-west-2
+  local_dir: build
   on:
     repo: North-Seattle-College/ad440-winter2020-thursday-repo
     branch: feature-sprint1-michael
