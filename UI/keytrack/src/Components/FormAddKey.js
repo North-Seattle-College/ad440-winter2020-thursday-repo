@@ -16,7 +16,7 @@ export class FormAddKey extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
-      <MuiThemeProvider >
+      <MuiThemeProvider>
         <React.Fragment>
           <TextField
             hintText="Enter Id"
