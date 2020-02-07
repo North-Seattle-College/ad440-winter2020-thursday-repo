@@ -38,7 +38,6 @@ export class FormAddKey extends Component {
             onChange={handleChange("keytype")}
             defaultValue={values.keytype}
           />
-
           <br />
           <RaisedButton
             label="Continue"

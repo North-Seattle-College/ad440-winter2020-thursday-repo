@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import FormAddKey from "./FormAddKey";
-import FormAddProperty from "./FormAddProperty"
+import FormAddProperty from "./FormAddProperty";
 
 export class AddKey extends Component {
   state = {
