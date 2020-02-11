@@ -49,15 +49,25 @@ body {
 }
 
 /*end top navbar*/
-.fixed{
+/* .fixed{
     width: 200px;
 }
 .flex-item{
     flex-grow: 1;
-}
+} */
 .container{
     text-align: center;
-
+}
+.search{
+    text-align: center;
+    max-width: 500px;
+    margin: auto;
+    border: 3px solid #73AD21;
+}
+.containerTwo{
+    max-width: 500px;
+    margin: auto;
+    border: 3px solid #73AD21;
 }
 
 /*for sidebar*/
@@ -70,6 +80,9 @@ body {
 .img{
   width: 30%;
   max-width: 200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto
 }
 
 /*another sidebar*/
@@ -82,7 +95,7 @@ body {
 }
 
 .bm-item:hover {
-  color: white;
+  color: 89cff0;
 }
 
 .bm-burger-button {

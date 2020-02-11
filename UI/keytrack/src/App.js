@@ -12,7 +12,7 @@ import SideBar from "./Components/SideBar";
 
 //for search demo
 import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
-import AddKey from "./Components/AddKey";
+//import AddKey from "./Components/AddKey";
 //for side menu
 const items = [
   { name: "Ckeckout Key", label: "Ckeckout Key" },
@@ -57,7 +57,7 @@ class App extends Component {
       );
     });
     return (
-      <div class="container">
+      <div class="maincontainer">
         <BrowserRouter>
           <div className="navbar">
             <Navbar />
@@ -68,17 +68,16 @@ class App extends Component {
             />
             <Route path="/Logout/" render={() => <Logout title="Logout" />} />
           </div>
+          <div>
+            <SideBar />
+          </div>
         </BrowserRouter>
 
-        <div class="fixed">
-          <SideBar />
-        </div>
-
-        <div className="flex-item">
-          <div className="container">
+        <div className="containerTwo">
+          <div className="search">
             <Input label="Search" onChange={this.onchange} />
           </div>
-          <div className="flex-item">
+          <div className="search">
             {filteredKeyholder.map(keyholder => {
               return this.renderKeyholder(keyholder);
             })}

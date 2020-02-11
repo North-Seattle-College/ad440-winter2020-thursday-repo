@@ -31,7 +31,7 @@ export class FormAddKey extends Component {
             onChange={handleChange("property")}
             defaultValue={values.property}
           />
-          />
+          
           <br />
           <RaisedButton
             label="Continue"
