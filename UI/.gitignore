@@ -1,6 +1,0 @@
-# Top level Git Ignore file for UI team
-
-# Ignore node modules, developer must install them with npm install
-**node_modules
-
-~
