@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import FormAddKey from "./FormAddKey";
+import FormAddProperty from "./FormAddProperty";
 
 export class AddKey extends Component {
   state = {
@@ -73,7 +74,14 @@ export class AddKey extends Component {
           />
         );
       case 2:
-        return <h1>Add property</h1>;
+        return (
+          <FormAddProperty
+            nextStep={this.nextStep}
+            prevStep={this.prevStep}
+            handleChange={this.handleChange}
+            values={values}
+          />
+        );
     }
   }
 }

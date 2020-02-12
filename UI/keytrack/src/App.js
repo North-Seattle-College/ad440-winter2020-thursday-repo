@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, HashRouter, NavLink } from "react-router-dom";
 
 import "./App.css";
 import keyholderList from "./Components/keyholder.json";
@@ -7,8 +7,11 @@ import Navbar from "./Components/navbar";
 import Home from "./Components/home";
 import Account from "./Components/account";
 import Logout from "./Components/logout";
-import SideBar from "./Components/SideBar";
+//import SideBar from "./Components/SideBar";
 //import SearchBar from "./Components/searchBar";
+import FormAddKey from "./Components/FormAddKey";
+import FormAddProperty from "./Components/FormAddProperty";
+import MyForm from "./Components/MyForm";
 
 //for search demo
 import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
@@ -73,8 +76,30 @@ class App extends Component {
           </div>
         </BrowserRouter>
 
-        <div className="containerTwo">
-          <div className="search">
+        <div id="form" class="container">
+          <HashRouter>
+            <ul className="header">
+              <li>
+                <NavLink to="/">Home</NavLink>
+              </li>
+              <li>
+                <NavLink to="/AddKey">AddKey</NavLink>
+              </li>
+              <li>
+                <NavLink to="/MyForm">MyForm</NavLink>
+              </li>
+            </ul>
+
+            <div className="content">
+              <Route path="/" component={Home} />
+              <Route path="/Addkey" component={AddKey} />
+              <Route path="/MyForm" component={MyForm} />
+            </div>
+          </HashRouter>
+        </div>
+
+        <div className="flex-item">
+          <div className="container">
             <Input label="Search" onChange={this.onchange} />
           </div>
           <div className="search">

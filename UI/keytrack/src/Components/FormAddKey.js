@@ -16,7 +16,7 @@ export class FormAddKey extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
-      <MuiThemeProvider >
+      <MuiThemeProvider>
         <React.Fragment>
           <TextField
             hintText="Enter Id"
@@ -31,7 +31,13 @@ export class FormAddKey extends Component {
             onChange={handleChange("property")}
             defaultValue={values.property}
           />
-          
+          <br />
+          <TextField
+            hintText="Enter Key Type"
+            floatingLabelText="Key Type"
+            onChange={handleChange("keytype")}
+            defaultValue={values.keytype}
+          />
           <br />
           <RaisedButton
             label="Continue"

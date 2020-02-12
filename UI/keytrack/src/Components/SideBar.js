@@ -95,7 +95,7 @@
 //   );
 // }
 
-import React from 'react';
+//import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import Home from "./account";
 import Layout from "./layout";
@@ -152,3 +152,13 @@ export default props => {
 //   )
 // }
 // export default SideMenu
+
+import React from "react";
+//import List from "@material-ui/core/List";
+//import ListItem from "@material-ui/core/ListItem";
+//import ListItemText from "@material-ui/core/ListItemText";
+
+function SideMenu({ items }) {
+  return <div className="sideMenu"></div>;
+}
+export default SideMenu;
