@@ -1,20 +1,9 @@
 import React, { Component } from "react";
 
-import RaisedButton from "material-ui/RaisedButton";
-
 export class FormAddProperty extends Component {
   state = {
-    property_name: ""
+    property_name: "",
   }
-  continue = e => {
-    e.preventDefault();
-    this.props.nextStep();
-  };
-  back = e => {
-    e.preventDefault();
-    this.props.prevStep();
-  };
-
   // What we need to post
   /*
   "property_name": "string",
@@ -32,10 +21,14 @@ export class FormAddProperty extends Component {
     this.setState({ property_name: e.target.value})
   }
 
+  // this is where you will want to trigger your api call.
+  // My recommendation is to trigger a function in another file
+  // that function will make the call.
   handleSubmit = (e) => {
     e.preventDefault()
     console.log(this.state)
   }
+
 
   render() {
     const { values, handleChange } = this.props;
