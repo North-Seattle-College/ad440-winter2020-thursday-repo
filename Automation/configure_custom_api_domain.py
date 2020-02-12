@@ -10,6 +10,8 @@ try:
     response = domain_client.create_domain_name(
         domainName='api.2edusite.com',
         regionalCertificateArn='arn:aws:acm:us-west-2:061431082068:certificate/a76789ce-ecbc-4984-b4e3-dd390480beac',
+        
+        # Shows the endpoint type of the domain name (Regional,Private, or Edge)
         endpointConfiguration={
             'types': [
                 'REGIONAL',
