@@ -15,7 +15,7 @@ import MyForm from "./Components/MyForm";
 
 //for search demo
 import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
-//import AddKey from "./Components/AddKey";
+import AddKey from "./Components/addkey";
 //for side menu
 const items = [
   { name: "Ckeckout Key", label: "Ckeckout Key" },
@@ -70,9 +70,6 @@ class App extends Component {
               render={() => <Account title="Account" />}
             />
             <Route path="/Logout/" render={() => <Logout title="Logout" />} />
-          </div>
-          <div>
-            <SideBar />
           </div>
         </BrowserRouter>
 

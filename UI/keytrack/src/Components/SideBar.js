@@ -96,41 +96,41 @@
 // }
 
 //import React from 'react';
-import { slide as Menu } from 'react-burger-menu';
-import Home from "./account";
-import Layout from "./layout";
-import AddKey from "./AddKey";
-import Logout from "./logout";
-import { NavLink } from 'react-router-dom';
-import { BrowserRouter, Route, Link } from "react-router-dom";
-
-export default props => {
-  return (
-    <Menu>
-      <a className="menu-item" href="/">
-        Home
-      </a>
-      <a className="menu-item" href="/home">
-        Checkout Key
-      </a>
-      <a className="menu-item" href="/home" >
-      <Link to="/layout">AddKey</Link>>
-      </a>
-
-      <a className="menu-item" href="/layout">
-        Add Property
-      </a>
-      <a className="menu-item" href="/home">
-      <BrowserRouter>
-        <div className="navbar">
-          <Layout />
-          <Route path="/AddKey" render={() => <AddKey title="AddKey" />} />
-        </div>
-      </BrowserRouter>      </a>
-
-    </Menu>
-  );
-};
+// import { slide as Menu } from 'react-burger-menu';
+// import Home from "./account";
+// import Layout from "./layout";
+// import AddKey from "./AddKey";
+// import Logout from "./logout";
+// import { NavLink } from 'react-router-dom';
+// import { BrowserRouter, Route, Link } from "react-router-dom";
+//
+// export default props => {
+//   return (
+//     <Menu>
+//       <a className="menu-item" href="/">
+//         Home
+//       </a>
+//       <a className="menu-item" href="/home">
+//         Checkout Key
+//       </a>
+//       <a className="menu-item" href="/home" >
+//       <Link to="/layout">AddKey</Link>>
+//       </a>
+//
+//       <a className="menu-item" href="/layout">
+//         Add Property
+//       </a>
+//       <a className="menu-item" href="/home">
+//       <BrowserRouter>
+//         <div className="navbar">
+//           <Layout />
+//           <Route path="/AddKey" render={() => <AddKey title="AddKey" />} />
+//         </div>
+//       </BrowserRouter>      </a>
+//
+//     </Menu>
+//   );
+// };
 
 //
 // import React from "react";
