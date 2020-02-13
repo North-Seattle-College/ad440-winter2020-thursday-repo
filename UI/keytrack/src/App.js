@@ -9,13 +9,11 @@ import Account from "./Components/account";
 import Logout from "./Components/logout";
 //import SideBar from "./Components/SideBar";
 //import SearchBar from "./Components/searchBar";
-import FormAddKey from "./Components/FormAddKey";
 import FormAddProperty from "./Components/FormAddProperty";
-import MyForm from "./Components/MyForm";
+import AddKey from "./Components/AddKey";
 
 //for search demo
 import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
-import AddKey from "./Components/addkey.js";
 //for side menu
 const items = [
   { name: "Ckeckout Key", label: "Ckeckout Key" },
@@ -83,9 +81,6 @@ class App extends Component {
                 <NavLink to="/AddKey">AddKey</NavLink>
               </li>
               <li>
-                <NavLink to="/MyForm">MyForm</NavLink>
-              </li>
-              <li>
                 <NavLink to="/AddProperty">AddProperty</NavLink>
               </li>
             </ul>
@@ -93,7 +88,6 @@ class App extends Component {
             <div className="content">
               <Route path="/" component={Home} />
               <Route path="/Addkey" component={AddKey} />
-              <Route path="/MyForm" component={MyForm} />
               <Route path="/AddProperty" component={FormAddProperty} />
             </div>
           </HashRouter>

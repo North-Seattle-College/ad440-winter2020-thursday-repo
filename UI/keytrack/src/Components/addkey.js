@@ -1,88 +1,43 @@
 import React, { Component } from "react";
-import FormAddKey from "./FormAddKey";
-import FormAddProperty from "./FormAddProperty";
 
 export class AddKey extends Component {
-  state = {
-    step: 1,
-    id: "",
-    property: "",
-    keytype: "",
-    name: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-    type: ""
-  };
+  constructor() {
+    super();
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  // Proceed to next step
-  nextStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step + 1
+  handleSubmit(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+
+    fetch("virtserver.swaggerhub.com/UnTamedLaw/keymanagement/4.0", {
+      method: "POST",
+      body: data
     });
-  };
-
-  // Go back to previous step
-  prevStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step - 1
-    });
-  };
-
-  // Handle changed fields
-  handleChange = input => e => {
-    this.setState({ [input]: e.target.value });
-  };
+  }
 
   render() {
-    const { step } = this.state;
-    const {
-      id,
-      property,
-      keytype,
-      name,
-      address,
-      city,
-      state,
-      zip,
-      country,
-      type
-    } = this.state;
-    const values = {
-      id,
-      property,
-      keytype,
-      name,
-      address,
-      city,
-      state,
-      zip,
-      country,
-      type
-    };
-    switch (step) {
-      case 1:
-        return (
-          <FormAddKey
-            nextStep={this.nextStep}
-            handleChange={this.handleChange}
-            values={values}
-          />
-        );
-      case 2:
-        return (
-          <FormAddProperty
-            nextStep={this.nextStep}
-            prevStep={this.prevStep}
-            handleChange={this.handleChange}
-            values={values}
-          />
-        );
-    }
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label htmlFor="id">Enter ID</label>
+        <input id="id" name="id" type="text" />
+        <br />
+        <br />
+        <label htmlFor="property">Select the Property Type</label>
+        <select id="list" value={this.props.mycar}>
+          <option value="apartemt">apartemt</option>
+          <option value="townhouse">townhouse</option>
+          <option value="commerical">commerical</option>
+        </select>
+        <br />
+        <br />
+        <label htmlFor="keytype">Enter keytype</label>
+        <input id="keytype" name="keytype" type="text" />
+        <br />
+        <br />
+        <button>Submit !</button>
+      </form>
+    );
   }
 }
 
