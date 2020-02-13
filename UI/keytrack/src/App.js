@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import { BrowserRouter, Route, HashRouter, NavLink } from "react-router-dom";
 
 import "./App.css";
