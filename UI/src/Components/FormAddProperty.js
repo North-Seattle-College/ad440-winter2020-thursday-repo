@@ -1,95 +1,50 @@
 import React, { Component } from "react";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
 
 export class FormAddProperty extends Component {
-  continue = e => {
-    e.preventDefault();
-    this.props.nextStep();
-  };
-  back = e => {
-    e.preventDefault();
-    this.props.prevStep();
-  };
+  state = {
+    property_name: "",
+  }
+  // What we need to post
+  /*
+  "property_name": "string",
+  "property_type_id": 0,
+  "property_address": "string",
+  "property_city": "string",
+  "property_state": "string",
+  "property_zip": "string",
+  "property_country": "string"
+  */
+
+  // this will update the state of property name as the user adds input
+  handlePropertyNameChange = (e) => {
+    console.log(e.target.value)
+    this.setState({ property_name: e.target.value})
+  }
+
+  // this is where you will want to trigger your api call.
+  // My recommendation is to trigger a function in another file
+  // that function will make the call.
+  handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(this.state)
+  }
+
 
   render() {
     const { values, handleChange } = this.props;
     return (
-      <MuiThemeProvider >
-        <React.Fragment>
-          <TextField
-            hintText="ID"
-            floatingLabelText="ID"
-            onChange={handleChange("id")}
-            defaultValue={values.id}
-          />
-          <br />
-          <TextField
-            hintText="Name"
-            floatingLabelText="Name"
-            onChange={handleChange("name")}
-            defaultValue={values.name}
-          />
-          <br />
-          <TextField
-            hintText="Address"
-            floatingLabelText="Address"
-            onChange={handleChange("address")}
-            defaultValue={values.address}
-          />
-          <br />
-          <TextField
-            hintText="City"
-            floatingLabelText="City"
-            onChange={handleChange("city")}
-            defaultValue={values.city}
-          />
-          <br />
-          <TextField
-            hintText="State"
-            floatingLabelText="State"
-            onChange={handleChange("state")}
-            defaultValue={values.state}
-          />
-          <br />
-          <TextField
-            hintText="Zip"
-            floatingLabelText="Zip"
-            onChange={handleChange("zip")}
-            defaultValue={values.zip}
-          />
-          <br />
-          <br />
-          <TextField
-            hintText="Country"
-            floatingLabelText="Country"
-            onChange={handleChange("country")}
-            defaultValue={values.country}
-          />
-          <br />
-          <TextField
-            hintText="Type"
-            floatingLabelText="Type"
-            onChange={handleChange("type")}
-            defaultValue={values.type}
-          />
+      <form>
+        <label htmlFor="property_name">Enter Property Name</label>
+        <input id="property_name" name="property_name" type="text" onChange={this.handlePropertyNameChange} />
 
-          <RaisedButton
-            label="Submit"
-          //  primary={true}
-          //  styles={styles.button}
-          //  onClick={this.continue}
-          />
-          <RaisedButton
-            label="Back"
-            primary={false}
-            styles={styles.button}
-            onClick={this.back}
-          />
+        <label htmlFor="property_type_id">Enter Property Type</label>
+        <input id="property_type_id" name="property_type_id" type="property_type_id" />
 
-        </React.Fragment>
-      </MuiThemeProvider>
+        <label htmlFor="property_address">Enter Property Address</label>
+        <input id="property_address" name="property_address" type="property_address" />
+
+        <button onClick={this.handleSubmit}>Send data!</button>
+      </form>
     );
   }
 }
