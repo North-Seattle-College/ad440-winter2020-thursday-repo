@@ -1,0 +1,30 @@
+[
+  {
+    "first_name": "Alberto",
+    "last_name": "Stein Rios",
+    "email": "info@umanopm.com",
+    "phone": "2066863661",
+    "keyholder_type_id":"1"
+  },
+  {
+    "first_name": "Alice",
+    "last_name": "Allium",
+    "email": "alice@tree.com",
+    "phone": "123456",
+    "keyholder_type_id":"2"
+  },
+  {
+    "first_name": "Brian",
+    "last_name": "Birch",
+    "email": "brian@birch.com",
+    "phone": "222222",
+    "keyholder_type_id":"3"
+  },
+  {
+    "first_name": "Candy",
+    "last_name": "Cypress",
+    "email": "candy@cypress.com",
+    "phone": "123454232",
+    "keyholder_type_id":"4"
+  }
+]
