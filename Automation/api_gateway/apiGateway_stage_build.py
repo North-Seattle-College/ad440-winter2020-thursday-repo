@@ -71,6 +71,7 @@ stg_vars_updated = {}
 for pair in stg_vars_get:
   methodName = ''
   partyName = ''
+  print(pair)
   pair = pair.split('-')
   if pair[0].isnumeric():
     methodNum = int(pair[0]) - 1
@@ -85,15 +86,17 @@ for pair in stg_vars_get:
   else:
     logger.inputError('Cannot identify the method number/name')
   
+  partyName = pair[1]
   if pair[1] not in api_team_roaster:
-    partyName = pair[1]
     logger.warn('The responsible party is not an API team member!' + partyName)
     validation = input('Type the responsible party name again to verify: ')
     if partyName != validation:
       logger.inputError('Validation of responsible party failed!')
+      partyName = ''
       os.abort()
   
   lambdaName = stg_name + '-' + partyName + '-' + methodName
+  print (lambdaName)
 
   stg_vars_updated[methodName] = lambdaName
 

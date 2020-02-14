@@ -17,3 +17,41 @@
 2020-02-13 07:11:58 PM - DEBUG - Generated_TAGs name:: feature
 2020-02-13 07:11:59 PM - TRACE - INPUT_Auto Deployment:: 
 2020-02-13 07:11:59 PM - DEBUG - Generated_Auto Deployment:: False
+2020-02-13 07:33:14 PM - TRACE - INPUT_Stage Name:: feature-sprint3
+2020-02-13 07:33:57 PM - TRACE - INPUT_API ID:: ez9pmaodek
+2020-02-13 07:33:57 PM - INFO - Stage Creation at -ez9pmaodekfor new stage ___feature-sprint3
+2020-02-13 07:34:19 PM - TRACE - INPUT_Method Selection:: 1-anu,5-yamato
+2020-02-13 07:34:19 PM - DEBUG - Generated_Stage Variables:: keybundle_GET
+2020-02-13 07:34:19 PM - DEBUG - Generated_Lambda Function Name:: feature-sprint3--keybundle_GET
+2020-02-13 07:34:19 PM - DEBUG - Generated_Stage Variables:: keyholder_GET
+2020-02-13 07:34:19 PM - DEBUG - Generated_Lambda Function Name:: feature-sprint3--keyholder_GET
+2020-02-13 07:34:44 PM - TRACE - INPUT_Description:: 
+2020-02-13 07:34:44 PM - DEBUG - Generated_Stage Description:: feature-sprint3for Key Management app api development.
+2020-02-13 07:34:45 PM - TRACE - INPUT_Additional TAGs:: 
+2020-02-13 07:34:45 PM - DEBUG - Generated_TAGs name:: Project
+2020-02-13 07:34:45 PM - DEBUG - Generated_TAGs name:: KeyManagement
+2020-02-13 07:34:45 PM - DEBUG - Generated_TAGs name:: Class
+2020-02-13 07:34:45 PM - DEBUG - Generated_TAGs name:: AD440 Th
+2020-02-13 07:34:45 PM - DEBUG - Generated_TAGs name:: Purpose
+2020-02-13 07:34:45 PM - DEBUG - Generated_TAGs name:: feature
+2020-02-13 07:34:46 PM - TRACE - INPUT_Auto Deployment:: 
+2020-02-13 07:34:46 PM - DEBUG - Generated_Auto Deployment:: False
+2020-02-13 08:12:12 PM - TRACE - INPUT_Stage Name:: feature-sprint3
+2020-02-13 08:12:39 PM - TRACE - INPUT_API ID:: ez9pmaodek
+2020-02-13 08:12:39 PM - INFO - Stage Creation at -ez9pmaodekfor new stage ___feature-sprint3
+2020-02-13 08:12:53 PM - TRACE - INPUT_Method Selection:: 1-yamato,2-anu
+2020-02-13 08:12:53 PM - DEBUG - Generated_Stage Variables:: keybundle_GET
+2020-02-13 08:12:53 PM - DEBUG - Generated_Lambda Function Name:: feature-sprint3-yamato-keybundle_GET
+2020-02-13 08:12:53 PM - DEBUG - Generated_Stage Variables:: keybundle_id_DELETE
+2020-02-13 08:12:53 PM - DEBUG - Generated_Lambda Function Name:: feature-sprint3-anu-keybundle_id_DELETE
+2020-02-13 08:16:01 PM - TRACE - INPUT_Description:: 
+2020-02-13 08:16:01 PM - DEBUG - Generated_Stage Description:: feature-sprint3for Key Management app api development.
+2020-02-13 08:16:01 PM - TRACE - INPUT_Additional TAGs:: 
+2020-02-13 08:16:01 PM - DEBUG - Generated_TAGs name:: Project
+2020-02-13 08:16:01 PM - DEBUG - Generated_TAGs name:: KeyManagement
+2020-02-13 08:16:01 PM - DEBUG - Generated_TAGs name:: Class
+2020-02-13 08:16:01 PM - DEBUG - Generated_TAGs name:: AD440 Th
+2020-02-13 08:16:01 PM - DEBUG - Generated_TAGs name:: Purpose
+2020-02-13 08:16:01 PM - DEBUG - Generated_TAGs name:: feature
+2020-02-13 08:16:02 PM - TRACE - INPUT_Auto Deployment:: 
+2020-02-13 08:16:02 PM - DEBUG - Generated_Auto Deployment:: False
