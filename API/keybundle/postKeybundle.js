@@ -12,25 +12,22 @@ const mysql = require('serverless-mysql')({
 
 exports.handler = async (event, context) => {
     
-    var response = {
-        body: null
-    };
   
     //get post data from the event body
     var queryPost = [
-        event.body.keybundle_id,
-        event.body.keybund_status, 
-        event.body.property_id,
-        event.body.keyholder_id
+        event.body.keybundle_id.toString(),
+        event.body.keybund_status.toString(), 
+        event.body.property_id.toString(),
+        event.body.keyholder_id.toString()
     ];
     
     // sql query to insert keybundle object into database
     var sql_post_keybundle = 'INSERT INTO keybundle (keybundle_id, keybundle_status_id, property_id, keyholder_id) VALUES (queryPost)';
     
-    let results = await mysql.query(sql_post_keybundle)
+    let response = await mysql.query(sql_post_keybundle)
 
     await mysql.end();
   
-    //return results
-    return results;
+    //return response
+    return response;
 }
