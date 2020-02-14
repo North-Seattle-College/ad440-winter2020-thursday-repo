@@ -1,113 +1,46 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, HashRouter, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+//logo for umano
+import Logo from './Components/logo.png';
+
 
 import "./App.css";
+//to be removed and added to its own component
 import keyholderList from "./Components/keyholder.json";
-import Navbar from "./Components/navbar";
+
+//for nav and side menu
+import  {NavBar} from "./Components/NavBar";
+import SideBar from  "./Components/SideBar";
+
+
+//other compoments
 import Home from "./Components/home";
 import Account from "./Components/account";
 import Logout from "./Components/logout";
-//import SideBar from "./Components/SideBar";
-//import SearchBar from "./Components/searchBar";
+
 import FormAddKey from "./Components/FormAddKey";
-import FormAddProperty from "./Components/FormAddProperty";
+import ForsmAddProperty from "./Components/FormAddProperty";
 import MyForm from "./Components/MyForm";
 
-//for search demo
-import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
-import AddKey from "./Components/addkey";
-//for side menu
-const items = [
-  { name: "Ckeckout Key", label: "Ckeckout Key" },
-  { name: "Add Property", label: "Add Property" },
-  { name: "Add Key ", label: "Add Key" }
-];
 
-class App extends Component {
-  //for search state
-  state = {
-    search: ""
-  };
+function App() {
+  return (
+    <React.Fragment>
+      <Router>
+        <NavBar />
 
-  //searchbar render
-  renderKeyholder = keyholder => {
-    const { search } = this.state;
-    var name = keyholder.first_name.toLowerCase();
+        <SideBar />
 
-    return (
-      <div className="searchKeyholder">
-        <Card>
-          <CardBody>
-            <CardTitle title={keyholder.first_name}>
-              {keyholder.first_name.substring(0, 15)}
-              {keyholder.first_name.length > 15 && "..."}
-            </CardTitle>
-          </CardBody>
-        </Card>
-      </div>
-    );
-  };
-  //to operate state
-  onchange = e => {
-    this.setState({ search: e.target.value });
-  };
-
-  render() {
-    const { search } = this.state;
-    const filteredKeyholder = keyholderList.filter(keyholder => {
-      return (
-        keyholder.first_name.toLowerCase().indexOf(search.toLowerCase()) !== -1
-      );
-    });
-    return (
-      <div class="maincontainer">
-        <BrowserRouter>
-          <div className="navbar">
-            <Navbar />
-            <Route exact path="/" render={() => <Home title="Key Manager" />} />
-            <Route
-              path="/Account/"
-              render={() => <Account title="Account" />}
-            />
-            <Route path="/Logout/" render={() => <Logout title="Logout" />} />
-          </div>
-        </BrowserRouter>
-
-        <div id="form" class="container">
-          <HashRouter>
-            <ul className="header">
-              <li>
-                <NavLink to="/">Home</NavLink>
-              </li>
-              <li>
-                <NavLink to="/AddKey">AddKey</NavLink>
-              </li>
-              <li>
-                <NavLink to="/MyForm">MyForm</NavLink>
-              </li>
-            </ul>
-
-            <div className="content">
-              <Route path="/" component={Home} />
-              <Route path="/Addkey" component={AddKey} />
-              <Route path="/MyForm" component={MyForm} />
-            </div>
-          </HashRouter>
-        </div>
-
-        <div className="flex-item">
-          <div className="container">
-            <Input label="Search" onChange={this.onchange} />
-          </div>
-          <div className="search">
-            {filteredKeyholder.map(keyholder => {
-              return this.renderKeyholder(keyholder);
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  }
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="./Components/FormAddKey" component={FormAddKey} />
+          <Route path="./Components/FormAddProperty" component={FormAddKey} />
+        </Switch>
+      </Router>
+    </React.Fragment>
+  );
 }
 
 export default App;
