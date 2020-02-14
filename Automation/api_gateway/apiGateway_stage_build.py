@@ -1,5 +1,7 @@
 import os
 import boto3
+# from datetime import datetime
+# import ast
 import apiGatewayLogger as logger
 
 """ THIS CODE IS USED TO GENERATE feature-sprint STAGE FOR KEY MANAGEMENT API GATEWAY"""
@@ -71,7 +73,6 @@ stg_vars_updated = {}
 for pair in stg_vars_get:
   methodName = ''
   partyName = ''
-  print(pair)
   pair = pair.split('-')
   if pair[0].isnumeric():
     methodNum = int(pair[0]) - 1
@@ -95,8 +96,7 @@ for pair in stg_vars_get:
       partyName = ''
       os.abort()
   
-  lambdaName = stg_name + '-' + partyName + '-' + methodName
-  print (lambdaName)
+  lambdaName = stg_name + '-' + partyName + '-' + methodName.lower().replace('_','-')
 
   stg_vars_updated[methodName] = lambdaName
 
@@ -105,7 +105,6 @@ for sv, ln in stg_vars_updated.items():
   logger.generatedDebug('Lambda Function Name', ln)
   # all none updated stg_vars connect to dev functions
   stg_vars[sv] = ln 
-
 
 #TODO generate stage description
 description = input('Enter description for the new stage: ')
@@ -142,16 +141,16 @@ for n, v in tags.items():
   logger.generatedDebug('TAGs name', n)
   logger.generatedDebug('TAGs name', v)
 
-#TODO is auto depoly?
-autoDeploy_get = input ('Do you want to auto deploy the stage(y/n): ')
-logger.inputTrace('Auto Deployment', autoDeploy_get)
+# #TODO is auto depoly? #This is not a option for aws apigateway
+# autoDeploy_get = input ('Do you want to auto deploy the stage(y/n): ')
+# logger.inputTrace('Auto Deployment', autoDeploy_get)
 
-if autoDeploy_get.lower() == 'y' or autoDeploy_get.lower() == 'yes':
-  isAutoDeploy = True
-  logger.generatedDebug('Auto Deployment', 'True')
-else:
-  isAutoDeploy = False
-  logger.generatedDebug('Auto Deployment', 'False')
+# if autoDeploy_get.lower() == 'y' or autoDeploy_get.lower() == 'yes':
+#   isAutoDeploy = True
+#   logger.generatedDebug('Auto Deployment', 'True')
+# else:
+#   isAutoDeploy = False
+#   logger.generatedDebug('Auto Deployment', 'False')
 
 #TODO deploy api gateway stage
 # new boto3 client for apigateway
@@ -173,5 +172,25 @@ response = client.create_stage(
 
 #TODO generate api.2edusite.com url for the stage
 print ('https://api.2edusite.com/' + stg_name)
+
 print(response)
+
+### not easy stringify response dict 
+# for n, v in response.items():
+#   if type(v) == dict:
+#     for name, value in v.items():
+#       if type(value) == int or type(value) == float:
+#         v[name] = str(value)
+#       elif type(value) == dict:
+#         for nam, val in value.items():
+#           if type(val) == int or type(val) == float:
+#             value[nam] = str(val)
+#   elif type(v) == datetime:
+#     response[n] = v.strftime('%Y-%m-%d, %H:%M:%S')
+
+# print(response)
+
+# resp = ast.literal_eval(response) #this stringify a dictionary
+# print(type(resp))
+# print(resp)
 # #LOG generated stage
