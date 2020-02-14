@@ -1,33 +1,42 @@
 //npm package for connecting to serverless database
-const mysql = require('serverless-mysql')({
-    //credentials
-    config: {
-        host     : process.env.RDS_HOSTNAME,
-        port     : process.env.RDS_PORT,
-        database : process.env.RDS_DATABASE,
-        user     : process.env.RDS_USERNAME,
-        password : process.env.RDS_PASSWORD
-    }
-});
+const mysql = require('mysql');
 
-exports.handler = async (event, context) => {
+    //credentials and connect to database
+    function mysql_connection(){
+        var params={
+        host     : process.env.RDS_HOSTNAME,
+        user     : process.env.RDS_USERNAME,
+        password : process.env.RDS_PASSWORD,
+        port     : process.env.RDS_PORT,
+        database : process.env.RDS_DATABASE
+    };
+    return mysql.createConnection(params);
+}
+
+exports.handler = async (event, context, callback) => {
     
+    //connect to the database
+    var connection = mysql_connection();
   
     //get post data from the event body
     var queryPost = [
-        event.body.keybundle_id.toString(),
-        event.body.keybund_status.toString(), 
-        event.body.property_id.toString(),
-        event.body.keyholder_id.toString()
+        event.body.keybundle_id,
+        event.body.keybundle_status, 
+        event.body.property_id,
+        event.body.keyholder_id.t
     ];
     
     // sql query to insert keybundle object into database
-    var sql_post_keybundle = 'INSERT INTO keybundle (keybundle_id, keybundle_status_id, property_id, keyholder_id) VALUES (queryPost)';
+    var sql_post_keybundle = 'INSERT INTO keybundle (keybundle_id, keybundle_status_id, property_id, keyholder_id) VALUES (?, ?, ?, ?)';
     
-    let response = await mysql.query(sql_post_keybundle)
+    connection.query(connection, queryPost, (err, result)=>{
+        if (err){
+            throw err;
+        } else {
+            console.log('Keybundle added' + result);
+            connection.end();
+            callback(null, 'Property created: ' + queryPost);
+        }
+    });
 
-    await mysql.end();
-  
-    //return response
-    return response;
-}
+};
