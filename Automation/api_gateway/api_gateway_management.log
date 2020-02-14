@@ -1,0 +1,19 @@
+2020-02-13 04:18:53 PM - TRACE - INPUT_Stage Name:: feature-sprint3
+2020-02-13 04:18:57 PM - TRACE - INPUT_API ID:: ez9pmaodek
+2020-02-13 04:18:57 PM - INFO - Stage Creation at -ez9pmaodekfor new stage ___feature-sprint3
+2020-02-13 04:19:07 PM - TRACE - INPUT_Method Selection:: 1-anu,2-yamato
+2020-02-13 04:19:07 PM - DEBUG - Generated_Stage Variables:: keybundle_GET
+2020-02-13 04:19:07 PM - DEBUG - Generated_Lambda Function Name:: feature-sprint3--keybundle_GET
+2020-02-13 04:19:07 PM - DEBUG - Generated_Stage Variables:: keybundle_id_DELETE
+2020-02-13 04:19:07 PM - DEBUG - Generated_Lambda Function Name:: feature-sprint3--keybundle_id_DELETE
+2020-02-13 04:19:10 PM - TRACE - INPUT_Description:: 
+2020-02-13 04:19:10 PM - DEBUG - Generated_Stage Description:: feature-sprint3for Key Management app api development.
+2020-02-13 04:19:12 PM - TRACE - INPUT_Additional TAGs:: 
+2020-02-13 04:19:12 PM - DEBUG - Generated_TAGs name:: Project
+2020-02-13 04:19:12 PM - DEBUG - Generated_TAGs name:: KeyManagement
+2020-02-13 04:19:12 PM - DEBUG - Generated_TAGs name:: Class
+2020-02-13 04:19:12 PM - DEBUG - Generated_TAGs name:: AD440 Th
+2020-02-13 04:19:12 PM - DEBUG - Generated_TAGs name:: Purpose
+2020-02-13 04:19:12 PM - DEBUG - Generated_TAGs name:: feature
+2020-02-13 04:19:13 PM - TRACE - INPUT_Auto Deployment:: 
+2020-02-13 04:19:13 PM - DEBUG - Generated_Auto Deployment:: False
