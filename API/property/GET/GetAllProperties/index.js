@@ -15,7 +15,7 @@ const mysql = require('serverless-mysql')({
 exports.handler = async (event, context) => {
 
   //MYSQL query
-  let results = await mysql.query('SELECT * FROM property')
+  let results = await mysql.query('SELECT * FROM property JOIN propertytype ON property.property_type_id=propertytype.property_type_id;')
 
   await mysql.end();
 
