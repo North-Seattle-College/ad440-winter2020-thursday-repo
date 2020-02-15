@@ -20,10 +20,11 @@ logger.setLevel(logging.TRACE)
 
 
 """ All log to api_gateway_management.log """
-default_handler = logging.FileHandler('api_gateway_management.log')
-default_handler.setLevel(logging.TRACE)
-default_handler.setFormatter(formatter)
-logger.addHandler(default_handler)
+def setLogger(path):
+  default_handler = logging.FileHandler(path)
+  default_handler.setLevel(logging.TRACE)
+  default_handler.setFormatter(formatter)
+  logger.addHandler(default_handler)
 
 """ Display warning and critical errors on console """
 stream_handler = logging.StreamHandler()
@@ -36,6 +37,9 @@ def inputError(m):
 
 def inputTrace(m, i):
   logger.trace('INPUT_' + m + ':: ' + i)
+
+def runTrace(m, i):
+  logger.trace('RUN_' + m + '=> ' + i)
 
 def stageInfo(api_id, stg_name):
   logger.info('Stage Creation at -' + api_id + 'for new stage ___' + stg_name )
