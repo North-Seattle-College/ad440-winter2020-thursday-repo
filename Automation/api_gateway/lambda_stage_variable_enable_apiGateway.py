@@ -62,23 +62,23 @@ def main():
   client_lambda = boto3.client('lambda')
   
   #TODO lambda add permission
-  # dev_prod_funcs = GetDevProdStageFunc(stg_var_name_lst)
+  dev_prod_funcs = GetDevProdStageFunc(stg_var_name_lst)
   
-  # for method_set in resources_dict.values():
-  #   print(method_set)
-  #   for method in method_set:
-  #     logger.runTrace('for method', json.dumps(method))
-  #     function_name = method[0].values()[0]
-  #     logger.runTrace('with stage variable', function_name)
-  #     statement_id = method[1]
-  #     source_arn = method[2]
+  for method_set in resources_dict.values():
+    print(method_set)
+    for method in method_set:
+      logger.runTrace('for method', json.dumps(method))
+      function_name = str(method[0].values())
+      # logger.runTrace('with stage variable', json.dumps(function_name))
+      statement_id = method[1]
+      source_arn = method[2]
       
-  #     function_name_part = function_name.split('${stageVariables.')
-  #     if function_name_part[1] in dev_prod_funcs.keys():
-  #       for val in dev_prod_funcs[function_name_part[1]].values():
-  #         function_name = function_name_part[0] + val
-  #         logger.runTrace('invoke function', function_name)
-  #         LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
+      function_name_part = function_name.split('${stageVariables.')
+      if function_name_part[1] in dev_prod_funcs.keys():
+        for val in dev_prod_funcs[function_name_part[1]].values():
+          function_name = function_name_part[0] + val
+          logger.runTrace('invoke function', function_name)
+          LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
   
   
   
