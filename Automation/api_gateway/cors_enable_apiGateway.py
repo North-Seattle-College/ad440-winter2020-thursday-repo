@@ -89,7 +89,7 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
   for resource in resources_dict:
     logger.runTrace('for resource', resource)
     resource_id = resources_dict[resource][0]
-    logger.runTrace('resouce', resource)
+    logger.runTrace('resource', resource)
 
     methods = resources_dict[resource][1]
     methods_str = ','.join(methods)
