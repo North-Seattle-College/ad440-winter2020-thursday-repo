@@ -83,10 +83,16 @@ def main():
           for val in dev_prod_funcs[function_name_part[1]]:
             function_name = function_name_part[0] + val.replace('id_','id-')
             logger.runTrace('invoke function', function_name)
-            # try:
-            LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
-            # except:
-            #   print('AddPermission failed for', function_name)
+            try:
+              LambdaRemovePermission(client_lambda, function_name, statement_id) 
+            except:
+              logger.runTrace('Permission Removal', 'permission not exist')           
+            try:
+              LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
+            except:
+              print('AddPermission failed for', function_name)
+            else:
+              print('Development and Production permission successfully added!')
   if isFeature:
     for method_set in resources_dict.values():
       # print(method_set)
@@ -103,13 +109,19 @@ def main():
         # print(function_name_part)
         # print(feature_funcs.keys())
         if function_name_part[1] in feature_funcs.keys():
-          function_name = function_name_part[0] + feature_funcs[function_name_part[1]]
+          function_name = function_name_part[0] + feature_funcs[function_name_part[1]].replace('-id','_id')
           print(function_name)
           logger.runTrace('invoke function', function_name)
+          try:
+              LambdaRemovePermission(client_lambda, function_name, statement_id) 
+          except:
+            logger.runTrace('Permission Removal', 'permission not exist')  
           try:
             LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
           except:
             print('AddPermission failed for', function_name)
+          else:
+              print('Feature permission successfully added!')
   
   
 
@@ -193,9 +205,6 @@ def GetSourceArn(api_id, function_name, method, resource_path):
   
 
 def LambdaAddPermission(client, api_id, function_name, statement_id, source_arn):
-  print('FunctionName =', function_name)
-  print('StetmentId =', statement_id)
-  print('SourceArn =', source_arn)
   response = client.add_permission(
     FunctionName = function_name,
     StatementId = statement_id,
@@ -203,8 +212,16 @@ def LambdaAddPermission(client, api_id, function_name, statement_id, source_arn)
     Principal = 'apigateway.amazonaws.com',
     SourceArn = source_arn
   )
-  print(response)
-  logger.createInfo('Lambda permission', json.dumps(response))
+  # print(response)
+  logger.createInfo('Added Lambda Permission', json.dumps(response))
+  
+def LambdaRemovePermission(client, function_name, statement_id):
+  response = client.remove_permission(
+    FunctionName = function_name,
+    StatementId = statement_id,
+  )
+  # print(response)
+  logger.createInfo('Removed Lambda Permission', json.dumps(response))
 
 def GetAPIId():
   api_id = input('Enter API Gateway ID (press enter for default): ')

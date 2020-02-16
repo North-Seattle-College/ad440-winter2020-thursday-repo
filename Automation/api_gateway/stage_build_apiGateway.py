@@ -36,20 +36,22 @@ stg_vars = dict(zip(stg_var_name_lst, dev_stg_var_val_lst))
 
 api_team_roaster = ['kevin', 'dereje', 'yamato', 'anu', 'deya', 'sojung']
 
-#TODO set logger
+# set logger
 logger.setLogger('api_gateway_stage_build.log')
 
-#TODO get stage name
+# get stage name
 stg_name = input('Enter new feature stage sprint number: ')
-try:
-  stg_name = int(stg_name)
-except:
-  logger.inputError('Stage sprint number must be numeric')
-  
-stg_name = 'feature-sprint' + str(stg_name)
-logger.inputTrace('Stage Name', stg_name)
 
-#TODO get api gateway id
+if stg_name not in ['prod', 'dev']:
+  try:
+    stg_name = int(stg_name)
+  except:
+    logger.inputError('Stage sprint number must be numeric')
+    
+  stg_name = 'feature-sprint' + str(stg_name)
+  logger.inputTrace('Stage Name', stg_name)
+
+# get api gateway id
 api_id = input('Enter API Gateway ID (press enter for default): ')
 if api_id == '':
   api_id = 'ez9pmaodek'
@@ -58,7 +60,7 @@ logger.inputTrace('API ID', api_id)
 #LOG stage name and api gateway id
 logger.stageInfo(api_id, stg_name )
 
-#TODO generate list of stage variables
+# generate list of stage variables
 
 ## get stage varibles use for the stage
 
@@ -101,6 +103,8 @@ for pair in stg_vars_get:
       os.abort()
   
   lambdaName = stg_name + '-' + partyName + '-' + methodName.lower().replace('_','-')
+  lambdaName = lambdaName.replace('_','-')
+  lambdaName = lambdaName.replace('-id', '_id')
 
   stg_vars_updated[methodName] = lambdaName
 
@@ -108,6 +112,8 @@ for sv, ln in stg_vars_updated.items():
   logger.generatedDebug('Stage Variables', sv)
   logger.generatedDebug('Lambda Function Name', ln)
   # all none updated stg_vars connect to dev functions
+  ln = ln.replace('_','-')
+  ln = ln.replace('-id', '_id')
   stg_vars[sv] = ln 
 
 #TODO generate stage description
