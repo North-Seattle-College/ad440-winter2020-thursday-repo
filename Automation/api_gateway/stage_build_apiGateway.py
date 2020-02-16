@@ -197,16 +197,26 @@ client = boto3.client('apigateway')
 #   restApiId = api_id
 # )
 
-response = client.create_stage(
-  restApiId = api_id,
-  stageName = stg_name,
-  deploymentId = '0i626r',
-  description = description,
-  cacheClusterEnabled = isCCEnabled,
-  cacheClusterSize = ccSize_set,
-  variables = stg_vars,
-  tags = tags
-)
+if isCCEnabled:
+  response = client.create_stage(
+    restApiId = api_id,
+    stageName = stg_name,
+    deploymentId = '0i626r',
+    description = description,
+    cacheClusterEnabled = isCCEnabled,
+    cacheClusterSize = ccSize_set,
+    variables = stg_vars,
+    tags = tags
+  )
+else:
+  response = client.create_stage(
+    restApiId = api_id,
+    stageName = stg_name,
+    deploymentId = '0i626r',
+    description = description,
+    variables = stg_vars,
+    tags = tags
+  )
 #LOG deployment feedback
 
 #TODO generate api.2edusite.com url for the stage
