@@ -35,20 +35,28 @@ def main():
   )
   resources = response_get_resources['items']
   print(resources)
-  resources_dict = GetResourcesDict(resources)
-  logger.generatedDebug('Resource Dictionary', json.dumps(resources_dict))
-  
-  for id, methods in resources_dict.items():
-    method_function_pairs = []
-    for method in methods:
-      method_function_pair = {}
-      function_name = GetFunctionName(client_api, api_id, id, method)
-      method_function_pair[method] = function_name
-      method_function_pairs.append(method_function_pair)
-    resources_dict[id] = method_function_pairs
+    # this gives {resource_id:({method:functionName}, statement_id, source_arn),()...}
+  resources_dict = GetResourcesDict(resources, client_api, api_id)
   logger.generatedDebug('Resource Dictionary with Function Names', json.dumps(resources_dict))
+
+  #  get boto3 clinet for lambda
+  client_lambda = boto3.client('lambda')
   
-def GetResourcesDict(resources):
+  #TODO lambda add permission
+  for method_set in resources_dict.values():
+    for method in method_set:
+      function_name = method[0].values()[0]
+      logger.runTrace('for function', function_name)
+      statement_id = method[1]
+      source_arn = method[2]
+      
+      LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
+  
+  
+  
+
+def GetResourcesDict(resources, client_api, api_id):
+  
   resources_dict = {}
   for resource in resources:
     #print(resource)
@@ -56,12 +64,37 @@ def GetResourcesDict(resources):
     resource_path = resource['path']
 
     methods = []
+    # this gives a dict {resource_id:[(method, statement_id, resource_path),...]}
     if resource_path != '/': # avoid root path, which don't have methods
       resource_methods = resource['resourceMethods']
       for method in resource_methods:
-        methods.append(method)
-
-    resources_dict[resource_id] = methods
+        method_statement_id = ()
+        method_statement_id.append(method)
+        #T generate pesudo statement id based on the method 
+        statement_id = resource_path.replace('/{', '-')
+        statement_id = statement_id.replace('}/', '-')
+        statement_id = statement_id.replace('_', '-')
+        statement_id = statement_id.replace('/', '')
+        statement_id = statement_id + '-' + method.lower()
+        method_statement_id.append(statement_id)
+        method_statement_id.append(resource_path)
+        
+        methods.append(method_statement_id)
+      resources_dict[resource_id] = methods
+  logger.generatedDebug('Resource Dictionary', json.dumps(resources_dict))
+  
+  for id, methods in resources_dict.items():
+    value_set = ()
+    for method in methods:
+      method_function_pair = {}
+      function_name = GetFunctionName(client_api, api_id, id, method[0])
+      method_function_pair[method[0]] = function_name
+      value_set.append(method_function_pair)
+      value_set.append(method[1])
+      source_arn = GetSourceArn(api_id, function_name, method[0], method[2])
+      value_set.append(source_arn)
+      logger.runTrace('value set', json.dumps(value_set))
+    resources_dict[id] = value_set
   return (resources_dict)
 
 def GetFunctionName(client_api, api_id, resource_id, http_method):
@@ -78,9 +111,27 @@ def GetFunctionName(client_api, api_id, resource_id, http_method):
   if response['type'] == 'AWS':
     function_name = response['uri'].rsplit('/', 1)[0]
   return(function_name)
+
+# generate source arn
+def GetSourceArn(api_id, function_name, method, resource_path):
+  source_arn = function_name.replace('lambda', 'execute-api')
+  temp = api_id + '/*/'
+  source_arn = source_arn.replace('function:', temp)
+  source_arn = source_arn + method
+  resource_path = re.sub("\{\w*}\Z",'*', resource_path)
+  logger.runTrace('Regex resource path', resource_path)
+  source_arn = source_arn + resource_path
+  return (source_arn)
   
-  
-  
+
+def LambdaAddPermission(client, api_id, function_name, statement_id, source_arn):
+  response = client.add_permission(
+    FunctionName = function_name,
+    StatementId = statement_id,
+    Action = 'lambda:InvokeFunction',
+    Principal = 'apigateway.amazonaws.com',
+    SourceArn = source_arn
+  )
 
 def GetAPIId():
   api_id = input('Enter API Gateway ID (press enter for default): ')
@@ -89,10 +140,6 @@ def GetAPIId():
   logger.inputTrace('API ID', api_id)
   return api_id
 
-#TODO get boto3 clinet for lambda
-
-#TODO find lambda info for method stage variables
-#TODO lambda add permission
 
 if __name__ == "__main__":
     main()
