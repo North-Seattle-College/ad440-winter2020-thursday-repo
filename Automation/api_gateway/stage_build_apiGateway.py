@@ -30,7 +30,7 @@ dev_stg_var_val_lst = []
 for name in stg_var_name_lst:
   method = name.split('_')[-1]
   val = name.replace('_' + method, '-' + method.lower())
-  dev_stg_var_val_lst.append('dve-' + val)
+  dev_stg_var_val_lst.append('dev-' + val)
 
 stg_vars = dict(zip(stg_var_name_lst, dev_stg_var_val_lst))
 
