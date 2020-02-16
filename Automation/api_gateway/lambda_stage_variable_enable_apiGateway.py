@@ -30,6 +30,7 @@ def main():
   logger.setLogger('api_gateway_lambda_stage_variable_enable.log')
   #set client for api
   client_api = boto3.client('apigateway')
+  
   #get API
   api_id = GetAPIId()
   #get feature stage
@@ -73,14 +74,14 @@ def main():
         source_arn = method[2]
         
         function_name_part = function_name.split('${stageVariables.')
-        function_name_part[1] = function_name_part[1].replace('}', '')
         # print(function_name_part)
+        function_name_part[1] = function_name_part[1].replace('}', '')
+        
         # print(dev_prod_funcs.keys())
         if function_name_part[1] in dev_prod_funcs.keys():
           
           for val in dev_prod_funcs[function_name_part[1]]:
-            function_name = function_name_part[0] + val
-            function_name = function_name.replace('_', '-')
+            function_name = function_name_part[0] + val.replace('id_','id-')
             logger.runTrace('invoke function', function_name)
             # try:
             LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
@@ -103,7 +104,7 @@ def main():
         # print(feature_funcs.keys())
         if function_name_part[1] in feature_funcs.keys():
           function_name = function_name_part[0] + feature_funcs[function_name_part[1]]
-          function_name = function_name.replace('_', '-')
+          print(function_name)
           logger.runTrace('invoke function', function_name)
           try:
             LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
@@ -171,6 +172,9 @@ def GetFunctionName(client_api, api_id, resource_id, http_method):
   # avoid errors with option methods
   if response['type'] == 'AWS':
     function_name = response['uri'].rsplit('/', 1)[0]
+    function_name = function_name.split('arn:')[2]
+    function_name = 'arn:' + function_name
+  logger.generatedDebug('Raw Function Name', function_name)
   return(function_name)
 
 # generate source arn
@@ -182,9 +186,8 @@ def GetSourceArn(api_id, function_name, method, resource_path):
   source_arn = source_arn + method
   resource_path = re.sub("\{\w*}",'*', resource_path)
   # logger.runTrace('Regex resource path', resource_path)
-  source_arn = re.sub("\$\w*}",'*', source_arn)
   source_arn = source_arn + resource_path
-  print(source_arn)
+  # print(source_arn)
   logger.generatedDebug('source arn', source_arn)
   return (source_arn)
   
@@ -216,6 +219,7 @@ def GetDevProdStageFunc(stg_var_name_lst):
     method = name.split('_')[-1]
     val = name.replace('_' + method, '-' + method.lower())
     dev_funcs.append('dev-' + val)
+    # print(val)
     
   prod_funcs = []
   for name in stg_var_name_lst:

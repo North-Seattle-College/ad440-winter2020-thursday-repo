@@ -43,6 +43,9 @@ def runTrace(m, i):
 
 def stageInfo(api_id, stg_name):
   logger.info('Stage Creation at -' + api_id + 'for new stage ___' + stg_name )
+  
+def createInfo(m, i):
+  logger.info(m + 'is created with' + i)
 
 def generatedDebug(m, output):
   if type(output) != str:
