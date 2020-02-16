@@ -1,10 +1,30 @@
 import os
 import boto3
+import re
 import json
 import apiGatewayLogger as logger
 
-# constants
-stg_var_name_lst = ['keybundle_GET',
+def GetDevProdStageFunc(stg_var_name_lst):
+  dev_funcs = []
+  for name in stg_var_name_lst:
+    method = name.split('_')[-1]
+    val = name.replace('_' + method, '-' + method.lower())
+    dev_funcs.append('dve-' + val)
+    
+  prod_funcs = []
+  for name in stg_var_name_lst:
+    method = name.split('_')[-1]
+    val = name.replace('_' + method, '-' + method.lower())
+    prod_funcs.append('prod-' + val)
+  
+  dev_prod_funcs = zip(dev_funcs, prod_funcs)
+  dev_prod_stg_funcs = dict(zip(stg_var_name_lst, dev_prod_funcs))
+  logger.generatedDebug('Development and Production Stage Functions:', dev_prod_stg_funcs)
+  return (dev_prod_stg_funcs)
+
+def main():
+  #constant
+  stg_var_name_lst = ['keybundle_GET',
                     'keybundle_id_DELETE',
                     'keybundle_id_GET',
                     'keybundle_id_PUT',
@@ -21,8 +41,7 @@ stg_var_name_lst = ['keybundle_GET',
                     'property_id_keybundle_GET',
                     'property_id_keybundle_POST'
                     ]
-
-def main():
+  
   #set logger
   logger.setLogger('api_gateway_lambda_stage_variable_enable.log')
   #set client for api
@@ -34,8 +53,8 @@ def main():
     restApiId=api_id
   )
   resources = response_get_resources['items']
-  print(resources)
-    # this gives {resource_id:({method:functionName}, statement_id, source_arn),()...}
+  logger.generatedDebug('Resources of API', json.dumps(resources))
+  # this gives {resource_id:[{method:functionName}, statement_id, source_arn],[]...}
   resources_dict = GetResourcesDict(resources, client_api, api_id)
   logger.generatedDebug('Resource Dictionary with Function Names', json.dumps(resources_dict))
 
@@ -43,14 +62,23 @@ def main():
   client_lambda = boto3.client('lambda')
   
   #TODO lambda add permission
-  for method_set in resources_dict.values():
-    for method in method_set:
-      function_name = method[0].values()[0]
-      logger.runTrace('for function', function_name)
-      statement_id = method[1]
-      source_arn = method[2]
+  # dev_prod_funcs = GetDevProdStageFunc(stg_var_name_lst)
+  
+  # for method_set in resources_dict.values():
+  #   print(method_set)
+  #   for method in method_set:
+  #     logger.runTrace('for method', json.dumps(method))
+  #     function_name = method[0].values()[0]
+  #     logger.runTrace('with stage variable', function_name)
+  #     statement_id = method[1]
+  #     source_arn = method[2]
       
-      LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
+  #     function_name_part = function_name.split('${stageVariables.')
+  #     if function_name_part[1] in dev_prod_funcs.keys():
+  #       for val in dev_prod_funcs[function_name_part[1]].values():
+  #         function_name = function_name_part[0] + val
+  #         logger.runTrace('invoke function', function_name)
+  #         LambdaAddPermission(client_lambda, api_id, function_name, statement_id, source_arn)
   
   
   
@@ -64,15 +92,16 @@ def GetResourcesDict(resources, client_api, api_id):
     resource_path = resource['path']
 
     methods = []
-    # this gives a dict {resource_id:[(method, statement_id, resource_path),...]}
+    # this gives a dict {resource_id:[[method, statement_id, resource_path],...]}
     if resource_path != '/': # avoid root path, which don't have methods
       resource_methods = resource['resourceMethods']
       for method in resource_methods:
-        method_statement_id = ()
+        method_statement_id = []
         method_statement_id.append(method)
         #T generate pesudo statement id based on the method 
         statement_id = resource_path.replace('/{', '-')
         statement_id = statement_id.replace('}/', '-')
+        statement_id = statement_id.replace('}', '-')
         statement_id = statement_id.replace('_', '-')
         statement_id = statement_id.replace('/', '')
         statement_id = statement_id + '-' + method.lower()
@@ -84,17 +113,20 @@ def GetResourcesDict(resources, client_api, api_id):
   logger.generatedDebug('Resource Dictionary', json.dumps(resources_dict))
   
   for id, methods in resources_dict.items():
-    value_set = ()
+    value_sets = []
     for method in methods:
-      method_function_pair = {}
-      function_name = GetFunctionName(client_api, api_id, id, method[0])
-      method_function_pair[method[0]] = function_name
-      value_set.append(method_function_pair)
-      value_set.append(method[1])
-      source_arn = GetSourceArn(api_id, function_name, method[0], method[2])
-      value_set.append(source_arn)
+      if method[0] != 'OPTIONS':
+        value_set = []
+        method_function_pair = {}
+        function_name = GetFunctionName(client_api, api_id, id, method[0])
+        method_function_pair[method[0]] = function_name
+        value_set.append(method_function_pair)
+        value_set.append(method[1])
+        source_arn = GetSourceArn(api_id, function_name, method[0], method[2])
+        value_set.append(source_arn)
+        value_sets.append(value_set)
       logger.runTrace('value set', json.dumps(value_set))
-    resources_dict[id] = value_set
+      resources_dict[id] = value_sets
   return (resources_dict)
 
 def GetFunctionName(client_api, api_id, resource_id, http_method):
