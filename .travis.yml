@@ -26,7 +26,7 @@ jobs:
       - feature-sprint2-mattyplo
   - name: deploy_s3
     before_install:
-    - cd UI/keytrack/
+    - cd UI/
     script:
     - npm test
     - npm run build
