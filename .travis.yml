@@ -1,0 +1,47 @@
+env:
+- CI=false npm run build
+language: node_js
+node_js:
+- node
+jobs:
+  include:
+  - name: deploy_lambdas
+    if: branch =~ /^feature-sprint[0-9]-(anu|mattyplo|towa|untamedlaw|sojung|miscdats)$/
+    before_install:
+    - cd API/travis/
+    deploy:
+      provider: lambda
+      function_name: "feature-sprint2-devops-travistest-keybundle-get"
+      region: "us-west-2"
+      role: "arn:aws:iam::061431082068:role/service-role/feature-sprint2-devops-travistest-keybundle-get-role-m20unjkc"
+      runtime: "nodejs4.3"
+      handler_name: "handler"
+      access_key_id: "$AWS_ACCESS_KEY2_ID"
+      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
+      on:
+        repo: North-Seattle-College/ad440-winter2020-thursday-repo
+        branch: feature-sprint2-mattyplo
+    branches:
+      only:
+      - feature-sprint2-mattyplo
+  - name: deploy_s3
+    before_install:
+    - cd UI/keytrack/
+    script:
+    - npm test
+    - npm run build
+    deploy:
+      skip_cleanup: true
+      provider: s3
+      access_key_id: "$AWS_ACCESS_KEY2_ID"
+      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
+      bucket: feature-sprint2-mattyplo
+      acl: bucket_owner_full_control
+      region: us-west-2
+      local_dir: build
+      on:
+        repo: North-Seattle-College/ad440-winter2020-thursday-repo
+        branch: feature-sprint3-mattyplo-test
+    branches:
+      only:
+      - feature-sprint3-mattyplo-test
