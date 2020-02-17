@@ -1,3 +1,5 @@
+#!/bin/bash
+
 FILE="./.env"
 
 if [[ $TRAVIS_BRANCH == 'feature-sprint3-mattyplo-test' ]]; then
