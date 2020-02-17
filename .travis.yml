@@ -26,6 +26,7 @@ jobs:
       - feature-sprint2-mattyplo
   - name: deploy_s3
     before_install:
+    - "./Automation/TravisScripts/build-env.sh"
     - cd UI/
     script:
     - npm run build
