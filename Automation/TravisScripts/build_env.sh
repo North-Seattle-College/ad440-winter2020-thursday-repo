@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE="./.env"
+FILE="../../UI/.env"
 
 if [[ $TRAVIS_BRANCH == 'feature-sprint3-mattyplo-test' ]]; then
 cat <<EOM >$FILE
