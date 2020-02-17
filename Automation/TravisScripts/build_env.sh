@@ -1,16 +1,18 @@
 #!/bin/bash
 
+# create a new .env file in the UI directory
 FILE="./UI/.env"
 
-if [[ $TRAVIS_BRANCH == 'feature-sprint3-mattyplo-test' ]]; then
+# Set the API endpoint based upon the branch being pushed
+if [[ $TRAVIS_BRANCH == 'development' ]]; then
 cat <<EOM >$FILE
-REACT_APP_NOT_SECRET_CODE=FEATURE
+REACT_APP_API_ENDPOINT=https://api.2edusite.com/dev/
 EOM
     echo "=========== $TRAVIS_BRANCH ENV ==========="
     cat $FILE
 elif [[ $TRAVIS_BRANCH == 'master' ]]; then
 cat <<EOM >$FILE
-REACT_APP_SOME_SERVICE=development
+REACT_APP_API_ENDPOINT=https://api.2edusite.com/prod/
 EOM
     echo "=========== $TRAVIS_BRANCH ENV ==========="
     cat $FILE
