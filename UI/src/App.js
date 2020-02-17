@@ -33,6 +33,7 @@ class App extends Component {
 
     return (
       <div className="searchKeyholder">
+      <h1>{process.env.REACT_APP_NOT_SECRET_CODE ? process.env.REACT_APP_NOT_SECRET_CODE : "hello World"}</h1>
         <Card>
           <CardBody>
             <CardTitle title={keyholder.first_name}>
