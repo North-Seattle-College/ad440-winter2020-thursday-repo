@@ -13,7 +13,6 @@ jobs:
       provider: lambda
       function_name: "feature-sprint2-devops-travistest-keybundle-get"
       region: "us-west-2"
-      role: "arn:aws:iam::061431082068:role/service-role/feature-sprint2-devops-travistest-keybundle-get-role-m20unjkc"
       runtime: "nodejs4.3"
       handler_name: "handler"
       access_key_id: "$AWS_ACCESS_KEY2_ID"
