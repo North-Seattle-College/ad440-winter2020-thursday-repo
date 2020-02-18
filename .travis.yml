@@ -8,7 +8,7 @@ jobs:
   - name: deploy_anu_lambdas
     if: branch =~ /^feature-sprint[0-9]-mattyplo/
     before_install:
-    - cd API/travis/
+    - cd API/feature-sprint2-devops-travistest-keybundle-get/
     deploy:
       provider: lambda
       function_name: "feature-sprint2-devops-travistest-keybundle-get"
@@ -41,7 +41,7 @@ jobs:
       local_dir: build
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
-        branch: feature-sprint3-mattyplo-test
+        branch: feature-sprint3-mattyplo-lambdas
     branches:
       only:
-      - feature-sprint3-mattyplo-test
+      - feature-sprint3-mattyplo-lambdas
