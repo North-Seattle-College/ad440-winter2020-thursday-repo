@@ -145,7 +145,7 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
             restApiId = api_id,
             resourceId = resource_id,
             httpMethod = method,
-            statusCode = status_code,
+            statusCode = status_code
           )
           logger.runTrace('Integration deletion', json.dumps(response_delete_integration))
         except:
