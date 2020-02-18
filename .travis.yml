@@ -5,8 +5,8 @@ node_js:
 - node
 jobs:
   include:
-  - name: deploy_lambdas
-    if: branch =~ /^feature-sprint[0-9]-(anu|mattyplo|towa|untamedlaw|sojung|miscdats)$/
+  - name: deploy_anu_lambdas
+    if: branch =~ /^feature-sprint[0-9]-mattyplo/
     before_install:
     - cd API/travis/
     deploy:
@@ -20,10 +20,10 @@ jobs:
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
-        branch: feature-sprint2-mattyplo
+        branch: feature-sprint3-mattyplo-lambdas
     branches:
       only:
-      - feature-sprint2-mattyplo
+      - feature-sprint2-mattyplo-lambdas
   - name: deploy_s3
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
