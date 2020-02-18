@@ -122,7 +122,7 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
     for method in methods:
       logger.runTrace('for method', method)
       
-      #TODO get status codes
+      #* Get status codes
       response_get_method = client.get_method(
         restApiId = api_id,
           resourceId = resource_id,
@@ -133,9 +133,7 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
       logger.runTrace('Method Responses', json.dumps(method_responses))
       status_codes = list(method_responses.keys())
       logger.runTrace('Status Codes', json.dumps(status_codes))
-      # #! hard coded to 200 only as waiting for API team update integration response selection pattern
-      # status_codes = ['200']
-      
+
       for status_code in status_codes:
         logger.runTrace('for status code', status_code)
         logger.runTrace('pattern', status_code_pattern[status_code])
