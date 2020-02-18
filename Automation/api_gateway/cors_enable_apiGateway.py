@@ -4,6 +4,18 @@ import json
 import apiGatewayLogger as logger
 
 def main():
+  status_code_pattern = {'200': 'Default',
+                    '201': 'Created',
+                    '204': 'No Content',
+                    '400': 'Bad Request',
+                    '404': 'Not Found',
+                    '405': 'Not Allowed',
+                    '500': 'Server Error'}
+  for status_code, pattern in status_code_pattern.items():
+    if pattern.lower() != 'default':
+            status_code_pattern[status_code] = status_code_pattern[status_code]+'.*'
+  logger.generatedDebug('Status Code Keywords', json.dumps(status_code_pattern))
+  
   # set logger
   logger.setLogger('api_gateway_cors_enable.log')
   # get boto3 client
@@ -38,7 +50,7 @@ def main():
   print('Method Parameters: ')
   print(method_respPara)
   
-  PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals)
+  PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern)
   
   
   
@@ -85,7 +97,7 @@ def GetResources(client, api_id):
   logger.generatedDebug('API Resource Dictionary', json.dumps(resources_dict))
   return resources_dict
 
-def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals):
+def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern):
   for resource in resources_dict:
     logger.runTrace('for resource', resource)
     resource_id = resources_dict[resource][0]
@@ -121,11 +133,12 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
       logger.runTrace('Method Responses', json.dumps(method_responses))
       status_codes = list(method_responses.keys())
       logger.runTrace('Status Codes', json.dumps(status_codes))
-      #! hard coded to 200 only as waiting for API team update integration response selection pattern
-      status_codes = ['200']
+      # #! hard coded to 200 only as waiting for API team update integration response selection pattern
+      # status_codes = ['200']
       
       for status_code in status_codes:
         logger.runTrace('for status code', status_code)
+        logger.runTrace('pattern', status_code_pattern[status_code])
         
         #! delete Method Response Headers if there is one
         try:
@@ -161,15 +174,26 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
           responseParameters = method_respPara
         )
         print(response_put_method)
+        logger.createInfo('Method Response', json.dumps(response_put_method))
         
         #* put Integration Responses Header Mappings
-        response_put_integration = client.put_integration_response(
-          restApiId = api_id,
-          resourceId = resource_id,
-          httpMethod = method,
-          statusCode = status_code,
-          responseParameters = integration_respPara
-        )
+        if status_code_pattern[status_code].lower() == 'default':
+          response_put_integration = client.put_integration_response(
+            restApiId = api_id,
+            resourceId = resource_id,
+            httpMethod = method,
+            statusCode = status_code,
+            responseParameters = integration_respPara
+          )
+        else:
+          response_put_integration = client.put_integration_response(
+            restApiId = api_id,
+            resourceId = resource_id,
+            httpMethod = method,
+            statusCode = status_code,
+            selectionPattern = status_code_pattern[status_code],
+            responseParameters = integration_respPara
+          )
         print(response_put_integration)
 
 if __name__ == "__main__":
