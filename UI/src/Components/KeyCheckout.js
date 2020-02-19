@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {default as apiurlbase} from '../apiurlbase'
 
 /**
  * Provides component that will render a form and (eventually) provide
@@ -54,9 +54,7 @@ export default class KeyCheckout extends React.Component {
             }
         }
 
-        var strURL = 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/feature/'
-                 + 'keybundle/'
-                 + String(keybundleId);
+        var strURL = apiurlbase + 'keybundle/' + String(keybundleId);
         var strBody = JSON.stringify({
             'keyholder_id': keyholderId,
             'property_id': propertyId,
@@ -155,8 +153,7 @@ export default class KeyCheckout extends React.Component {
             }
         }
 
-        var strURL = 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/'
-                 + 'feature/property'
+        var strURL = apiurlbase + 'property';
         var req = new XMLHttpRequest();
         req.open('GET', strURL, true);
         req.send();
@@ -185,10 +182,9 @@ export default class KeyCheckout extends React.Component {
             }
         }
 
+        var strURL = apiurlbase + 'keybundle';
         var req = new XMLHttpRequest();
-        req.open('GET',
-                 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/dev/keybundle',
-                 true);
+        req.open('GET', strURL, true);
         req.send();
         req.addEventListener('readystatechange',
                               handleReadyStateChange,
