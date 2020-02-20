@@ -1,5 +1,5 @@
 env:
-- CI=false npm run build PATH_TO_LAMBDA=
+- CI=false npm run build
 language: node_js
 node_js:
 - node
