@@ -6,4 +6,4 @@ path_raw=$( echo $TRAVIS_BRANCH | cut -d'-' -f4- )
 
 # replace '-' with '/' and '_' with '/'
 path_raw_no_dashes=$( tr '-' '/' <<<$path_raw )
-path_to_lambda=$( tr '_' '/' <<<$path_raw_no_dashes )
+PATH_TO_LAMBDA=$( tr '_' '/' <<<$path_raw_no_dashes )
