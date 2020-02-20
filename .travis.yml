@@ -12,13 +12,19 @@ jobs:
     - cd $PATH_TO_LAMBDA
     deploy:
       provider: lambda
-      function_name: "$TRAVIS_BRANCH"
+      function_name: $TRAVIS_BRANCH
       region: "us-west-2"
       role: "arn:aws:iam::061431082068:role/Lambda_Role"
       runtime: "nodejs12.x"
       handler_name: "handler"
       access_key_id: "$AWS_ACCESS_KEY2_ID"
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
+      on:
+        repo: North-Seattle-College/ad440-winter2020-thursday-repo
+        branch: $TRAVIS_BRANCH
+    branches:
+      only:
+      - $TRAVIS_BRANCH
   - name: deploy_s3
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
