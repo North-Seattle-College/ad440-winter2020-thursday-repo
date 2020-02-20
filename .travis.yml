@@ -12,7 +12,7 @@ jobs:
     - cd $PATH_TO_LAMBDA
     deploy:
       provider: lambda
-      function_name: "feature-sprint2-devops-travistest-keybundle-get"
+      function_name: $TRAVIS_BRANCH
       region: "us-west-2"
       role: "arn:aws:iam::061431082068:role/Lambda_Role"
       runtime: "nodejs12.x"
@@ -21,10 +21,6 @@ jobs:
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
-        branch: feature-sprint3-mattyplo-lambdas
-    branches:
-      only:
-      - feature-sprint2-mattyplo-lambdas
   - name: deploy_s3
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
