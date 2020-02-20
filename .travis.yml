@@ -12,7 +12,7 @@ jobs:
     - cd $PATH_TO_LAMBDA
     deploy:
       provider: lambda
-      function_name: $TRAVIS_BRANCH
+      function_name: "$TRAVIS_BRANCH"
       region: "us-west-2"
       role: "arn:aws:iam::061431082068:role/Lambda_Role"
       runtime: "nodejs12.x"
