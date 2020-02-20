@@ -6,5 +6,4 @@ path_raw=$( echo $TRAVIS_BRANCH | cut -d'-' -f4- )
 
 # replace '-' with '/' and '_' with '/'
 path_raw_no_dashes=$( tr '-' '/' <<<$path_raw )
-PATH_TO_LAMBDA=/API/$( tr '_' '/' <<<$path_raw_no_dashes )
-export PATH_TO_LAMBDA
+export PATH_TO_LAMBDA=/API/$( tr '_' '/' <<<$path_raw_no_dashes )
