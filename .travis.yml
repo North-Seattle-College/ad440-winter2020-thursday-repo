@@ -19,8 +19,6 @@ jobs:
       handler_name: "handler"
       access_key_id: "$AWS_ACCESS_KEY2_ID"
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      on:
-        repo: North-Seattle-College/ad440-winter2020-thursday-repo
   - name: deploy_s3
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
