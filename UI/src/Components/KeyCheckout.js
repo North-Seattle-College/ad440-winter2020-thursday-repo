@@ -4,12 +4,16 @@ import React from 'react';
 /**
  * Provides component that will render a form and (eventually) provide
  * functionality to checkout a key from one keyholder to another.
- * Currently strictly renders a non-functional form and buttons.
+ * Currently partial API connection implemented, but there are problems.
  * 
  * Required props: none
  * 
  * Acceptted props:
- * keyId, the DB ID of a key or keybundle
+ * keyholderId, the DB ID of a keyholder to check-out a keybundle to
+ * keybundleId, the DB ID of a keybundle
+ * propertyId, the DB ID of a property that the keybundle goes to
+ *   Note: I'm not sure why we need propertyId. Seems redundant.
+ *   but the API requires it.
  * dueBackDate, a date that will appear as the default due back date
  *   which must be given as an ISO 8601 date only string (ex: 2020-02-29)
  * 
@@ -18,9 +22,54 @@ import React from 'react';
 export default class KeyCheckout extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {keyId: this.props.keyId,
-                      checkoutToId: "",
+        this.state = {keyholderId: this.props.keyholderId,
+                      keybundleId: this.props.keybundleId,
+                      propertyId: this.props.propertyId,
                       dueBackDate: this.props.dueBackDate };
+    }
+
+    /**
+     * Generate a PUT request to our API to checkout a key
+     * @param keyholderId - the keyholder ID as it appears in the DB
+     * @param keybundleId - the keybundle ID as it appears in the DB
+     * @param propertyId - the property ID as it appears in the DB
+     * @param dueBackDate - the date the key is expected back. Use ISO
+     */
+    checkoutKey = (keyholderId, keybundleId, propertyId, dueBackDate) => {
+        function handleReadyStateChange(e) {
+            // Tracking all the state changes for dev / debugging.
+            /* ToDo - reduce event states handled later for prod */
+            if (req.readyState === 0) {
+                console.log('getAllPropertyIds state 0' + String(e));
+            } else if (req.readyState === 1) {
+                console.log('getAllPropertyIds state 1' + String(e))
+            } else if (req.readyState === 2) {
+                console.log('getAllPropertyIds state 2' + String(e))
+            } else if (req.readyState === 3) {
+                console.log('getAllPropertyIds state 3' + String(e))
+            } else if (req.readyState === 4 && req.status === 200) {
+                console.log('getAllPropertyIds state 4' + String(e))
+                var res = JSON.parse(req.responseText);
+                alert(String(res))
+            }
+        }
+
+        var strURL = 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/feature/'
+                 + 'keybundle/'
+                 + String(keybundleId);
+        var strBody = JSON.stringify({
+            'keyholder_id': keyholderId,
+            'property_id': propertyId,
+            'keybundle_id': keybundleId
+        });
+        
+        var req = new XMLHttpRequest();
+        req.open('PUT', strURL, true);
+        req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        req.send(strBody);
+        req.addEventListener('readystatechange',
+                              handleReadyStateChange,
+                              false);
     }
 
     /**
@@ -28,7 +77,13 @@ export default class KeyCheckout extends React.Component {
      */
     handleSubmit = (event) => {
         /* ToDo: implement keycheckout event handler in later sprint */
-        alert('KeyCheckout form submit button pressed.');
+        //alert('KeyCheckout form submit button pressed.');
+        this.checkoutKey(
+            this.state.keyholderId,
+            this.state.keybundleId,
+            this.state.propertyId,
+            this.state.dueBackDate
+        );
         event.preventDefault();
     }
     
@@ -44,15 +99,22 @@ export default class KeyCheckout extends React.Component {
     /**
      * Handles updates to form field for Key ID
      */
-    handleKeyIdChange = (event) => {
-        this.setState({keyId: event.target.value});
+    handleKeybundleIdChange = (event) => {
+        this.setState({keybundleId: event.target.value});
     }
 
     /**
      * Handles updates to form field for Checkout ID
      */
     handleCheckoutToChange = (event) => {
-        this.setState({checkoutToId: event.target.value});
+        this.setState({keyholderId: event.target.value});
+    }
+
+    /**
+     * Handles updates to form field for Property ID
+     */
+    handlePropertyIdChange = (event) => {
+        this.setState({propertyId: event.target.value})
     }
 
     /**
@@ -60,6 +122,77 @@ export default class KeyCheckout extends React.Component {
      */
     handleDueBackChange = (event) => {
         this.setState({dueBackDate: event.target.value});
+    }
+
+    /**
+     * Get all the KeybundleId's, this is for early development & demo
+     */
+    getAllKeyholderIds = () => {
+        /* ToDo: Implement this when the API for it is written*/
+        console.log('Phasers on stun, good luck. Kirk out.')
+    }
+
+    /**
+     * Get all the Property Id's, this is for early development & demo
+     */
+    getAllPropertyIds = () => {
+        /**
+         * OnReadyStateChange event handler for getAllPropertyIds
+         */
+        function handleReadyStateChange(e) {
+            if (req.readyState === 0) {
+                console.log('getAllPropertyIds state 0' + String(e));
+            } else if (req.readyState === 1) {
+                console.log('getAllPropertyIds state 1' + String(e))
+            } else if (req.readyState === 2) {
+                console.log('getAllPropertyIds state 2' + String(e))
+            } else if (req.readyState === 3) {
+                console.log('getAllPropertyIds state 3' + String(e))
+            } else if (req.readyState === 4 && req.status === 200) {
+                console.log('getAllPropertyIds state 4' + String(e))
+                var res = JSON.parse(req.responseText);
+                alert(String(res))
+            }
+        }
+
+        var strURL = 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/'
+                 + 'feature/property'
+        var req = new XMLHttpRequest();
+        req.open('GET', strURL, true);
+        req.send();
+        req.addEventListener('readystatechange',
+                              handleReadyStateChange,
+                              false);
+    }
+
+    /**
+     * Get all the Keybundle Id's, this is for early development & demo
+     */
+    getAllKeybundleIds = () => {
+        function handleReadyStateChange(e) {
+            if (req.readyState === 0) {
+                console.log('getAllPropertyIds state 0' + String(e));
+            } else if (req.readyState === 1) {
+                console.log('getAllPropertyIds state 1' + String(e))
+            } else if (req.readyState === 2) {
+                console.log('getAllPropertyIds state 2' + String(e))
+            } else if (req.readyState === 3) {
+                console.log('getAllPropertyIds state 3' + String(e))
+            } else if (req.readyState === 4 && req.status === 200) {
+                console.log('getAllPropertyIds state 4' + String(e))
+                var res = JSON.parse(req.responseText);
+                alert(String(res))
+            }
+        }
+
+        var req = new XMLHttpRequest();
+        req.open('GET',
+                 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/dev/keybundle',
+                 true);
+        req.send();
+        req.addEventListener('readystatechange',
+                              handleReadyStateChange,
+                              false);
     }
 
     /**
@@ -72,14 +205,20 @@ export default class KeyCheckout extends React.Component {
                     <legend>Check-out keys:</legend>
                     <label>
                         Key ID (tag):
-                        <input type="text" value={this.state.keyId}
-                               onChange={this.handleKeyIdChange} />
+                        <input type="text" value={this.state.keybundleId}
+                               onChange={this.handleKeybundleIdChange} />
                     </label>
                     <br />
                     <label>
                         Checkout to:
-                        <input type="text" value={this.state.checkoutToId}
+                        <input type="text" value={this.state.keyholderId}
                                onChange={this.handleCheckoutToChange} />
+                    </label>
+                    <br />
+                    <label>
+                        Property ID:
+                        <input type="text" value={this.state.propertyId}
+                               onChange={this.handlePropertyIdChange} />
                     </label>
                     <br />
                     <label>
@@ -92,6 +231,13 @@ export default class KeyCheckout extends React.Component {
                     <input type="button" value="Cancel"
                          onClick={this.handleCancel}/>
                 </form>
+                <button onClick={this.getAllPropertyIds}>
+                    Get all property information
+                </button>
+                <br />
+                <button onClick={this.getAllKeybundleIds}>
+                    Get all key bundle information
+                </button>
             </div>
         );
     }
