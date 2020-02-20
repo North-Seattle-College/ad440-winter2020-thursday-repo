@@ -8,7 +8,9 @@ jobs:
   - name: deploy_anu_lambdas
     if: branch =~ /^feature-sprint[0-9]-(mattyplo|dereje|deya|kevin|sojung|yamato|)/
     before_install:
-    - cd API/feature-sprint2-devops-travistest-keybundle-get/
+    - path_to_lambda
+    - ./Automation/TravisScripts/replaceDashes.sh
+    - cd $path_to_lambda
     deploy:
       provider: lambda
       function_name: "feature-sprint2-devops-travistest-keybundle-get"
