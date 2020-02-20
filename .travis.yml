@@ -8,7 +8,7 @@ jobs:
   - name: deploy_anu_lambdas
     if: branch =~ /^feature-sprint[0-9]-(mattyplo|dereje|deya|kevin|sojung|yamato|)/
     before_install:
-    - PATH_TO_LAMBDA=./Automation/TravisScripts/replaceDashes.sh
+    - PATH_TO_LAMBDA=$(./Automation/TravisScripts/replaceDashes.sh)
     - echo $PATH_TO_LAMBDA
     - cd $PATH_TO_LAMBDA
     deploy:
