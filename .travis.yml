@@ -5,7 +5,7 @@ node_js:
 - node
 jobs:
   include:
-  - name: deploy_anu_lambdas
+  - name: deploy_lambdas
     if: branch =~ /^feature-sprint[0-9]-(mattyplo|dereje|deya|kevin|sojung|yamato|)/
     before_install:
     - PATH_TO_LAMBDA=$(./Automation/TravisScripts/setPathToLambda.sh)
@@ -21,6 +21,10 @@ jobs:
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
+        branch: $TRAVIS_BRANCH
+    branches:
+      only:
+      - $TRAVIS_BRANCH
   - name: deploy_s3
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
