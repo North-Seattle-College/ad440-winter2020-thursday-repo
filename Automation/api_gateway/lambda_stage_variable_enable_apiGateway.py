@@ -121,7 +121,7 @@ def main():
           except:
             print('AddPermission failed for', function_name)
           else:
-              print('Feature permission successfully added!')
+            print('Feature permission successfully added!')
   
   
 

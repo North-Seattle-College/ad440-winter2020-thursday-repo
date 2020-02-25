@@ -3,6 +3,8 @@ import boto3
 import json
 import apiGatewayLogger as logger
 
+#TODO add OPTIONS if preflight not exist.
+
 def main():
   status_code_pattern = {'200': 'Default',
                     '201': 'Created',
@@ -25,7 +27,15 @@ def main():
   api_id = GetAPIId()
   # get a dict of resources for the API {resource_name:resource_id,[methods]}
   resources_dict = GetResources(client, api_id)
- 
+
+  # if resource does not have OPTIONS method, add OPTIONS to resource for each
+  for resource in resources_dict:
+    resource_id = resources_dict[resource][0]
+    methods = resources_dict[resource][1]
+    if 'OPTIONS' not in methods:
+      PutOPTIONSMethod(client, api_id, resource_id)
+      methods.append('OPTIONS')
+      resources_dict[resource][1] = methods
   # set Response Headers
   response_headers = ['X-Requested-With', 'Access-Control-Allow-Headers',
                       'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods']
@@ -40,7 +50,7 @@ def main():
   print(resp_headers_integration)
   XRW_val = "'*'"
   ACAH_val = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with'"
-  ACAO_val = "'*'"
+  ACAO_val = "'https://2edusite.com'"
   
   headers_vals = (XRW_val, ACAH_val, ACAO_val)
 
@@ -97,6 +107,17 @@ def GetResources(client, api_id):
   logger.generatedDebug('API Resource Dictionary', json.dumps(resources_dict))
   return resources_dict
 
+def PutOPTIONSMethod(client, api_id, resource_id):
+  logger.runTrace('Create OPTIONS Method for resource', resource_id)
+
+  response_put_option = client.put_method(
+    restApiId = api_id,
+    resourceId = resource_id,
+    httpMethods = 'OPTIONS',
+    authorizationType = 'NONE' #NONE for open access, COGNITO_USER_POOLS for cognito
+  )
+  logger.generatedDebug('OPTIONS Method created', json.dumps(response_put_option))
+
 def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern):
   for resource in resources_dict:
     logger.runTrace('for resource', resource)
@@ -144,7 +165,7 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
             restApiId = api_id,
             resourceId = resource_id,
             httpMethod = method,
-            statusCode = status_code, 
+            statusCode = status_code 
           )
           logger.runTrace('Method deletion', json.dumps(response_delete_method))
         except:
