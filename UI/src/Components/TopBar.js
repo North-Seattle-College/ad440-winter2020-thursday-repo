@@ -1,5 +1,7 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import './TopBar.css';
+import logo from './UmanoPM-Logo.png';
 
 /**
  * Component to render the top bar
@@ -21,9 +23,20 @@ export default class TopBar extends React.Component {
   render() {
     return (
       <header className='TopBar'>
-        <button>Home</button>
-        <button>Account</button>
-        <button>Sign-Out</button>
+        <div className='logo-flexbox'>
+          <img src={logo} alt='Logo' className='Logo' />
+        </div>
+        <div className='interactive-flexbox'>
+          <Link className='top-bar-link' to='/'>
+            Home
+          </Link>
+          <Link className='top-bar-link' to='/account'>
+            Account
+          </Link>
+          <Link className='top-bar-link' to='/signout'>
+            Sign-Out
+          </Link>
+        </div>
       </header>
     )
   };
@@ -33,4 +46,5 @@ export default class TopBar extends React.Component {
 (menuId) => { // menuId is expected to be a string
   logic run in parent element
 }
+<Image source={{uri: 'data:image/png;base64,${logo}'}} />
 */

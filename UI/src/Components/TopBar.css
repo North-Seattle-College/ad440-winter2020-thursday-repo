@@ -4,10 +4,33 @@
 }
 
 header {
-    border-style: solid;
-    border-width: 2px;
-    margin-left: 12px;
-    margin-right: 12px;
-    margin-top: 6px;
-    margin-bottom: 6px;
+  display: flex;
+  border-style: solid;
+  border-width: 2px;
+  margin-left: 12px;
+  margin-right: 12px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+img {
+  height: 100px;
+}
+
+.logo-flexbox {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.interactive-flexbox {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.top-bar-link {
+  margin: auto;
+  padding-left: 3px;
+  padding-right: 3px;
+  text-align: center;
 }

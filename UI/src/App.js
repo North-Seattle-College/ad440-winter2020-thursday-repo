@@ -1,19 +1,18 @@
 import React from "react";
-//import ReactDOM from 'react-dom'
-
 import "./App.css";
-import keyholderList from "./Components/keyholder.json"; //Used for mock
+
+//import keyholderList from "./Components/keyholder.json"; //Used for mock
 
 // Import our custom components
 import WorkingArea from './Components/WorkingArea';
-import Navbar from "./Components/Navbar";
-import Home from "./Components/Home";
-import Account from "./Components/Account";
-import Logout from "./Components/Logout";
-import AddKey from "./Components/AddKey";
+//import Navbar from "./Components/Navbar";
+//import Home from "./Components/Home";
+// import Account from "./Components/Account";
+// import Logout from "./Components/Logout";
+// import AddKey from "./Components/AddKey";
 import SideBar from "./Components/SideBar";
 import TopBar from './Components/TopBar';
-import TestComp from './Components/TestComp';
+//import TestComp from './Components/TestComp';
 import Footer from './Components/Footer';
 //import SearchBar from "./Components/searchBar";
 

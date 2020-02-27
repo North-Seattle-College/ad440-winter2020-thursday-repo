@@ -17,28 +17,26 @@ import TestComp from './TestComp';
 export default function WorkingArea() {
   return(
     <div className='WorkingArea'>
-      {/*<Router>*/}
-        <Switch>
-          {/* <Route path='/addproperty'>
-            <AddProperty />
-          </Route> */}
-          <Route path='/addkey'>
-            <AddKey />
-          </Route>
-          {/* <Route path='/addkeyholder'>
-            <AddPerson />
-          </Route> */}
-          <Route path='/checkoutkey'>
-            <CheckoutKey />
-          </Route>
-          <Route path='/testcomp'>
-            <TestComp />
-          </Route>
-          <Route path='/'>
-            <Home />
-          </Route>
-        </Switch>
-      {/*</Router>*/}
+      <Switch>
+        {/* <Route path='/addproperty'>
+          <AddProperty />
+        </Route> */}
+        <Route path='/addkey'>
+          <AddKey />
+        </Route>
+        {/* <Route path='/addkeyholder'>
+          <AddPerson />
+        </Route> */}
+        <Route path='/checkoutkey'>
+          <CheckoutKey />
+        </Route>
+        <Route path='/testcomp'>
+          <TestComp />
+        </Route>
+        <Route path='/'>
+          <Home />
+        </Route>
+      </Switch>
     </div>
   );
 }

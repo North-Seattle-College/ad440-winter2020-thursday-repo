@@ -2,12 +2,64 @@
 //not get installed material-ui
 //does not direct to checkout nor add properties
 import React from 'react';
-import { slide as Menu } from 'react-burger-menu';
-import Home from "./Account";
-import AddKey from "./AddKey";
-import FormAddKey from "./FormAddKey";
-import Logout from "./Logout";
+import './SideBar.css'
+import {Link} from 'react-router-dom';
+//import { slide as Menu } from 'react-burger-menu';
+//import Home from "./Account";
+//import AddKey from "./AddKey";
+//import FormAddKey from "./FormAddKey";
+//import Logout from "./Logout";
 
+/**
+ * Component to display the side bar
+ * 
+ * Accepted props: none
+ * 
+ * Required props:
+ * 
+ * @author Perla Reyes-Herrera
+ * @author Quincy Powell <Quincy.Powell@gmail.com>
+ */
+export default class SideBar extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render() {
+    return (
+      <nav className='SideBar'>
+        {/*<Router>*/}
+        <Link className='sideMenuItem' to='/'>
+          Home
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/addproperty'>
+          Add Property
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/addkey'>
+          Add Key
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/addkeyholder'>
+          Add Person
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/checkoutkey'>
+          Checkout Key
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/testcomp'>
+          Test Component
+        </Link>
+        {/*</Router>*/}
+      </nav>
+    );
+  }
+}
+
+
+/*
 export default props => {
   return (
     <Menu>
@@ -24,9 +76,14 @@ export default props => {
       <a className="menu-item" href="/home">
         Add Property
       </a>
+
+      <a className='menu-item' href='/testcomp'>
+        Show Test Component
+      </a>
     </Menu>
   );
 };
+*/
 
 //
 // import React from "react";
