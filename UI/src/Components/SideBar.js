@@ -28,7 +28,6 @@ export default class SideBar extends React.Component {
   render() {
     return (
       <nav className='SideBar'>
-        {/*<Router>*/}
         <Link className='sideMenuItem' to='/'>
           Home
         </Link>
@@ -49,10 +48,6 @@ export default class SideBar extends React.Component {
           Checkout Key
         </Link>
         <br />
-        <Link className='sideMenuItem' to='/testcomp'>
-          Test Component
-        </Link>
-        {/*</Router>*/}
       </nav>
     );
   }

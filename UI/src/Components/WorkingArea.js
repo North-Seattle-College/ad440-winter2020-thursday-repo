@@ -12,7 +12,6 @@ import Home from './Home';
 import AddKey from './AddKey';
 //import AddPerson from './AddPerson';
 import CheckoutKey from './CheckoutKey';
-import TestComp from './TestComp';
 
 export default function WorkingArea() {
   return(
@@ -29,9 +28,6 @@ export default function WorkingArea() {
         </Route> */}
         <Route path='/checkoutkey'>
           <CheckoutKey />
-        </Route>
-        <Route path='/testcomp'>
-          <TestComp />
         </Route>
         <Route path='/'>
           <Home />
