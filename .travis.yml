@@ -55,5 +55,5 @@ jobs:
       local_dir: build												
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
-        branch: 
-            - /^feature-sprint[0-9]-(kdanepetersen|abainesh|howardkuoooo|reyesherrera|quincypowell|robezal)/
+        all_branches: true
+        condition: ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} =~ ^feature\/.*$
