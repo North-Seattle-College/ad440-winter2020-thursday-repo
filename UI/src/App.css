@@ -60,6 +60,11 @@ table th.sort-desc::before {
 .App-link {
   color: #09d3ac;
 }
+body {
+    background-color: lightblue;
+    padding: 3px 8px;
+
+}
 
 /*navbar starts*/
 .navbar { background-color: #222; }
