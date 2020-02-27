@@ -1,47 +1,5 @@
-/* For tableLayout Start*/
-table {
-  border-spacing: 0;
-  border: 1px solid #ededed;
-}
-table tr:last-child td {
-  border-bottom: 0;
-}
-table th,
-table td {
-  margin: 0;
-  padding: 0.5rem;
-  border-bottom: 1px solid #ededed;
-  border-right: 1px solid #ededed;
-  position: relative;
-}
-table th:last-child,
-table td:last-child {
-  border-right: 0;
-}
-table tr:nth-child(even) {
-  background-color: #fafafa;
-}
 
-table th::before {
-  position: absolute;
-  right: 15px;
-  top: 16px;
-  content: "";
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-}
-table th.sort-asc::before {
-  border-bottom: 5px solid #22543d;
-}
 
-table th.sort-desc::before {
-  border-top: 5px solid #22543d;
-}
-/*For tableLayout End*/
-
-/*Gen CSS*/
 .App {
   text-align: center;
 }
@@ -67,76 +25,6 @@ body {
 
 }
 
-/*navbar starts*/
-.navbar { background-color: #222; }
-a, .navbar-nav, .navbar-light .nav-link {
-  color: #9FFFCB;
-  &:hover { color: white; }
-}
-.navbar-brand {
-  font-size: 1.4em;
-  color: #9FFFCB;
-  &:hover { color: white; }
-}
-.form-center {
-  position: absolute !important;
-  left: 25%;
-  right: 25%;
-}
-/*navbar Ends*/
-
-/*another sidebar
-.bm-item {
-  display: inline-block;
-  text-decoration: none;
-  margin-bottom: 10px;
-  color: #d1d1d1;
-  transition: color 0.2s;
-}
-
-.bm-item:hover {
-  color: 89cff0;
-}
-
-.bm-burger-button {
-  position: fixed;
-  width: 36px;
-  height: 30px;
-  left: 36px;
-  top: 36px;
-}
-
-.bm-burger-bars {
-  background: #373a47;
-}
-
-.bm-cross-button {
-  height: 24px;
-  width: 24px;
-}
-
-.bm-cross {
-  background: #bdc3c7;
-}
-
-.bm-menu {
-  background: #373a47;
-  padding: 2.5em 1.5em 0;
-  font-size: 1.15em;
-}
-
-.bm-morph-shape {
-  fill: #373a47;
-}
-
-.bm-item-list {
-  color: #b8b7ad;
-}
-
-.bm-overlay {
-  background: rgba(0, 0, 0, 0.3);
-}
-/*SideBar Ends*/
 * {
   padding: 0;
   margin: 0;

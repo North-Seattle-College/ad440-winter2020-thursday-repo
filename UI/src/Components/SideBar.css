@@ -1,8 +1,17 @@
-
-
+/*SideBar Starts*/
 .sideMenuItem {
   margin-left: 4px;
   margin-right: 4px;
+}
+.menu-item {
+    display: inline-block;
+    margin: 5px;
+    border: 1px solid lightgray;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
 }
 .bm-item {
   display: inline-block;

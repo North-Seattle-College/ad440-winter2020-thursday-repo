@@ -40,7 +40,6 @@ export default class App extends React.Component {
         <div className='FlexWrapper'>
           <SideBar />
           <WorkingArea />
-          <Tables />
         </div>
         <Footer />
       </div>
