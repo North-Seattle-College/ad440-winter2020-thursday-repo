@@ -1,4 +1,3 @@
-
 import React from "react";
 //import ReactDOM from 'react-dom'
 
@@ -6,18 +5,20 @@ import "./App.css";
 import keyholderList from "./Components/keyholder.json"; //Used for mock
 
 // Import our custom components
-import WorkingArea from './Components/WorkingArea';
+import WorkingArea from "./Components/WorkingArea";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
-import Account from "./Components/Account";
 import Logout from "./Components/Logout";
 import AddKey from "./Components/AddKey";
 import SideBar from "./Components/SideBar";
-import TopBar from './Components/TopBar';
+import TopBar from "./Components/TopBar";
+import { Account } from "./Components/Account";
+import Signup from "./Components/Signup";
+import Login from "./Components/Login";
 //import TestComp from './Components/TestComp';
-import Footer from './Components/Footer';
+import Footer from "./Components/Footer";
 //import SearchBar from "./Components/searchBar";
-import Tables from './Components/tableLayout';
+import Tables from "./Components/tableLayout";
 /**
  * Base component for the KeyTrack application.
  *
@@ -35,11 +36,15 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div className='Wrapper'>
+      <div className="Wrapper">
         <TopBar />
-        <div className='FlexWrapper'>
+        <div className="FlexWrapper">
           <SideBar />
           <WorkingArea />
+          <Account>
+            <Signup />
+            <Login />
+          </Account>
         </div>
         <Footer />
       </div>
@@ -57,38 +62,38 @@ export default class App extends React.Component {
 //                 };
 //   }
 
-  /**
-   * Render the searchbar?
-   * @param keyholder ?
-   */
-  // renderKeyholder = (keyholder) => {
-  //   const { search } = this.state;
-  //   var name = keyholder.first_name.toLowerCase();
+/**
+ * Render the searchbar?
+ * @param keyholder ?
+ */
+// renderKeyholder = (keyholder) => {
+//   const { search } = this.state;
+//   var name = keyholder.first_name.toLowerCase();
 
-  //   return (
-  //     <div className="searchKeyholder">
-  //       <Card>
-  //         <CardBody>
-  //           <CardTitle title={keyholder.first_name}>
-  //             {keyholder.first_name.substring(0, 15)}
-  //             {keyholder.first_name.length > 15 && "..."}
-  //           </CardTitle>
-  //         </CardBody>
-  //       </Card>
-  //     </div>
-  //   );
-  // };
+//   return (
+//     <div className="searchKeyholder">
+//       <Card>
+//         <CardBody>
+//           <CardTitle title={keyholder.first_name}>
+//             {keyholder.first_name.substring(0, 15)}
+//             {keyholder.first_name.length > 15 && "..."}
+//           </CardTitle>
+//         </CardBody>
+//       </Card>
+//     </div>
+//   );
+// };
 
-  /**
-   * Handle updates to the search term
-   */
-  // handleSearchTermChange = (e) => {
-  //   this.setState({ search: e.target.value });
-  // };
+/**
+ * Handle updates to the search term
+ */
+// handleSearchTermChange = (e) => {
+//   this.setState({ search: e.target.value });
+// };
 
-  /**
-   * Required render method for React
-   */
+/**
+ * Required render method for React
+ */
 //   render() {
 //     const { search } = this.state;
 //     const filteredKeyholder = keyholderList.filter(keyholder => {
