@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import {default as apiurlbase} from '../apiurlbase'
+
+
 import { useTable, useFilters, useSortBy } from "react-table";
 
 export default function Table({ columns, data }) {

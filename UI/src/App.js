@@ -14,10 +14,10 @@ import Logout from "./Components/Logout";
 import AddKey from "./Components/AddKey";
 import SideBar from "./Components/SideBar";
 import TopBar from './Components/TopBar';
-import TestComp from './Components/TestComp';
+//import TestComp from './Components/TestComp';
 import Footer from './Components/Footer';
 //import SearchBar from "./Components/searchBar";
-
+import Tables from './Components/tableLayout';
 /**
  * Base component for the KeyTrack application.
  *
@@ -40,6 +40,7 @@ export default class App extends React.Component {
         <div className='FlexWrapper'>
           <SideBar />
           <WorkingArea />
+          <Tables />
         </div>
         <Footer />
       </div>

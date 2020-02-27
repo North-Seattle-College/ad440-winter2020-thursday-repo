@@ -34,15 +34,8 @@ table th::before {
 }
 table th.sort-asc::before {
   border-bottom: 5px solid #22543d;
-
-* {
-  padding: 0;
-  margin: 0;
 }
 
-.Wrapper {
-  height: 100%;
-}
 table th.sort-desc::before {
   border-top: 5px solid #22543d;
 }
@@ -144,7 +137,14 @@ a, .navbar-nav, .navbar-light .nav-link {
   background: rgba(0, 0, 0, 0.3);
 }
 /*SideBar Ends*/
+* {
+  padding: 0;
+  margin: 0;
+}
 
+.Wrapper {
+  height: 100%;
+}
 .FlexWrapper {
   display: flex;
   flex-direction: row;
