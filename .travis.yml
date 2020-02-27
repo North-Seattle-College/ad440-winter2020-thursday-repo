@@ -56,4 +56,3 @@ jobs:
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
         all_branches: true
-        condition: ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} =~ ^feature\/.*$
