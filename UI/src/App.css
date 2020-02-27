@@ -1,78 +1,85 @@
+/* For tableLayout Start*/
+table {
+  border-spacing: 0;
+  border: 1px solid #ededed;
+}
+table tr:last-child td {
+  border-bottom: 0;
+}
+table th,
+table td {
+  margin: 0;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ededed;
+  border-right: 1px solid #ededed;
+  position: relative;
+}
+table th:last-child,
+table td:last-child {
+  border-right: 0;
+}
+table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+table th::before {
+  position: absolute;
+  right: 15px;
+  top: 16px;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+table th.sort-asc::before {
+  border-bottom: 5px solid #22543d;
+}
+table th.sort-desc::before {
+  border-top: 5px solid #22543d;
+}
+/*For tableLayout End*/
+
+/*Gen CSS*/
 .App {
-    max-width: 992px;
-    background-color: #fff;
-    margin: auto;
+  text-align: center;
 }
-body {
-    background-color: lightblue;
-    padding: 3px 8px;
-
+.App-logo {
+  height: 40vmin;
 }
-
 .App-header {
   background-color: #282c34;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: right;
+  align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
-/* top Navbar */
-.nav {
-    border-bottom: 1px solid grey;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    background-color: #282c34;
-    opacity: 0.6;
-    filter: alpha(opacity=60);
-    z-index: -1;
-
-
-}
-.nav-menu {
-    list-style: none;
-}
-.nav-menu li {
-    display: inline-block;
-}
-.nav-menu__link {
-    display: inline-block;
-    margin: 5px;
-    border: 1px solid lightgray;
-    padding: 3px 8px;
-    border-radius: 5px;
-    background-color: #fff;
-    transition: all 0.3s ease-in-out;
-    text-decoration: none;
+.App-link {
+  color: #09d3ac;
 }
 
-/*end top navbar*/
-.fixed{
-    width: 200px;
+/*navbar starts*/
+.navbar { background-color: #222; }
+a, .navbar-nav, .navbar-light .nav-link {
+  color: #9FFFCB;
+  &:hover { color: white; }
 }
-.flex-item{
-    flex-grow: 1;
+.navbar-brand {
+  font-size: 1.4em;
+  color: #9FFFCB;
+  &:hover { color: white; }
 }
-.container{
-    text-align: center;
+.form-center {
+  position: absolute !important;
+  left: 25%;
+  right: 25%;
+}
+/*navbar Ends*/
 
-}
-
-/*for sidebar*/
-.sidebar {
-  max-width: 240px;
-  height: 100vh;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.img{
-  width: 30%;
-  max-width: 200px;
-}
-
-/*another sidebar*/
+/*another sidebar
 .bm-item {
   display: inline-block;
   text-decoration: none;
@@ -82,7 +89,7 @@ body {
 }
 
 .bm-item:hover {
-  color: white;
+  color: 89cff0;
 }
 
 .bm-burger-button {
@@ -123,3 +130,4 @@ body {
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
 }
+/*SideBar Ends*/

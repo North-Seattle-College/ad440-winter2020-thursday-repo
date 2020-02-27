@@ -1,92 +1,48 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+//import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+//logo for umano
+import Logo from './Components/logo.png';
+
 
 import "./App.css";
+//to be removed and added to its own component
 import keyholderList from "./Components/keyholder.json";
-import Navbar from "./Components/Navbar";
-import Home from "./Components/Home";
-import Account from "./Components/Account";
-import Logout from "./Components/Logout";
-import SideBar from "./Components/SideBar";
-//import SearchBar from "./Components/searchBar";
 
-//for search demo
-import { Button, Input, Card, CardBody, CardTitle } from "mdbreact";
-import AddKey from "./Components/AddKey";
-//for side menu
-const items = [
-  { name: "Ckeckout Key", label: "Ckeckout Key" },
-  { name: "Add Property", label: "Add Property" },
-  { name: "Add Key ", label: "Add Key" }
-];
+//for nav and side menu
+import  {NavBar} from "./Components/navbar";
+import SideBar from  "./Components/SideBar";
 
-class App extends Component {
-  //for search state
-  state = {
-    search: ""
-  };
 
-  //searchbar render
-  renderKeyholder = keyholder => {
-    const { search } = this.state;
-    var name = keyholder.first_name.toLowerCase();
+//other compoments
+import {Home} from "./Components/Home";
+import {Account} from "./Components/Account";
+import {Logout} from "./Components/Logout";
 
-    return (
-      <div className="searchKeyholder">
-        <Card>
-          <CardBody>
-            <CardTitle title={keyholder.first_name}>
-              {keyholder.first_name.substring(0, 15)}
-              {keyholder.first_name.length > 15 && "..."}
-            </CardTitle>
-          </CardBody>
-        </Card>
-      </div>
-    );
-  };
-  //to operate state
-  onchange = e => {
-    this.setState({ search: e.target.value });
-  };
+import {FormAddKey} from "./Components/FormAddKey";
+import {FormAddProperty} from "./Components/FormAddProperty";
+import Tables from './Components/tableLayout';
+import {NoMatch} from './NoMatch';
 
-  render() {
-    const { search } = this.state;
-    const filteredKeyholder = keyholderList.filter(keyholder => {
-      return (
-        keyholder.first_name.toLowerCase().indexOf(search.toLowerCase()) !== -1
-      );
-    });
-    return (
-      <div class="container">
-        <BrowserRouter>
-          <div className="navbar">
-            <Navbar />
-            <Route exact path="/" render={() => <Home title="Key Manager" />} />
-            <Route
-              path="/Account/"
-              render={() => <Account title="Account" />}
-            />
-            <Route path="/Logout/" render={() => <Logout title="Logout" />} />
-          </div>
-        </BrowserRouter>
 
-        <div class="fixed">
-          <SideBar />
-        </div>
+function App() {
+  return (
+    <React.Fragment>
+      <Router>
+        <NavBar />
+        <Tables />
+        <SideBar />
+        <Switch>
+          <Route exact path="./Components/Home" component={Home} />
+          <Route path="./Components/FormAddKey" component={FormAddKey} />
+          //<Route component ={FormAddProperty} />
+          //<Route component={NoMatch} />
 
-        <div className="flex-item">
-          <div className="container">
-            <Input label="Search" onChange={this.onchange} />
-          </div>
-          <div className="flex-item">
-            {filteredKeyholder.map(keyholder => {
-              return this.renderKeyholder(keyholder);
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  }
+        </Switch>
+      </Router>
+    </React.Fragment>
+  );
 }
 
 export default App;
