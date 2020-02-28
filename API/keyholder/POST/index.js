@@ -1,59 +1,78 @@
+//PUT Keyholder by id 
+
+// Logging levels:
+//Trace: Everything.
+//Debug: What user entered, JSON request. What was implemented in the database. 
+//(information about database entry for post, put request, returned get request)
+//Info: What happened. POST request, PUT REQUEST, GET REQUEST, DELETE. Skeleton of what happened.
+//Error: error, 400, 404, 405, 500 would show up
+
+//import package for connecting to database
 const mysql = require('mysql');
 
-// connection credential for mySQl RDS db
+//credentials
 const connection = mysql.createConnection({
-  host     : process.env.RDS_HOSTNAME,
-  user     : process.env.RDS_USERNAME,
-  password : process.env.RDS_PASSWORD,
-  port     : process.env.RDS_PORT,
-  database : process.env.RDS_DATABASE
-
+    host     : process.env.RDS_HOSTNAME,
+    port     : process.env.RDS_PORT,
+    database : process.env.RDS_DATABASE,
+    user     : process.env.RDS_USERNAME,
+    password : process.env.RDS_PASSWORD
 });
 
+console.trace("PUT keyholder by keyholder_id -- function starting --");
 exports.handler = (event, context, callback) => {
+  console.trace('connected as id ' + connection.threadId);
   
   // allows for using callbacks as finish/error-handlers
   context.callbackWaitsForEmptyEventLoop = false;
   
-  var first_name=event.body.first_name;
-  var last_name=event.body.last_name;
-  var email=event.body.email;
-  var phone=event.body.phone;
-  var keyholder_type=event.body.keyholder_type;
+  //body parameters for changing data
+  let keyholder_id=event.body.keyholder_id;
+  let first_name=event.body.first_name;
+  let last_name=event.body.last_name;
+  let email=event.body.email;
+  let phone=event.body.phone;
+  let keyholder_type=event.body.keyholder_type;
  
-  var queryParams = [
+ //query parameters
+  let queryParams = [
+    keyholder_id,
     first_name,
     last_name,
     email,
     phone,
     keyholder_type
   ]; 
-  
-  var error = new Error("wrong datatype inside json");
+
+  //data type error handling
+  let error = new Error("wrong datatype inside json");
     
   //check if the right data type is provided
-
-  if(typeof first_name != 'string' || 
-     typeof last_name !='string'   || 
-     typeof email != 'string'     ||
-     typeof phone != 'string'     ||
-     typeof keyholder_type != 'string'){
-     
-    context.fail(error);
-
-
- // SQL query to insert into keyholder table
- // using the forign key key_holdertype_id from keyholdertype table
- 
- }else{
-    var query = "INSERT INTO keyholder (first_name, last_name, email, phone, keyholder_type_id)" + 
-               "VALUES ( ?,?,?,?, (SELECT keyholder_type_id FROM keyholdertype WHERE keyholder_type = ? )  );"
+  let i = 1;
   
-    connection.query(query,queryParams, (err, res) => {
-      if (err) {
-        throw err
-      }
-      callback(null,res);
-    })
+  if(i==2)
+    // typeof first_name != 'string' || 
+    // typeof last_name !='string'   || 
+    // typeof email != 'string'     ||
+    // typeof phone != 'string'     ||
+    // typeof keyholder_type_id != 'number')
+    {
+     context.fail(error);
+
+ }else{
+   // SQL query to update keyholder
+
+  let query = "UPDATE keyholder SET first_name=?,last_name=?,email=?,phone=?, keyholder_type_id=? WHERE keyholder_id=" + event.params.keyholder_id.toString() + ";";
+  
+  connection.query(query,queryParams, (err, response) => {
+    if (err) {
+      throw err;
+    }
+    callback(null,response);
+  });
  }
- };
+};
+console.trace("PUT keyholder by keyholder_id -- function end ");
+
+//destroying connection to eliminate possibility of additional callbacks or events 
+connection.destroy();
