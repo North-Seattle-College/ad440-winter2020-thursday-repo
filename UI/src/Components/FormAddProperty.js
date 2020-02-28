@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import apiurlbase from "../apiurlbase.js";
 export class FormAddProperty extends Component {
   state = {
     property_name: "",
@@ -49,13 +49,11 @@ export class FormAddProperty extends Component {
     console.log(e.target.value)
     this.setState({property_country: e.target.value})
   }
-  // this is where you will want to trigger your api call.
-  // My recommendation is to trigger a function in another file
-  // that function will make the call.
+  //Processes Add Property Form data when form submit button pressed
   handleSubmit = (e) => {
     e.preventDefault()
     console.log(this.state)
-    var strURL = 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/dev/'
+    var strURL = apiurlbase
                    + 'property/';
     var strBody = JSON.stringify({
     "property_name": this.state.property_name,
@@ -66,14 +64,23 @@ export class FormAddProperty extends Component {
     "property_zip": this.state.property_zip,
     "property_country": this.state.property_country
   });
+  //Generate a GET request to our API to get Property
      var req = new XMLHttpRequest();
-      req.open('POST', strURL, true);
-        //req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        req.send(strBody);
-      //  req.addEventListener('readystatechange',
-                              //handleReadyStateChange,
-                              //false);
-                            };
+            req.open('GET', strURL, true);
+            req.setRequestHeader('Content-Type',
+              'application/json;charset=UTF-8',
+              "Access-Control-Request-Method: GET",
+              'Access-Control-Allow-Origin: https://api.2edusite.com');
+            req.addEventListener('readystatechange',
+                                  this.handleReadyStateChange,
+                                  false);
+            req.send(strBody);
+          }
+    //Handles updates to form Add Property
+    handleReadyStateChange = (e) => {
+      console.log(e.target.response);
+  }
+  //Generate a POST request to our API to add Property
   componentDidMount() {
   		fetch('https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property', {
   			method: 'POST',
