@@ -1,15 +1,7 @@
 import React, { Component } from "react";
+import {default as apiurlbase} from '../apiurlbase'
 
-import styled from 'styled-components';
-const GridWrapper = styled.div`
-  display: grid;
-  grid-gap: 10px;
-  margin-top: 1em;
-  margin-left: 6em;
-  margin-right: 6em;
-  grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: minmax(25px, auto);
-`;
+
 export class FormAddProperty extends Component {
   state = {
     property_name: "",
@@ -65,8 +57,7 @@ export class FormAddProperty extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     console.log(this.state)
-    var strURL = 'https://ez9pmaodek.execute-api.us-west-2.amazonaws.com/dev/'
-                   + 'property/';
+    var strURL = apiurlbase + 'property/' ;
     var strBody = JSON.stringify({
     "property_name": this.state.property_name,
     "property_type_id": this.state.property_type_id,
@@ -106,7 +97,6 @@ export class FormAddProperty extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
-      <GridWrapper>
       <form>
         <label htmlFor="property_name">Enter Property Name</label>
         <input id="property_name" name="property_name" type="text" onChange={this.handlePropertyNameChange} />
@@ -121,7 +111,7 @@ export class FormAddProperty extends Component {
         <input id="property_city" name="property_city" type="property_city" onChange={this.handlePropertyCityChange}/>
         <br />
         <label htmlFor="property_state">Enter Property State</label>
-        <input id="property_state" name="property_state" type="property_state" onChange={this.handlePropertyStatusChange} />
+        <input id="property_state" name="property_state"  type="property_state" onChange={this.handlePropertyStatusChange} />
         <br />
         <label htmlFor="property_zip">Enter Property Zip</label>
         <input id="property_zip" name="property_zip" type="property_zip" onChange={this.handlePropertyZipChange}/>
@@ -131,7 +121,7 @@ export class FormAddProperty extends Component {
         <br />
         <button onClick={this.handleSubmit}>Submit</button>
       </form>
-      </GridWrapper>
+
     );
   }
 }

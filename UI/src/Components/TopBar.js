@@ -1,6 +1,8 @@
 import React from 'react';
 import './TopBar.css';
 
+import Home from './Home';
+
 /**
  * Component to render the top bar
  *
@@ -21,7 +23,7 @@ export default class TopBar extends React.Component {
   render() {
     return (
       <header className='TopBar'>
-        <button class = "button">Home</button>
+        <button class = "button" href="./Home">Home</button>
         <button  class = "button">Account</button>
         <button  class = "button">Sign-Out</button>
       </header>
