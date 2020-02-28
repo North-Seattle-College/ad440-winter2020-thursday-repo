@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 import Home from "./Home";
-import AddKey from "./FormAddKey";
+import FormAddKey from "./FormAddKey";
 import FormAddProperty from "./FormAddProperty";
 import Logout from "./Logout";
 
@@ -22,19 +22,12 @@ export default props => {
       <a className="menu-item" href="/CheckoutKey">
         Checkout Key
       </a>
-      <a className="menu-item" href="/AddKey" >
-      <Link to="/AddKey">AddKey</Link>>
+      <a className="menu-item" href="/FormAddKey" >
+        Add Key
       </a>
-
       <a className="menu-item" href="/FormAddProperty">
         Add Property
       </a>
-      <BrowserRouter>
-        <div className="navbar">
-          <Route path="/AddKey" render={() => <AddKey title="AddKey" />} />
-        </div>
-      </BrowserRouter>
-
     </Menu>
   );
 };

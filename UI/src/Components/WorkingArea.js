@@ -9,12 +9,11 @@ import './WorkingArea.css'
 
 import Home from './Home';
 //import AddProperty from './AddProperty';
-import AddKey from './AddKey';
 //import AddPerson from './AddPerson';
 import CheckoutKey from './CheckoutKey';
 //import TestComp from './TestComp';
 import FormAddProperty from './FormAddProperty';
-
+import FormAddKey from './FormAddKey';
 export default function WorkingArea() {
   return(
     <div className='WorkingArea'>
@@ -24,7 +23,7 @@ export default function WorkingArea() {
             <AddProperty />
           </Route> */}
           <Route path='/addkey'>
-            <AddKey />
+            <FormAddKey />
           </Route>
           {/* <Route path='/addkeyholder'>
             <AddPerson />
