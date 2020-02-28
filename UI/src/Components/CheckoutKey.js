@@ -19,7 +19,7 @@ import {default as apiurlbase} from '../apiurlbase'
  * 
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
-export default class KeyCheckout extends React.Component {
+export default class CheckoutKey extends React.Component {
     constructor (props) {
         super(props);
         this.state = {keyholderId: this.props.keyholderId,
@@ -63,11 +63,13 @@ export default class KeyCheckout extends React.Component {
         
         var req = new XMLHttpRequest();
         req.open('PUT', strURL, true);
-        req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        req.send(strBody);
+        req.setRequestHeader('Content-Type',
+            'application/json;charset=UTF-8',
+            'Access-Control-Request-Method: PUT');
         req.addEventListener('readystatechange',
                               handleReadyStateChange,
                               false);
+        req.send(strBody);
     }
 
     /**
@@ -131,67 +133,6 @@ export default class KeyCheckout extends React.Component {
     }
 
     /**
-     * Get all the Property Id's, this is for early development & demo
-     */
-    getAllPropertyIds = () => {
-        /**
-         * OnReadyStateChange event handler for getAllPropertyIds
-         */
-        function handleReadyStateChange(e) {
-            if (req.readyState === 0) {
-                console.log('getAllPropertyIds state 0' + String(e));
-            } else if (req.readyState === 1) {
-                console.log('getAllPropertyIds state 1' + String(e))
-            } else if (req.readyState === 2) {
-                console.log('getAllPropertyIds state 2' + String(e))
-            } else if (req.readyState === 3) {
-                console.log('getAllPropertyIds state 3' + String(e))
-            } else if (req.readyState === 4 && req.status === 200) {
-                console.log('getAllPropertyIds state 4' + String(e))
-                var res = JSON.parse(req.responseText);
-                alert(String(res))
-            }
-        }
-
-        var strURL = apiurlbase + 'property';
-        var req = new XMLHttpRequest();
-        req.open('GET', strURL, true);
-        req.send();
-        req.addEventListener('readystatechange',
-                              handleReadyStateChange,
-                              false);
-    }
-
-    /**
-     * Get all the Keybundle Id's, this is for early development & demo
-     */
-    getAllKeybundleIds = () => {
-        function handleReadyStateChange(e) {
-            if (req.readyState === 0) {
-                console.log('getAllPropertyIds state 0' + String(e));
-            } else if (req.readyState === 1) {
-                console.log('getAllPropertyIds state 1' + String(e))
-            } else if (req.readyState === 2) {
-                console.log('getAllPropertyIds state 2' + String(e))
-            } else if (req.readyState === 3) {
-                console.log('getAllPropertyIds state 3' + String(e))
-            } else if (req.readyState === 4 && req.status === 200) {
-                console.log('getAllPropertyIds state 4' + String(e))
-                var res = JSON.parse(req.responseText);
-                alert(String(res))
-            }
-        }
-
-        var strURL = apiurlbase + 'keybundle';
-        var req = new XMLHttpRequest();
-        req.open('GET', strURL, true);
-        req.send();
-        req.addEventListener('readystatechange',
-                              handleReadyStateChange,
-                              false);
-    }
-
-    /**
      * Required render method for React to create and draw elements from components
      */
     render() {
@@ -225,7 +166,7 @@ export default class KeyCheckout extends React.Component {
                     <br />
                     <input type="submit" value="Checkout key" />
                     <input type="button" value="Cancel"
-                         onClick={this.handleCancel}/>
+                           onClick={this.handleCancel}/>
                 </form>
                 <button onClick={this.getAllPropertyIds}>
                     Get all property information
