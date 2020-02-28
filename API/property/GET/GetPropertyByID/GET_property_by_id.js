@@ -22,18 +22,17 @@ exports.handler = async (event, context) => {
             console.error('500 status returned: incorrect method call.');
             response = {
                 statusCode: 500,
-                message:"Server Error !"
+                errorMessage:"Server Error !"
             };
-            return response;
+            return context.fail(response.errorMessage);
             
         } else if (isNaN(parseInt(event.params.property_id)) || 
                     parseInt(event.params.property_id) < 0) {
             console.debug('400 status returned: bad input.');
-            response = {
+            response = { 
                 statusCode: 400,
-                message:"Bad Request !"
-            };
-            return response;
+                errorMessage: "Bad Request !" };
+            return context.fail(response.errorMessage);
         
         } else {            
             // grab param data to fetch
@@ -54,12 +53,12 @@ exports.handler = async (event, context) => {
                 console.debug('Queried not found + got: ', response);
                 response = {
                     statusCode: 404,
-                    message:"Not Found !"
+                    errorMessage:"Not Found !"
                 };
-                return response;
+                return context.fail(response.errorMessage);
             } else { // return requested info from successful query
                 console.log('FINAL RESPONSE: ', response);
-                return response[0];
+                return context.succeed(response[0]);
             }
         }
         
@@ -68,7 +67,7 @@ exports.handler = async (event, context) => {
         console.error(e.message);
         let response = { 
             statusCode: 500, 
-            message: 'Server Error !' };
-        return response;
+            errorMessage: 'Server Error !' };
+        return context.fail(response.errorMessage);
     }
 };
