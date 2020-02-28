@@ -24,7 +24,7 @@ exports.handler = async (event, context) => {
       console.info("Keybundle deleted");
       return {
         statusCode: 200,
-        message: "Keybundle deleted !"
+        message: "Keybundle id=" + event.params.keybundle_id.toString() + " deleted !"
       };
     } else if (results.affectedRows == 0) {
       console.info("No keybundle found");
