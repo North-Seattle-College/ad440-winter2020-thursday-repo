@@ -1,3 +1,4 @@
+
 import React from "react";
 import "./App.css";
 
@@ -7,14 +8,14 @@ import SideBar from "./Components/SideBar";
 import TopBar from './Components/TopBar';
 import Footer from './Components/Footer';
 //import SearchBar from "./Components/searchBar";
-
+import Tables from './Components/tableLayout';
 /**
  * Base component for the KeyTrack application.
- * 
+ *
  * Required props: none
- * 
+ *
  * Accepted props: none
- * 
+ *
  * @author Perla Reyes-Herrera
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */

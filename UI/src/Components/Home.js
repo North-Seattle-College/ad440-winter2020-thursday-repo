@@ -5,11 +5,11 @@ import {default as apiurlbase} from '../apiurlbase'
 /**
  * Landing page for app where user searches for DB objects
  * And, on clicking them, gets to maniuplate them
- * 
+ *
  * Required props: none
- * 
+ *
  * Accepted props: none
- * 
+ *
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default class Home extends React.Component {
@@ -119,7 +119,7 @@ export default class Home extends React.Component {
   }
 
   //lifecycle methods
-  
+
 
   /**
    * Render method required for React

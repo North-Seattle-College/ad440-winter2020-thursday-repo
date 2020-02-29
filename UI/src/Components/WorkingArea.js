@@ -17,11 +17,11 @@ import Account from './Account';
 /**
  * Component to handle route switching and display
  * other components that provide working forms
- * 
+ *
  * Required props: none
  * 
  * Accepted props: none
- * 
+ *
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default function WorkingArea() {

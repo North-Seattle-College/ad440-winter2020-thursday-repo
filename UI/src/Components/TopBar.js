@@ -3,13 +3,15 @@ import {Link} from 'react-router-dom';
 import './TopBar.css';
 import logo from './UmanoPM-Logo.png';
 
+import Home from './Home';
+
 /**
  * Component to render the top bar
- * 
+ *
  * Required props: A click handler function named. See comment.
- * 
+ *
  * Accepted props: none
- * 
+ *
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default class TopBar extends React.Component {
