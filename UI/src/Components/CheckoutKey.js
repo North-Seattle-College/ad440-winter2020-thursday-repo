@@ -166,7 +166,7 @@ export default class CheckoutKey extends React.Component {
                     <br />
                     <input type="submit" value="Checkout key" />
                     <input type="button" value="Cancel"
-                         onClick={this.handleCancel}/>
+                           onClick={this.handleCancel}/>
                 </form>
                 <button onClick={this.getAllPropertyIds}>
                     Get all property information
