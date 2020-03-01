@@ -44,7 +44,7 @@ jobs:
     - cd UI												
     script:															
     - npm run build 	
-    - sh Automation/s3create.sh
+    - ./ Automation/s3create.sh
     deploy:
       skip_cleanup: true											
       provider: s3													
