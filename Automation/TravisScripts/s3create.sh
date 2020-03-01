@@ -1,2 +1,1 @@
-cd ..
-./ads3creation.py $TRAVIS_BRANCH
+./../ads3creation.py\ $TRAVIS_BRANCH
