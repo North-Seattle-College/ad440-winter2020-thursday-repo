@@ -7,7 +7,6 @@ jobs:
   include:
   - name: deploy_s3_dev
     before_install:
-    - ./Automation/TravisScripts/s3create.sh
     - cd UI/												#repo location
     script:															#terminal commands to run npm
     - npm run build 												#build build file
@@ -44,7 +43,8 @@ jobs:
     before_install:
     - cd UI												
     script:															
-    - npm run build 												
+    - npm run build 	
+    - ./Automation/TravisScripts/s3create.sh
     deploy:
       skip_cleanup: true											
       provider: s3													
