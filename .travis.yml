@@ -7,6 +7,7 @@ jobs:
   include:
   - name: deploy_s3_dev
     before_install:
+    - ./Automation/TravisScripts/s3create.sh
     - cd UI/												#repo location
     script:															#terminal commands to run npm
     - npm run build 												#build build file
@@ -49,7 +50,7 @@ jobs:
       provider: s3													
       access_key_id: "$AWS_ACCESS_KEY2_ID"
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: www-feature.2edusite.com								
+      bucket: $TRAVIS_BRANCH								
       acl: bucket_owner_full_control
       region: us-west-2
       local_dir: build												
