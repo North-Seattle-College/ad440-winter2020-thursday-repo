@@ -127,8 +127,9 @@ def deploy_all_lambdas():
   print("deploy all lambdas:")
   # create list of directories with lambdas to deploy
   lambdas = generate_lambda_list_to_deploy()
-  for lambda in lambdas:
+  for lam in lambdas:
       # Generate the lambda name.
+      print("love")
 
 
 if __name__ == '__main__':
