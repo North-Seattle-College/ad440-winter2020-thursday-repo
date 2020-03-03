@@ -9,6 +9,7 @@ jobs:
     if: branch = feature-sprint4-mattyplo
     before_install:
       - pip install boto3 --user
+      - pip install pynpm --user
       - ./Automation/TravisScripts/deployLambda.py
 
   # - name: deploy_lambdas
