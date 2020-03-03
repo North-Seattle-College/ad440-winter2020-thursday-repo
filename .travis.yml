@@ -10,7 +10,7 @@ jobs:
     before_install:
       - pip install boto3 --user
       - pip install pynpm --user
-      - ./Automation/TravisScripts/deployLambda.py
+    script: ./Automation/TravisScripts/deployLambda.py
 
   # - name: deploy_lambdas
   #   if: branch =~ /^feature-sprint[0-9]-(anu|dereje|deya|kevin|sojung|yamato)/
