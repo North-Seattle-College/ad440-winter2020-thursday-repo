@@ -108,11 +108,32 @@ def zipDir():
   print(dir_name+'.zip file is created successfully!')
   return zip_file
 
+def generate_lambda_list_to_deploy():
+  print("generate lambda list to deploy")
+  lambda_list = []
+  # Walk API directory finding all directories with Lambdas
+  rootDir = '../../API/'
+  for dirName, subdirList, fileList in os.walk(rootDir):
+    print('Found directory: %s' % dirName)
+    #for fname in fileList:
+     #print('\t%s' % fname)
+    if 'index.js' in fileList:
+      print('index.js!')
+      lambda_list.append(dirName)
+
+  return lambda_list
+
 def deploy_all_lambdas():
-    print("deploy all lambdas:")
+  print("deploy all lambdas:")
+  # create list of directories with lambdas to deploy
+  lambdas = generate_lambda_list_to_deploy()
+  for lambda in lambdas:
+      # Generate the lambda name.
+
 
 if __name__ == '__main__':
-    deploy_all_lambdas()
+  print(os.getenv('TRAVIS_BRANCH'))
+  #deploy_all_lambdas()
   #run_npm_install()
   #zipDir()
   #print(deploy_lambda_function(NODEJS_LAMBDA_NAME, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN))
