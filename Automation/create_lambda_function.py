@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import boto3
-import create_iam_role
+# import create_iam_role (will use Lamdba_Role for all lambdas)
 import re
 
 
@@ -19,14 +19,14 @@ args = parser.parse_args()
 function_name = args.filename
 
 # requires Lamba name to follow the correct pattern
-feature_exp = re.compile(r"feature-sprint[1-6]-[a-zA-Z]{1,}$")
-devProd_exp = re.compile(r"dev|prod-[a-zA-Z]{1,}-[a-zA-Z]{1,}$")
+feature_exp = re.compile(r"feature-sprint[1-6]-api-[a-z_]{1,}-[a-z0-9]{1,}$")
+devProd_exp = re.compile(r"dev|prod-[a-z]{1,}-[a-z0-9]{1,}$")
 
 
 if feature_exp.match(function_name) or devProd_exp.match(function_name):
-
-    # calls the function to create the IAM role, returns the arn
-    iam_role = create_iam_role.get_role_arn(function_name)
+  
+    # iam_role to a pre-existing IAM role "Lambda_Role
+    iam_role = 'arn:aws:iam::061431082068:role/Lambda_Role'
 
     #Builds a lambda function using the code in function.zip
     try:
