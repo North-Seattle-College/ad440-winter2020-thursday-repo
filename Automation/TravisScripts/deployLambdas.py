@@ -11,42 +11,46 @@ import zipfile
 
 NODEJS_12X_RUNTIME = "nodejs12.x"
 LAMBDA_HANDLER = 'lambda_function.handler'
-NODEJS_LAMBDA_NAME = "NodeJSLambdaFunction"
+# NODEJS_LAMBDA_NAME = "NodeJSLambdaFunction"
 LAMBDA_ROLE_ARN = "arn:aws:iam::061431082068:role/Lambda_Role"
 
 def lambda_client():
   aws_lambda = boto3.client('lambda', region_name='us-west-2')
   return aws_lambda
 
-def deploy_lambda_function(function_name, runtime, handler, role_arn):
+def deploy_lambda_function(function_name, dir_name, runtime, handler, role_arn):
 
   # run npm install to get node_modules
 
-  folder_path = "../../API/testDeleteMe"
-  zip_file = make_zip_file_bytes(path=folder_path)
+  # folder_path = "../../API/testDeleteMe"
+  zip_file = make_zip_file_bytes(path=dir_name)
   #zipFile = "../../API/testDeleteMe/testDeleteMe.zip"
 
   # Deploy Lambda Function
 
-  # Update the function if deploy doesn't work.
-  # return lambda_client().update_function_code(
-  #   FunctionName=function_name,
-  #   ZipFile=zip_file,
-  # )
 
-  # Try to deploy, if it already exists, then update.
-  # return lambda_client().create_function(
-  #   FunctionName=function_name,
-  #   Runtime=runtime,
-  #   Role=role_arn,
-  #   Handler=handler,
-  #   Code={
-  #     'ZipFile': zip_file
-  #   },
-  #   Timeout=15,
-  #   MemorySize=128,
-  #   Publish=True,
-  # )
+
+  # Try to Update the function .
+  try:
+      return lambda_client().update_function_code(
+        FunctionName=function_name,
+        ZipFile=zip_file,
+      )
+  except:
+
+      # If it doesn't exist, create it.
+      return lambda_client().create_function(
+        FunctionName=function_name,
+        Runtime=runtime,
+        Role=role_arn,
+        Handler=handler,
+        Code={
+          'ZipFile': zip_file
+        },
+        Timeout=15,
+        MemorySize=128,
+        Publish=True,
+      )
 
   # will need to add api gateway calls to further configure newly created and deployed lambda.
 
@@ -65,8 +69,8 @@ def files_to_zip(path):
             yield full_path, archive_name
 
 # uses the pynpm module to run npm install in lambda directory
-def run_npm_install():
-    pck = NPMPackage('../../API/testDeleteMe/package.json')
+def run_npm_install(dir_name):
+    pck = NPMPackage(dir_name + '/package.json')
     pck.install()
 
 # Declare the function to return all file paths of the particular directory
@@ -114,11 +118,11 @@ def generate_lambda_list_to_deploy():
   # Walk API directory finding all directories with Lambdas
   rootDir = '../../API/'
   for dirName, subdirList, fileList in os.walk(rootDir):
-    print('Found directory: %s' % dirName)
+    #print('Found directory: %s' % dirName)
     #for fname in fileList:
      #print('\t%s' % fname)
     if 'index.js' in fileList:
-      print('index.js!')
+      #print('index.js!')
       lambda_list.append(dirName)
 
   return lambda_list
@@ -127,14 +131,46 @@ def deploy_all_lambdas():
   print("deploy all lambdas:")
   # create list of directories with lambdas to deploy
   lambdas = generate_lambda_list_to_deploy()
-  for lam in lambdas:
+  for dir_name in lambdas:
       # Generate the lambda name.
-      print("love")
+      lambda_name = get_lambda_name_from_directory(dir_name)
+      # run npm install in lambda directory
+      run_npm_install(dir_name)
+      # deploy lambda
+      deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
+      print(lambda_name + " " + dir_name)
+
+def get_lambda_name_from_directory(dir_name):
+    # Parse the dir_name into the lambda name
+    dir_name_components = dir_name.split('/')
+    # remove ../../ and API from dir_name_components
+    dir_name_components.pop(0)
+    dir_name_components.pop(0)
+    dir_name_components.pop(0)
+    # determine which environment we are deploying to based on branch
+    branch = ""
+    if os.getenv('TRAVIS_BRANCH') == 'master':
+        branch = 'prod'
+    else:
+        branch = 'dev2'
+
+    lambda_name = branch + "-" + dir_name_components[0]
+    # iterate through dir_name_components to build lambda name
+    for i in range(1, len(dir_name_components)):
+        if dir_name_components[i] == 'id':
+            lambda_name = lambda_name + "_" + dir_name_components[i]
+        else:
+            lambda_name = lambda_name + "-" + dir_name_components[i]
+    #print(lambda_name)
+    lambda_name = lambda_name.lower()
+    return lambda_name
 
 
 if __name__ == '__main__':
-  print(os.getenv('TRAVIS_BRANCH'))
-  #deploy_all_lambdas()
-  #run_npm_install()
-  #zipDir()
-  #print(deploy_lambda_function(NODEJS_LAMBDA_NAME, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN))
+    deploy_all_lambdas()
+
+    # Single test case
+    # dir_name = "../../API/testDeleteMe"
+    # lambda_name = get_lambda_name_from_directory(dir_name)
+    # run_npm_install(dir_name)
+    # deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
