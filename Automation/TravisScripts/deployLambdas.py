@@ -131,7 +131,9 @@ def deploy_all_lambdas():
   print("deploy all lambdas:")
   # create list of directories with lambdas to deploy
   lambdas = generate_lambda_list_to_deploy()
+  print("pre-loop")
   for dir_name in lambdas:
+      print("in loop")
       # Generate the lambda name.
       lambda_name = get_lambda_name_from_directory(dir_name)
       # run npm install in lambda directory
