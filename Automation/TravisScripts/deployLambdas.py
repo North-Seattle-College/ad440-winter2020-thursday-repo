@@ -90,28 +90,6 @@ def retrieve_file_paths(dirName):
   # return all paths
   return filePaths
 
-# create a zip file of all files in directory
-def zipDir():
-# Assign the name of the directory to zip
-  dir_name = '../../API/testDeleteMe'
-
-  # Call the function to retrieve all files and folders of the assigned directory
-  filePaths = retrieve_file_paths(dir_name)
-  print(filePaths)
-  # printing the list of all files to be zipped
-  print('The following list of files will be zipped:')
-  # for fileName in filePaths:
-  #   print(fileName)
-
-  # writing files to a zipfile
-  zip_file = zipfile.ZipFile(dir_name+'/testDeleteMe.zip', 'w')
-  with zip_file:
-    # writing each file one by one
-    for file in filePaths:
-      zip_file.write(file)
-
-  print(dir_name+'.zip file is created successfully!')
-  return zip_file
 
 def generate_lambda_list_to_deploy():
   print("generate lambda list to deploy")
