@@ -146,9 +146,17 @@ def get_lambda_name_from_directory(dir_name):
     # Parse the dir_name into the lambda name
     dir_name_components = dir_name.split('/')
     # remove ../../ and API from dir_name_components
+    # dir_name_components.pop(0)
+    # dir_name_components.pop(0)
+    # dir_name_components.pop(0)
+
+    # remove dir_name_components until you get to API directory
+    while dir_name_components[0] != "API":
+        dir_name_components.pop(0)
+
+    # remove API directory from dir_name_components
     dir_name_components.pop(0)
-    dir_name_components.pop(0)
-    dir_name_components.pop(0)
+    print(dir_name_components)
     # determine which environment we are deploying to based on branch
     branch = ""
     if os.getenv('TRAVIS_BRANCH') == 'master':
@@ -170,9 +178,9 @@ def get_lambda_name_from_directory(dir_name):
 
 if __name__ == '__main__':
     # deploy_all_lambdas()
-
+    print(get_lambda_name_from_directory("./API/testDeleteMe"))
     # Single test case
-    dir_name = "./API/testDeleteMe"
-    lambda_name = get_lambda_name_from_directory(dir_name)
-    run_npm_install(dir_name)
-    deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
+    # dir_name = "./API/testDeleteMe"
+    # lambda_name = get_lambda_name_from_directory(dir_name)
+    # run_npm_install(dir_name)
+    # deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
