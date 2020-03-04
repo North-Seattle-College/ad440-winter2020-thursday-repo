@@ -133,12 +133,12 @@ def deploy_all_lambdas():
   lambdas = generate_lambda_list_to_deploy()
   for dir_name in lambdas:
       # Generate the lambda name.
+      print(lambda_name + " " + dir_name)
       lambda_name = get_lambda_name_from_directory(dir_name)
       # run npm install in lambda directory
       run_npm_install(dir_name)
       # deploy lambda
       deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
-      print(lambda_name + " " + dir_name)
 
 def get_lambda_name_from_directory(dir_name):
     # Parse the dir_name into the lambda name
