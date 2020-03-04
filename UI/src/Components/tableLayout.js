@@ -1,22 +1,29 @@
 import React, { useMemo, useState, useEffect } from "react";
 import axios from "axios";
+import {default as apiurlbase} from '../apiurlbase'
+//		"https://api.2edusite.com/dev/";
+
 
 import Table from "./Table";
 import "./tableLayout.css";
 
-const Genres = ({ values }) => {
+const Keys = ({ values }) => {
   return (
     <>
-      {values.map((genre, idx) => {
+      {values.map((key, idx) => {
         return (
           <span key={idx} className="badge">
-            {genre}
+            {key}
           </span>
         );
       })}
     </>
   );
 };
+
+
+var strURLkey = apiurlbase + 'keybundle/';
+var strURLproperty = apiurlbase + 'property/';
 
 function Tables() {
   const columns = useMemo(
@@ -26,7 +33,7 @@ function Tables() {
         columns: [
           {
             Header: "Key Id",
-            accessor: "show.name"
+            accessor: "show.keybundle_id"
           },
           {
             Header: "Key Type",
@@ -34,13 +41,11 @@ function Tables() {
           },
           {
             Header: "Checkout Date",
-            accessor: "show.date",
-            Cell: ({ cell: { value } }) => <Genres values={value} />
+            accessor: "show.checkoutDta"
           },
           {
             Header: "Due Date",
-            accessor: "show.dueDate",
-            Cell: ({ cell: { value } }) => <Genres values={value} />
+            accessor: "show.dueBackDate"
           }
         ]
       },
@@ -49,26 +54,11 @@ function Tables() {
         columns: [
           {
             Header: "Property Address",
-            accessor: "show.address"
-          },
-
-          {
-            Header: "Runtime",
-            accessor: "show.runtime",
-            Cell: ({ cell: { value } }) => {
-              const hour = Math.floor(value / 60);
-              const min = Math.floor(value % 60);
-              return (
-                <>
-                  {hour > 0 ? `${hour} hr${hour > 1 ? "s" : ""} ` : ""}
-                  {min > 0 ? `${min} min${min > 1 ? "s" : ""}` : ""}
-                </>
-              );
-            }
+            accessor: "show.property_address"
           },
           {
             Header: "Key Holder",
-            accessor: "show.holder"
+            accessor: "show.keyholder_id"
           }
         ]
       }
@@ -80,7 +70,7 @@ function Tables() {
 
   useEffect(() => {
     (async () => {
-      const result = await axios("https://api.2edusite.com/feature-sprint2/property");
+      const result = await axios(strURLkey + strURLproperty);
       setData(result.data);
     })();
   }, []);

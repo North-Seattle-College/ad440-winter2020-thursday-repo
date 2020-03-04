@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import {default as apiurlbase} from '../apiurlbase'
 
 
 import { useTable, useFilters, useSortBy } from "react-table";
 
 export default function Table({ columns, data }) {
   const [filterInput, setFilterInput] = useState("");
-  // Use the state and functions returned from useTable to build your UI
+  // Use the state and functions returned from useTable
   const {
     getTableProps,
     getTableBodyProps,
@@ -35,7 +34,7 @@ export default function Table({ columns, data }) {
       <input
         value={filterInput}
         onChange={handleFilterChange}
-        placeholder={"Search name"}
+        placeholder={"Search keys"}
       />
       <table {...getTableProps()}>
         <thead>

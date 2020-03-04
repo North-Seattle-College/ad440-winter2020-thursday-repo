@@ -1,0 +1,48 @@
+env:
+- CI=false npm run build
+language: node_js
+node_js:
+- node
+jobs:
+  include:
+  - name: deploy_lambdas
+    if: branch =~ /^feature-sprint[0-9]-(anu|dereje|deya|kevin|sojung|yamato)/
+    before_install:
+    - PATH_TO_LAMBDA=$(./Automation/TravisScripts/setPathToLambda.sh)
+    - cd $PATH_TO_LAMBDA
+    deploy:
+      provider: lambda
+      function_name: $TRAVIS_BRANCH
+      region: "us-west-2"
+      role: "arn:aws:iam::061431082068:role/Lambda_Role"
+      runtime: "nodejs12.x"
+      handler_name: "handler"
+      access_key_id: "$AWS_ACCESS_KEY2_ID"
+      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
+      on:
+        repo: North-Seattle-College/ad440-winter2020-thursday-repo
+        branch: $TRAVIS_BRANCH
+    branches:
+      only:
+      - $TRAVIS_BRANCH
+  - name: deploy_s3
+    before_install:
+    - "./Automation/TravisScripts/build_env.sh"
+    - cd UI/
+    script:
+    - npm run build
+    deploy:
+      skip_cleanup: true
+      provider: s3
+      access_key_id: "$AWS_ACCESS_KEY2_ID"
+      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
+      bucket: feature-sprint2-mattyplo
+      acl: bucket_owner_full_control
+      region: us-west-2
+      local_dir: build
+      on:
+        repo: North-Seattle-College/ad440-winter2020-thursday-repo
+        branch: feature-sprint3-mattyplo
+    branches:
+      only:
+      - feature-sprint3-mattyplo

@@ -11,7 +11,7 @@ import fetch from 'isomorphic-fetch';
 //      ...
 //    }
    export function createBlogPost(data) {
-       return fetch('http://api.symfony-3.dev/app_dev.php/posts', {
+       return fetch('https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property', {
            method: 'POST',
            mode: 'CORS',
            body: JSON.stringify(data),

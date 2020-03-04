@@ -3,16 +3,59 @@
 //does not direct to checkout nor add properties
 
 import React from 'react';
-import { slide as Menu } from 'react-burger-menu';
-import { NavLink } from 'react-router-dom';
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import './SideBar.css'
+import {Link} from 'react-router-dom';
+//import { slide as Menu } from 'react-burger-menu';
+//import Home from "./Account";
+//import AddKey from "./AddKey";
+//import FormAddKey from "./FormAddKey";
+//import Logout from "./Logout";
 
-import Home from "./Home";
-import AddKey from "./FormAddKey";
-import FormAddProperty from "./FormAddProperty";
-import Logout from "./Logout";
+/**
+ * Component to display the side bar
+ *
+ * Accepted props: none
+ *
+ * Required props:
+ *
+ * @author Perla Reyes-Herrera
+ * @author Quincy Powell <Quincy.Powell@gmail.com>
+ */
+export default class SideBar extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <nav className='SideBar'>
+        <Link className='sideMenuItem' to='/'>
+          Home
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/addproperty'>
+          Add Property
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/addkey'>
+          Add Key
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/addkeyholder'>
+          Add Person
+        </Link>
+        <br />
+        <Link className='sideMenuItem' to='/checkoutkey'>
+          Checkout Key
+        </Link>
+        <br />
+      </nav>
+    );
+  }
+}
 
 
+/*
 export default props => {
   return (
     <Menu>
@@ -22,25 +65,21 @@ export default props => {
       <a className="menu-item" href="/CheckoutKey">
         Checkout Key
       </a>
-      <a className="menu-item" href="/AddKey" >
-      <Link to="/AddKey">AddKey</Link>>
+      <a className="menu-item" href="/FormAddKey" >
+        Add Key
       </a>
-
       <a className="menu-item" href="/FormAddProperty">
         Add Property
       </a>
-      <BrowserRouter>
-        <div className="navbar">
-          <Route path="/AddKey" render={() => <AddKey title="AddKey" />} />
-        </div>
-      </BrowserRouter>
 
+      <a className='menu-item' href='/testcomp'>
+        Show Test Component
+      </a>
     </Menu>
   );
 };
-// import React from 'react';
-// import { slide as Menu } from 'react-burger-menu';
-// import { Link } from "react-router-dom";
+*/
+
 //
 // import './SideBar.css';
 // import Home from "./Home";

@@ -1,8 +1,5 @@
 import React from "react";
-//import ReactDOM from 'react-dom'
-
 import "./App.css";
-import keyholderList from "./Components/keyholder.json"; //Used for mock
 
 // Import our custom components
 import WorkingArea from "./Components/WorkingArea";
