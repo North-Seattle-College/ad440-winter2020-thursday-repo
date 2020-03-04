@@ -7,6 +7,10 @@ import subprocess
 from pynpm import NPMPackage
 import zipfile
 
+# set up boto3 with AWS credentials and environment
+os.environ['AWS_PROFILE'] = "MyProfile1"
+os.environ['AWS_DEFAULT_REGION'] = "us-west-2"
+
 #from src.utils import Utils
 
 NODEJS_12X_RUNTIME = "nodejs12.x"
