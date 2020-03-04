@@ -172,7 +172,7 @@ if __name__ == '__main__':
     # deploy_all_lambdas()
 
     # Single test case
-    dir_name = "../../API/testDeleteMe"
+    dir_name = "./API/testDeleteMe"
     lambda_name = get_lambda_name_from_directory(dir_name)
     run_npm_install(dir_name)
     deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
