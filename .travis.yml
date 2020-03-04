@@ -10,7 +10,6 @@ jobs:
     before_install:
       - pip install boto3 --user
       - pip install pynpm --user
-      - ./Automation/TravisScripts/set_aws.creds.sh
     script: ./Automation/TravisScripts/deployLambdas.py
 
   # - name: deploy_lambdas

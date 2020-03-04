@@ -7,10 +7,6 @@ import subprocess
 from pynpm import NPMPackage
 import zipfile
 
-# set up boto3 with AWS credentials and environment
-os.environ['AWS_PROFILE'] = "MyProfile1"
-os.environ['AWS_DEFAULT_REGION'] = "us-west-2"
-
 #from src.utils import Utils
 
 NODEJS_12X_RUNTIME = "nodejs12.x"
@@ -19,7 +15,8 @@ LAMBDA_HANDLER = 'lambda_function.handler'
 LAMBDA_ROLE_ARN = "arn:aws:iam::061431082068:role/Lambda_Role"
 
 def lambda_client():
-  aws_lambda = boto3.client('lambda', region_name='us-west-2')
+  aws_lambda = boto3.client('lambda', aws_access_key_id=$AWS_ACCESS_KEY2_ID,
+    aws_secret_access_key=$AWS_SECRET_ACCESS_KEY2, region_name='us-west-2')
   return aws_lambda
 
 def deploy_lambda_function(function_name, dir_name, runtime, handler, role_arn):
