@@ -117,7 +117,7 @@ def generate_lambda_list_to_deploy():
   print("generate lambda list to deploy")
   lambda_list = []
   # Walk API directory finding all directories with Lambdas
-  rootDir = '../../API/'
+  rootDir = './API/'
   for dirName, subdirList, fileList in os.walk(rootDir):
     #print('Found directory: %s' % dirName)
     #for fname in fileList:
@@ -178,10 +178,10 @@ def get_lambda_name_from_directory(dir_name):
 
 
 if __name__ == '__main__':
-    # deploy_all_lambdas()
+    deploy_all_lambdas()
     # print(get_lambda_name_from_directory("./API/testDeleteMe"))
     # Single test case
-    dir_name = "./API/testDeleteMe"
-    lambda_name = get_lambda_name_from_directory(dir_name)
-    run_npm_install(dir_name)
-    deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
+    # dir_name = "./API/testDeleteMe"
+    # lambda_name = get_lambda_name_from_directory(dir_name)
+    # run_npm_install(dir_name)
+    # deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
