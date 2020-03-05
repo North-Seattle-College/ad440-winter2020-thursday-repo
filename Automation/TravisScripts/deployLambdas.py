@@ -84,10 +84,10 @@ def retrieve_file_paths(dirName):
 
     # Read all directories, subdirectories and file lists
     for root, directories, files in os.walk(dirName):
-    for filename in files:
-        # Create the full filepath by using os module.
-        filePath = os.path.join(root, filename)
-        filePaths.append(filePath)
+        for filename in files:
+            # Create the full filepath by using os module.
+            filePath = os.path.join(root, filename)
+            filePaths.append(filePath)
 
     # return all paths
     return filePaths
