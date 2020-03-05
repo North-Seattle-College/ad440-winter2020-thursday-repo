@@ -37,7 +37,7 @@ def main():
   isFeature = input('Is this for the feature stage?(y/n) ')
   logger.inputTrace('Is Feature', isFeature)
   if isFeature.lower() ==  'y' or isFeature.lower() ==  'yes':
-    feature_funcs = GetFeatureStageFuncs(stg_var_name_lst, api_team_roaster)
+    feature_funcs = GetFeatureStageFuncs(stg_var_name_lst)
     isFeature = True
   else:
     isFeature = False
@@ -249,7 +249,7 @@ def GetDevProdStageFunc(stg_var_name_lst):
   logger.generatedDebug('Development and Production Stage Functions:', dev_prod_stg_funcs)
   return (dev_prod_stg_funcs)
 
-def GetFeatureStageFuncs(stg_var_name_lst, api_team_roaster):
+def GetFeatureStageFuncs(stg_var_name_lst):
   # get stage name
   stg_name = input('Enter new feature stage sprint number: ')
   try:
@@ -265,41 +265,38 @@ def GetFeatureStageFuncs(stg_var_name_lst, api_team_roaster):
   for l in range(length):
     print(str(l+1)+'.'+ stg_var_name_lst[l], end=" ")
   print('')
-  stg_vars_get = input('Enter method name/number-responsible party, separate by comma:')
+  stg_vars_get = input('Enter method name/number to enable, separate by comma, or enter all:')
   stg_vars_get = stg_vars_get.replace(" ", "")
   logger.inputTrace('Method Selection', stg_vars_get)
   stg_vars_get = stg_vars_get.split(',')
   stg_vars_updated = {}
-  
-  for pair in stg_vars_get:
-    methodName = ''
-    partyName = ''
-    pair = pair.split('-')
-    if pair[0].isnumeric():
-      methodNum = int(pair[0]) - 1
-      methodName = stg_var_name_lst[methodNum]
-    elif '_' in pair[0]:
-      pair[0] = pair[0].lower()
-      methodName = pair[0].split('_')
-      methodName = pair[0].replace(methodName[-1], methodName[-1].upper())
-      if methodName not in stg_var_name_lst:
-        logger.inputError('Method name you enter is not a known method')
-        os.abort()
-    else:
-      logger.inputError('Cannot identify the method number/name')
-    
-    partyName = pair[1]
-    if pair[1] not in api_team_roaster:
-      logger.warn('The responsible party is not an API team member!' + partyName)
-      validation = input('Type the responsible party name again to verify: ')
-      if partyName != validation:
-        logger.inputError('Validation of responsible party failed!')
-        partyName = ''
-        os.abort()
-    
-    lambdaName = stg_name + '-' + partyName + '-' + methodName.lower().replace('_','-')
 
-    stg_vars_updated[methodName] = lambdaName
+  
+  if stg_vars_get.lower() != 'all':
+    for var in stg_vars_get:
+      methodName = ''
+      if var.isnumeric():
+        methodNum = int(var) - 1
+        methodName = stg_var_name_lst[methodNum]
+      elif '_' in var:
+        var = var.lower()
+        methodName = var.split('_')
+        methodName = var.replace(methodName[-1], methodName[-1].upper())
+        if methodName not in stg_var_name_lst:
+          logger.inputError('Method name you enter is not a known method')
+          os.abort()
+      else:
+        logger.inputError('Cannot identify the method number/name')
+      
+      lambdaName = stg_name + '-api-' + methodName.lower().replace('_','-')
+
+      stg_vars_updated[methodName] = lambdaName
+  else:
+    for var in stg_var_name_lst:
+      methodName = var.replace('id_', 'id-').lower()
+      lambdaName = stg_name + '-api-' + methodName.lower().replace('_','-')
+
+      stg_vars_updated[methodName] = lambdaName
   
   logger.generatedDebug('Feature Functions', json.dumps(stg_vars_updated))
   
