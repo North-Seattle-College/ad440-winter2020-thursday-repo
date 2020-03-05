@@ -7,61 +7,61 @@ import subprocess
 from pynpm import NPMPackage
 import zipfile
 
-#from src.utils import Utils
 
 NODEJS_12X_RUNTIME = "nodejs12.x"
 LAMBDA_HANDLER = 'lambda_function.handler'
-# NODEJS_LAMBDA_NAME = "NodeJSLambdaFunction"
 LAMBDA_ROLE_ARN = "arn:aws:iam::061431082068:role/Lambda_Role"
 
-def lambda_client():
-  aws_lambda = boto3.client('lambda', aws_access_key_id=os.getenv('AWS_ACCESS_KEY2_ID'),
-    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY2'), region_name='us-west-2')
-  return aws_lambda
 
+# Returns the AWS Lambda client enabling the caller to use AWS Lambda resources
+def lambda_client():
+    # Pass in the AWS Resource you want to use.  Pass in your AWS Access key credentials, and region.
+    aws_lambda = boto3.client('lambda', aws_access_key_id=os.getenv('AWS_ACCESS_KEY2_ID'),
+        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY2'), region_name='us-west-2')
+    return aws_lambda
+
+
+# Prep and deploy a lambda function to your AWS account.
+# The method takes in the function name, the path to the directory.
+# The node.js runtime, the handler and the arn for the security role.
 def deploy_lambda_function(function_name, dir_name, runtime, handler, role_arn):
 
-  # run npm install to get node_modules
+    # To deploy our lambda, we must package it as a zip file.
+    zip_file = make_zip_file_bytes(path=dir_name)
 
-  # folder_path = "../../API/testDeleteMe"
-  zip_file = make_zip_file_bytes(path=dir_name)
-  #zipFile = "../../API/testDeleteMe/testDeleteMe.zip"
+    # Try to Update the function.  This is the case if the function already exists.
+    try:
+        return lambda_client().update_function_code(
+            FunctionName=function_name,
+            ZipFile=zip_file,
+        )
+    # If it doesn't exist, create it.
+    except:
+        return lambda_client().create_function(
+            FunctionName=function_name,
+            Runtime=runtime,
+            Role=role_arn,
+            Handler=handler,
+            Code={
+                'ZipFile': zip_file
+            },
+            Timeout=15,
+            MemorySize=128,
+            Publish=True,
+        )
 
-  # Deploy Lambda Function
 
-
-
-  # Try to Update the function .
-  try:
-      return lambda_client().update_function_code(
-        FunctionName=function_name,
-        ZipFile=zip_file,
-      )
-  except:
-
-      # If it doesn't exist, create it.
-      return lambda_client().create_function(
-        FunctionName=function_name,
-        Runtime=runtime,
-        Role=role_arn,
-        Handler=handler,
-        Code={
-          'ZipFile': zip_file
-        },
-        Timeout=15,
-        MemorySize=128,
-        Publish=True,
-      )
-
-  # will need to add api gateway calls to further configure newly created and deployed lambda.
-
+# Convert a given file into a zipped file.
 def make_zip_file_bytes(path):
+    # In order for AWS to accept our zip files, we must first convert them to Byte objects.
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, 'w') as z:
         for full_path, archive_name in files_to_zip(path=path):
             z.write(full_path, archive_name)
     return buf.getvalue()
 
+
+# Create a zip file of all the files in a lambda directory.
 def files_to_zip(path):
     for root, dirs, files in os.walk(path):
         for f in files:
@@ -69,65 +69,60 @@ def files_to_zip(path):
             archive_name = full_path[len(path) + len(os.sep):]
             yield full_path, archive_name
 
+
 # uses the pynpm module to run npm install in lambda directory
 def run_npm_install(dir_name):
     pck = NPMPackage(dir_name + '/package.json')
     pck.install()
 
+
 # Declare the function to return all file paths of the particular directory
 def retrieve_file_paths(dirName):
 
-  # setup file paths variable
-  filePaths = []
+    # setup file paths variable
+    filePaths = []
 
-  # Read all directory, subdirectories and file lists
-  for root, directories, files in os.walk(dirName):
+    # Read all directories, subdirectories and file lists
+    for root, directories, files in os.walk(dirName):
     for filename in files:
         # Create the full filepath by using os module.
         filePath = os.path.join(root, filename)
         filePaths.append(filePath)
 
-  # return all paths
-  return filePaths
+    # return all paths
+    return filePaths
 
 
+# generate a list of all the directories with lambdas that need to be deployed.
 def generate_lambda_list_to_deploy():
-  print("generate lambda list to deploy")
-  lambda_list = []
-  # Walk API directory finding all directories with Lambdas
-  rootDir = './API/'
-  for dirName, subdirList, fileList in os.walk(rootDir):
-    #print('Found directory: %s' % dirName)
-    #for fname in fileList:
-     #print('\t%s' % fname)
-    if 'index.js' in fileList:
-      #print('index.js!')
-      lambda_list.append(dirName)
+    lambda_list = []
+    # Walk API directory finding all directories with Lambdas
+    rootDir = './API/'
+    for dirName, subdirList, fileList in os.walk(rootDir):
+        # We know if it's a lambda directory because it has an index.js file in it.
+        if 'index.js' in fileList:
+            lambda_list.append(dirName)
 
-  return lambda_list
+    return lambda_list
 
+
+# deploys all lambdas in the API directory.
 def deploy_all_lambdas():
-  print("deploy all lambdas:")
-  # create list of directories with lambdas to deploy
-  lambdas = generate_lambda_list_to_deploy()
-  print("pre-loop")
-  for dir_name in lambdas:
-      print("in loop")
-      # Generate the lambda name.
-      lambda_name = get_lambda_name_from_directory(dir_name)
-      # run npm install in lambda directory
-      run_npm_install(dir_name)
-      # deploy lambda
-      deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
-      print("Deployed " + lambda_name)
+    # create list of directories with lambdas to deploy
+    lambdas = generate_lambda_list_to_deploy()
+    for dir_name in lambdas:
+        # Generate the lambda name.
+        lambda_name = get_lambda_name_from_directory(dir_name)
+        # run npm install in lambda directory
+        run_npm_install(dir_name)
+        # deploy lambda
+        deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
+        print("Deployed " + lambda_name)
 
+
+# Generate the name of the lambda function based off of the directory name.
 def get_lambda_name_from_directory(dir_name):
-    # Parse the dir_name into the lambda name
     dir_name_components = dir_name.split('/')
-    # remove ../../ and API from dir_name_components
-    # dir_name_components.pop(0)
-    # dir_name_components.pop(0)
-    # dir_name_components.pop(0)
 
     # remove dir_name_components until you get to API directory
     while dir_name_components[0] != "API":
@@ -135,7 +130,6 @@ def get_lambda_name_from_directory(dir_name):
 
     # remove API directory from dir_name_components
     dir_name_components.pop(0)
-    print(dir_name_components)
     # determine which environment we are deploying to based on branch
     branch = ""
     if os.getenv('TRAVIS_BRANCH') == 'master':
@@ -150,16 +144,10 @@ def get_lambda_name_from_directory(dir_name):
             lambda_name = lambda_name + "_" + dir_name_components[i]
         else:
             lambda_name = lambda_name + "-" + dir_name_components[i]
-    #print(lambda_name)
     lambda_name = lambda_name.lower()
     return lambda_name
 
 
+# Start of the script.
 if __name__ == '__main__':
     deploy_all_lambdas()
-    # print(get_lambda_name_from_directory("./API/testDeleteMe"))
-    # Single test case
-    # dir_name = "./API/testDeleteMe"
-    # lambda_name = get_lambda_name_from_directory(dir_name)
-    # run_npm_install(dir_name)
-    # deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
