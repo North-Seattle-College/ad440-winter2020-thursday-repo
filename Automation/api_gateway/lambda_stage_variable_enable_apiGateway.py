@@ -293,8 +293,8 @@ def GetFeatureStageFuncs(stg_var_name_lst):
       stg_vars_updated[methodName] = lambdaName
   else:
     for var in stg_var_name_lst:
-      methodName = var.replace('id_', 'id-').lower()
-      lambdaName = stg_name + '-api-' + methodName.lower().replace('_','-')
+      methodName = var
+      lambdaName = stg_name + '-api-' + methodName.lower().replace('_','-').replace('-id', '_id')
 
       stg_vars_updated[methodName] = lambdaName
   
