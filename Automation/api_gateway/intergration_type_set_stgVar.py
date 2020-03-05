@@ -23,7 +23,7 @@ def main():
     for method in methods:
       logger.runTrace('on method', method)
 
-      lambda_func = '${stageVariables.' + name + '_' + method.upper()
+      lambda_func = '${stageVariables.' + name + '_' + method.upper() + '}'
       logger.runTrace('stage varialbe is', lambda_func)
       #set integration with lambda function
 
