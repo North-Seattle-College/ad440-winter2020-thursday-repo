@@ -272,7 +272,7 @@ def GetFeatureStageFuncs(stg_var_name_lst):
   stg_vars_updated = {}
 
   
-  if stg_vars_get.lower() != 'all':
+  if stg_vars_get[0].lower() != 'all':
     for var in stg_vars_get:
       methodName = ''
       if var.isnumeric():
