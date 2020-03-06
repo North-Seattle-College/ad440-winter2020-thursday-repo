@@ -9,7 +9,7 @@ import zipfile
 
 
 NODEJS_12X_RUNTIME = "nodejs12.x"
-LAMBDA_HANDLER = 'lambda_function.handler'
+LAMBDA_HANDLER = 'index.handler'
 LAMBDA_ROLE_ARN = "arn:aws:iam::061431082068:role/Lambda_Role"
 
 
