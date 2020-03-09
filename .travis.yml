@@ -54,7 +54,7 @@ jobs:
       only:
       - $TRAVIS_BRANCH
 - name: deploy_dev_s3
-  if: branch = feature-sprint4-mattyplo-UI
+  if: branch = feature-sprint4-mattyplo-UI 
   before_install:
   - "./Automation/TravisScripts/build_env.sh"
   - cd UI/
