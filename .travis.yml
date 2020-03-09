@@ -31,7 +31,8 @@ jobs:
     branches:
       only:
       - $TRAVIS_BRANCH
-  - name: deploy_s3
+  - name: deploy_prod_s3
+    if: branch = master
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
     - cd UI/
@@ -42,13 +43,13 @@ jobs:
       provider: s3
       access_key_id: "$AWS_ACCESS_KEY2_ID"
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: feature-sprint2-mattyplo
+      bucket: www.2edusite.com
       acl: bucket_owner_full_control
       region: us-west-2
       local_dir: build
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
-        branch: feature-sprint3-mattyplo
+        branch: $TRAVIS_BRANCH
     branches:
       only:
-      - feature-sprint3-mattyplo
+      - $TRAVIS_BRANCH
