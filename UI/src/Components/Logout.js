@@ -1,4 +1,5 @@
 //same as home
+//placeholder component
 
 import React from 'react';
 
