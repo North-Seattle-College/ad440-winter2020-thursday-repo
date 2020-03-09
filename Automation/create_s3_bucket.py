@@ -52,13 +52,14 @@ if feature_exp.match(bucketname) or devProd_exp.match(bucketname):
 		bucket = s3.Bucket(bucketname)
 
 		if bucket.creation_date:
-			return 0
-		response = s3.create_bucket(ACL='public-read',Bucket=bucketname, CreateBucketConfiguration={"LocationConstraint":"us-west-2"},)
-# 		print(response)
-		resp = (response.get('ResponseMetadata').get('HTTPHeaders').get('location'))
-		print(resp)
-		s3.put_bucket_website(Bucket=bucketname, WebsiteConfiguration=website_configuration)
-		s3.put_bucket_policy(Bucket=bucketname, Policy=json.dumps(policy))
+			print('already exist')
+		else:
+			response = s3.create_bucket(ACL='public-read',Bucket=bucketname, CreateBucketConfiguration={"LocationConstraint":"us-west-2"},)
+# 			print(response)
+			resp = (response.get('ResponseMetadata').get('HTTPHeaders').get('location'))
+			print(resp)
+			s3.put_bucket_website(Bucket=bucketname, WebsiteConfiguration=website_configuration)
+			s3.put_bucket_policy(Bucket=bucketname, Policy=json.dumps(policy))
 	except Exception as error:
 		print(error)
     
