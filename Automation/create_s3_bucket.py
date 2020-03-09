@@ -49,6 +49,10 @@ if feature_exp.match(bucketname) or devProd_exp.match(bucketname):
 	#iam_role = create_iam_role.get_role_arn(bucketname)
 
 	try:
+		bucket = s3.Bucket(bucketname)
+
+		if bucket.creation_date:
+			return 0
 		response = s3.create_bucket(ACL='public-read',Bucket=bucketname, CreateBucketConfiguration={"LocationConstraint":"us-west-2"},)
 # 		print(response)
 		resp = (response.get('ResponseMetadata').get('HTTPHeaders').get('location'))
