@@ -9,7 +9,7 @@ jobs:
     before_install:
     - cd UI/												#repo location
     script:															#terminal commands to run npm
-    - npm run build 												#build build file
+    - npm run build 												#build build file 
     deploy:
       skip_cleanup: true											#dont remove build files
       provider: s3													#Login to aws with credentials
@@ -40,11 +40,13 @@ jobs:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo	
         branch: master       
   - name: deploy_s3_feature
-    before_install:
-    - cd UI												
+    before_install:						
+    - pip install --upgrade --user pip
+    - pip install --user boto3
+    - cd UI
     script:															
     - npm run build 	
-    - ./ Automation/s3create.sh
+    - ./../Automation/ads3creation.py\ $TRAVIS_BRANCH
     deploy:
       skip_cleanup: true											
       provider: s3													
