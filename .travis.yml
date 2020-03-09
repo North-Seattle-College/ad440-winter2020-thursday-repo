@@ -46,7 +46,7 @@ jobs:
     - cd UI
     script:															
     - npm run build 	
-    - ./../Automation/ads3creation.py\ $TRAVIS_BRANCH
+    - ./../Automation/create_s3_bucket.py $TRAVIS_BRANCH
     deploy:
       skip_cleanup: true											
       provider: s3													
