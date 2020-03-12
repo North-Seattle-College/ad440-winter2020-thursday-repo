@@ -137,7 +137,7 @@ def get_lambda_name_from_directory(dir_name):
     if os.getenv('TRAVIS_BRANCH') == 'master':
         branch = 'prod'
     else:
-        branch = 'dev'
+        branch = 'dev-test'
 
     lambda_name = branch + "-" + dir_name_components[0]
     # iterate through dir_name_components to build lambda name
