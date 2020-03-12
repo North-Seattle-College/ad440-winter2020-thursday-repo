@@ -38,19 +38,19 @@ def deploy_lambda_function(function_name, dir_name, runtime, handler, role_arn):
     # If it doesn't exist, create it.
     except:
         # Toddy said not to create new lambdas for Sprint 4
-        return 0
-        # return lambda_client().create_function(
-        #     FunctionName=function_name,
-        #     Runtime=runtime,
-        #     Role=role_arn,
-        #     Handler=handler,
-        #     Code={
-        #         'ZipFile': zip_file
-        #     },
-        #     Timeout=15,
-        #     MemorySize=128,
-        #     Publish=True,
-        # )
+        #return 0
+        return lambda_client().create_function(
+            FunctionName=function_name,
+            Runtime=runtime,
+            Role=role_arn,
+            Handler=handler,
+            Code={
+                'ZipFile': zip_file
+            },
+            Timeout=15,
+            MemorySize=128,
+            Publish=True,
+        )
 
 
 # Convert a given file into a zipped file.
