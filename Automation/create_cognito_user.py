@@ -87,12 +87,24 @@ if args.create or args.user:
         print(error)
 
 # Deletes user listed on the command line        
-elif args.delete:    
+elif args.delete:
+    del_user = args.delete
+    print("Are you sure you want to delete user: ", del_user)
+    ans = input("Enter 'y' to delete or any other key to save: ")
     try: 
-        response = client.admin_delete_user(
-            UserPoolId=user_pool_id,
-            Username=args.delete,
-        )
+        if ans.lower() == 'y' or ans.lower() == 'yes':
+            response = client.admin_delete_user(
+                UserPoolId=user_pool_id,
+                Username=del_user,
+            )
+            s_code = response['ResponseMetadata']['HTTPStatusCode']
+            if s_code == 200:
+                print("User '{}' was deleted successfully.".format(del_user))
+            else:
+                print(response)
+        else:
+            print("User " + del_user + " was not deleted.")
+    
     except Exception as error:
         print(error)
     
