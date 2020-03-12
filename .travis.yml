@@ -6,7 +6,7 @@ node_js:
 jobs:
   include:
   - name: deploy_dev_prod_lambdas
-    if: branch IN (master, development)
+    if: branch IN (master, development, development-test)
     before_install:
       - pip install boto3 --user
       - pip install pynpm --user
