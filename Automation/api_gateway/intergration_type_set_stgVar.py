@@ -23,13 +23,11 @@ def main():
     for method in methods:
       logger.runTrace('on method', method)
 
-      lambda_func = '${stageVariables.' + name + '_' + method.upper()
+      lambda_func = '${stageVariables.' + name + '_' + method.upper() + '}'
       logger.runTrace('stage varialbe is', lambda_func)
       #set integration with lambda function
 
-      # SetIntegrationType(client, api_id, resource_id, method, integration_type, lambda_func)
-  #TODO get methods 
-  #TODO set Integration
+      SetIntegrationType(client, api_id, resource_id, method, integration_type, lambda_func)
   
 def GetAPIId():
   api_id = input('Enter API Gateway ID (press enter for default): ')
