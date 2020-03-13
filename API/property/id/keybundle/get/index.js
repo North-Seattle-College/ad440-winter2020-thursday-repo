@@ -12,32 +12,32 @@ const cnx = require('serverless-mysql')({
 });
 const jwt = require('jsonwebtoken');
 
-exports.handler = async (event, context) => {
+exports.handler = async (event, context, callback) => {
     try {
         let response = {
             property_id: null
         };
+        let headers = event.headers;
+        console.info('headers: ', headers);
+        
         // middleware auth TODO: connect & move
-        if (event.userPoolId) {
-        const poolOk = 'cognito_userpool_admin';
-        const token = event.queryStringParameters.Authorization;
-        const idPool = context.identity.cognitoIdentityPoolId;
-        console.info('token: ', token);
-        console.info('identity pool: ', idPool);
-        // get the decoded payload and header ignoring signature, no secretOrPrivateKey needed
-        var decoded = jwt.decode(token, {complete: true});
-        console.log(decoded.header);
-        console.log(decoded.payload)
-            if (event.userPoolId != poolOk) {
-                console.debug('user pool id: ', event.userPoolId);
-                response = {
-                    statusCode: 403,
-                    errorMessage:'Server Error !'
-                };
-                return context.fail(response.errorMessage);  
+        if (event) {
+            const poolOk = 'cognito_userpool_admin';
+            let token = headers.Authorization;
+            // let idPool = context.identity.cognitoIdentityPoolId;
+            console.info('received token: ', token);
+            // console.info('identity pool: ', idPool);
+            // get the decoded payload and header ignoring signature, no secretOrPrivateKey needed
+            let decoded = jwt.decode(token, {complete: true});
+            if (decoded) {
+                console.info('decoded header: ', decoded.header);
+                console.info('decoded payload: ', decoded.payload);
+                response['headers'] = { 'Authorization': decoded };
+            } else { 
+                response['headers'] = { 'Authorization': token }; 
             }
         }
-
+        let pid = event.params.property_id;
         // check methods and params or get error status code returned
         if (event.method != 'GET') {
             console.error('500 status returned: incorrect method call for this function.');
@@ -45,19 +45,19 @@ exports.handler = async (event, context) => {
                 statusCode: 500,
                 errorMessage:'Server Error !'
             };
-            return context.fail(response.errorMessage);
+            return context.fail(response.errorMessage, response.headers);
             
-        } else if (isNaN(parseInt(event.params.property_id)) || 
-                    parseInt(event.params.property_id) < 0) {
+        } else if (isNaN(parseInt(pid)) || 
+                    parseInt(pid) < 0) {
             console.debug('400 status returned: bad input.');
             response = { 
                 statusCode: 400,
                 errorMessage: 'Bad Request !' };
-            return context.fail(response.errorMessage);
+            return context.fail(response.errorMessage, response.headers);
         
         } else {            
             // grab param data to fetch
-            response.property_id = parseInt(event.params.property_id);
+            response.property_id = parseInt(pid);
     
             // create then run sql query from data passed in request
             let query_data = [
@@ -79,7 +79,7 @@ exports.handler = async (event, context) => {
                 return context.fail(response.errorMessage);
             } else { // return requested info from successful query
                 console.log('FINAL RESPONSE: ', response);
-                return context.succeed(response[0]);
+                return context.succeed(response[0], response.headers);
             }
         }
         
@@ -89,6 +89,6 @@ exports.handler = async (event, context) => {
         let response = { 
             statusCode: 500, 
             errorMessage: 'Server Error !' };
-        return context.fail(response.errorMessage);
+        return context.fail(response.errorMessage, response.headers);
     }
 };
