@@ -31,7 +31,7 @@ group.add_argument("-u", "--user", help="create username entered")
 parser.add_argument("-d", "--delete", help="delete username entered")
 
 parser.add_argument("-a", "--add", help="add users to groups", action="store_true")
-
+parser.add_argument("-g", "--group", help="group to add")
 
 # read argument from the command line
 args = parser.parse_args()
@@ -45,9 +45,9 @@ client = boto3.client('cognito-idp')
 if args.create or args.user:
     if args.create:
         # Bulk create all users
-        user_dict = {'admin':'9VZd@fakemail.com',
-                     'employee':'lUrq@fakemail.com',
-                     'keyholder':'N2qb@fakemail.com'}
+        user_dict = {'admin2':'9VZd@fakemail.com',
+                     'employee2':'lUrq@fakemail.com',
+                     'keyholder2':'N2qb@fakemail.com'}
     else:
         # For individual user creation in lowercase
         one_user = args.user.lower()
@@ -79,8 +79,15 @@ if args.create or args.user:
             set_user_attributes.verify_email(user_pool_id, username)
             
             # If add option selected, add users to groups
-            if args.add:
+            if args.add and args.group:
+                response = client.admin_add_user_to_group(
+                    UserPoolId=user_pool_id,
+                    Username=username,
+                    GroupName=args.group
+                )
+            elif args.add:
                 add_to_group(username)
+                
 
 
     except Exception as error:
