@@ -121,7 +121,7 @@ def deploy_all_lambdas():
         deploy_lambda_function(lambda_name, dir_name, NODEJS_12X_RUNTIME, LAMBDA_HANDLER, LAMBDA_ROLE_ARN)
         print("Deployed " + lambda_name)
 
-
+# a little change
 # Generate the name of the lambda function based off of the directory name.
 def get_lambda_name_from_directory(dir_name):
     dir_name_components = dir_name.split('/')
