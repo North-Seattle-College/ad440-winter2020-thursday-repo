@@ -11,6 +11,7 @@ def main():
                     '204': 'No Content',
                     '400': 'Bad Request',
                     '404': 'Not Found',
+                    '403': '403 response',
                     '405': 'Not Allowed',
                     '500': 'Server Error'}
   for status_code, pattern in status_code_pattern.items():
@@ -32,15 +33,18 @@ def main():
   for resource in resources_dict:
     resource_id = resources_dict[resource][0]
     methods = resources_dict[resource][1]
+    print(methods)
     if 'OPTIONS' not in methods:
       PutOPTIONSMethod(client, api_id, resource_id)
       methods.append('OPTIONS')
       resources_dict[resource][1] = methods
+
   # set Response Headers
   response_headers = ['X-Requested-With', 'Access-Control-Allow-Headers',
                       'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods']
   resp_headers_methods = []
   resp_headers_integration = []
+
   for header in response_headers:
     resp_headers_methods.append('method.response.header.'+header)
     resp_headers_integration.append('integration.response.header.'+header)
@@ -102,8 +106,8 @@ def GetResources(client, api_id):
       resource = resource[-1]
 
     if type(resource) == str:
-      temp_tuple = (resource_id, methods)
-      resources_dict[resource] = temp_tuple
+      temp_lst = [resource_id, methods]
+      resources_dict[resource] = temp_lst
   logger.generatedDebug('API Resource Dictionary', json.dumps(resources_dict))
   return resources_dict
 
@@ -113,10 +117,28 @@ def PutOPTIONSMethod(client, api_id, resource_id):
   response_put_option = client.put_method(
     restApiId = api_id,
     resourceId = resource_id,
-    httpMethods = 'OPTIONS',
+    httpMethod = 'OPTIONS',
     authorizationType = 'NONE' #NONE for open access, COGNITO_USER_POOLS for cognito
   )
   logger.generatedDebug('OPTIONS Method created', json.dumps(response_put_option))
+
+  response_put_integration = client.put_integration(
+    restApiId = api_id,
+    resourceId = resource_id,
+    httpMethod = 'OPTIONS',
+    type = 'MOCK'
+  )
+  logger.generatedDebug('OPTIONS Integration set type', 'MOCK')
+
+  response_put_method_response = client.put_method_response(
+    restApiId = api_id,
+    resourceId = resource_id,
+    httpMethod = 'OPTIONS',
+    statusCode = '200'
+  )
+  logger.generatedDebug('OPTIONS Method Response set status Code', '200')
+
+
 
 def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern):
   for resource in resources_dict:
