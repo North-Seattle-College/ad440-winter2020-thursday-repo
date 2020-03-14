@@ -34,20 +34,13 @@ for name in stg_var_name_lst:
 
 stg_vars = dict(zip(stg_var_name_lst, dev_stg_var_val_lst))
 
-api_team_roaster = ['kevin', 'dereje', 'yamato', 'anu', 'deya', 'sojung']
-
 # set logger
 logger.setLogger('api_gateway_stage_build.log')
 
 # get stage name
-stg_name = input('Enter new feature stage sprint number: ')
+stg_name = input('Enter prod or dev, or feature stage sprint number: ')
 
-stage = stg_name
-if stg_name == 'prod':
-  ver = input('Enter version number for new production stage: ')
-  stage = 'v' + ver
-
-if stg_name not in ['v1', 'dev']:
+if stg_name not in ['prod', 'dev']:
   try:
     stg_name = int(stg_name)
   except:
@@ -55,6 +48,13 @@ if stg_name not in ['v1', 'dev']:
     
   stg_name = 'feature-sprint' + str(stg_name)
   logger.inputTrace('Stage Name', stg_name)
+
+stage = stg_name
+branch = stage
+if stg_name == 'prod':
+  ver = input('Enter version number for new production stage: ')
+  stage = 'v' + ver
+  stg_name = stg_name + '-' + stage
 
 # get api gateway id
 api_id = input('Enter API Gateway ID (press enter for default): ')
@@ -69,15 +69,22 @@ logger.stageInfo(api_id, stg_name )
 
 ## get stage varibles use for the stage
 
-print ('List of stage variables:')
-length = len(stg_var_name_lst)
-for l in range(length):
-  print(str(l+1)+'.'+ stg_var_name_lst[l], end=" ")
-print('')
-stg_vars_get = input('Enter method name/number-responsible party, separate by comma:')
-stg_vars_get = stg_vars_get.replace(" ", "")
-logger.inputTrace('Method Selection', stg_vars_get)
-stg_vars_get = stg_vars_get.split(',')
+if branch not in ['dev', 'prod']:
+  print ('List of stage variables:')
+  length = len(stg_var_name_lst)
+  for l in range(length):
+    print(str(l+1)+'.'+ stg_var_name_lst[l], end=" ")
+  print('')
+  stg_vars_get = input('Enter method name/number-responsible party, separate by comma: ')
+  stg_vars_get = stg_vars_get.replace(" ", "")
+  logger.inputTrace('Method Selection', stg_vars_get)
+  stg_vars_get = stg_vars_get.split(',')
+else:
+  l = len(stg_var_name_lst)
+  stg_vars_get = []
+  for i in range(l):
+    stg_vars_get.append(str(i+1))
+
 stg_vars_updated = {}
 
 
@@ -97,17 +104,13 @@ for pair in stg_vars_get:
       os.abort()
   else:
     logger.inputError('Cannot identify the method number/name')
-  
-  partyName = pair[1]
-  if pair[1] not in api_team_roaster:
-    logger.warn('The responsible party is not an API team member!' + partyName)
-    validation = input('Type the responsible party name again to verify: ')
-    if partyName != validation:
-      logger.inputError('Validation of responsible party failed!')
-      partyName = ''
-      os.abort()
 
-  lambdaName = stage + '-' + partyName + '-' + methodName.lower().replace('_','-')
+  lambdaName = branch + '-' + methodName.lower().replace('_','-')
+
+  if branch not in ['dev', 'prod']:
+    partyName = 'api'
+    lambdaName = branch + '-' + partyName + '-' + methodName.lower().replace('_','-')
+  
   lambdaName = lambdaName.replace('_','-')
   lambdaName = lambdaName.replace('-id', '_id')
 
@@ -136,7 +139,7 @@ logger.generatedDebug('Stage Description',
 tags ={
   'Project' : 'KeyManagement',
   'Class' : 'AD440 Th',
-  'Purpose' : stg_name.split('-')[0]
+  'Purpose' : stg_name
 }
 
 print("Auto Generated Tags:")
@@ -171,8 +174,7 @@ if isCCEnabled_get.lower() == 'y' or isCCEnabled_get.lower() == 'yes':
     cacheClusterSize = [.5,1.6,6.1,13.5,28.4,58.2,118,237]
     length = len(cacheClusterSize)
     for l in range(length):
-      l = l + 1
-      print(str(cacheClusterSize[l])+'GB,', end = " ")
+      print(str(l+1)+ '. ' + str(cacheClusterSize[l])+'GB ', end = " ")
     print("")
     ccSize_set = input('Select Cache Cluster Size: ')
     logger.inputTrace('Cache Cluster Size selection', ccSize_set)
@@ -182,7 +184,7 @@ if isCCEnabled_get.lower() == 'y' or isCCEnabled_get.lower() == 'yes':
       logger.inputError('Cache Cluster Size much be numeric, ')
       os.abort()
     if ccSize_set <= length:
-      ccSize_set = cacheClusterSize[ccSize_set]
+      ccSize_set = str(cacheClusterSize[ccSize_set])
       logger.generatedDebug('Cache Cluster Size', ccSize_set)
   else:
     logger.generatedDebug('Cache Cluster', 'False')
@@ -211,7 +213,7 @@ client = boto3.client('apigateway')
 if isCCEnabled:
   response = client.create_stage(
     restApiId = api_id,
-    stageName = stg_name,
+    stageName = stage,
     deploymentId = '0i626r',
     description = description,
     cacheClusterEnabled = isCCEnabled,
@@ -222,7 +224,7 @@ if isCCEnabled:
 else:
   response = client.create_stage(
     restApiId = api_id,
-    stageName = stg_name,
+    stageName = stage,
     deploymentId = '0i626r',
     description = description,
     variables = stg_vars,
