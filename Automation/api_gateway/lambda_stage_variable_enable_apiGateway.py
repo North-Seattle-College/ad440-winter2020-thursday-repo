@@ -24,8 +24,6 @@ def main():
                     'property_id_keybundle_POST'
                     ]
   
-  api_team_roaster = ['kevin', 'dereje', 'yamato', 'anu', 'deya', 'sojung']
-  
   #set logger
   logger.setLogger('api_gateway_lambda_stage_variable_enable.log')
   #set client for api
@@ -37,7 +35,7 @@ def main():
   isFeature = input('Is this for the feature stage?(y/n) ')
   logger.inputTrace('Is Feature', isFeature)
   if isFeature.lower() ==  'y' or isFeature.lower() ==  'yes':
-    feature_funcs = GetFeatureStageFuncs(stg_var_name_lst, api_team_roaster)
+    feature_funcs = GetFeatureStageFuncs(stg_var_name_lst)
     isFeature = True
   else:
     isFeature = False
@@ -249,7 +247,7 @@ def GetDevProdStageFunc(stg_var_name_lst):
   logger.generatedDebug('Development and Production Stage Functions:', dev_prod_stg_funcs)
   return (dev_prod_stg_funcs)
 
-def GetFeatureStageFuncs(stg_var_name_lst, api_team_roaster):
+def GetFeatureStageFuncs(stg_var_name_lst):
   # get stage name
   stg_name = input('Enter new feature stage sprint number: ')
   try:
@@ -288,15 +286,16 @@ def GetFeatureStageFuncs(stg_var_name_lst, api_team_roaster):
     else:
       logger.inputError('Cannot identify the method number/name')
     
-    partyName = pair[1]
-    if pair[1] not in api_team_roaster:
-      logger.warn('The responsible party is not an API team member!' + partyName)
-      validation = input('Type the responsible party name again to verify: ')
-      if partyName != validation:
-        logger.inputError('Validation of responsible party failed!')
-        partyName = ''
-        os.abort()
+    # partyName = pair[1]
+    # if pair[1] not in api_team_roaster:
+    #   logger.warn('The responsible party is not an API team member!' + partyName)
+    #   validation = input('Type the responsible party name again to verify: ')
+    #   if partyName != validation:
+    #     logger.inputError('Validation of responsible party failed!')
+    #     partyName = ''
+    #     os.abort()
     
+    partyName = 'api'
     lambdaName = stg_name + '-' + partyName + '-' + methodName.lower().replace('_','-')
 
     stg_vars_updated[methodName] = lambdaName
