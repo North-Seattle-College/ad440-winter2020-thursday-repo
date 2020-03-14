@@ -20,7 +20,7 @@ function_name = args.filename
 
 # requires Lamba name to follow the correct pattern
 feature_exp = re.compile(r"feature-sprint[1-6]-api-[a-z_]{1,}-[a-z0-9]{1,}$")
-devProd_exp = re.compile(r"dev|prod-[a-z]{1,}-[a-z0-9]{1,}$")
+devProd_exp = re.compile(r"dev|prod-[a-z_]{1,}-[a-z0-9]{1,}$")
 
 
 if feature_exp.match(function_name) or devProd_exp.match(function_name):
