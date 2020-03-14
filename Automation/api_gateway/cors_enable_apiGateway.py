@@ -11,12 +11,12 @@ def main():
                     '204': 'No Content',
                     '400': 'Bad Request',
                     '404': 'Not Found',
-                    '403': '403 response',
+                    '403': 'Forbidden',
                     '405': 'Not Allowed',
                     '500': 'Server Error'}
   for status_code, pattern in status_code_pattern.items():
     if pattern.lower() != 'default':
-            status_code_pattern[status_code] = status_code_pattern[status_code]+'.*'
+            status_code_pattern[status_code] = '.*' + status_code_pattern[status_code] + '.*'
   logger.generatedDebug('Status Code Keywords', json.dumps(status_code_pattern))
   
   # set logger
@@ -33,7 +33,6 @@ def main():
   for resource in resources_dict:
     resource_id = resources_dict[resource][0]
     methods = resources_dict[resource][1]
-    print(methods)
     if 'OPTIONS' not in methods:
       PutOPTIONSMethod(client, api_id, resource_id)
       methods.append('OPTIONS')

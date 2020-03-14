@@ -4,7 +4,7 @@ import boto3
 # import ast
 import apiGatewayLogger as logger
 
-""" THIS CODE IS USED TO GENERATE feature-sprint STAGE FOR KEY MANAGEMENT API GATEWAY"""
+""" THIS CODE IS USED TO GENERATE feature-sprint, dev, or v1 STAGE FOR KEY MANAGEMENT API GATEWAY"""
 
 # constants
 stg_var_name_lst = ['keybundle_GET',
@@ -42,7 +42,12 @@ logger.setLogger('api_gateway_stage_build.log')
 # get stage name
 stg_name = input('Enter new feature stage sprint number: ')
 
-if stg_name not in ['prod', 'dev']:
+stage = stg_name
+if stg_name == 'prod':
+  ver = input('Enter version number for new production stage: ')
+  stage = 'v' + ver
+
+if stg_name not in ['v1', 'dev']:
   try:
     stg_name = int(stg_name)
   except:
@@ -101,8 +106,8 @@ for pair in stg_vars_get:
       logger.inputError('Validation of responsible party failed!')
       partyName = ''
       os.abort()
-  
-  lambdaName = stg_name + '-' + partyName + '-' + methodName.lower().replace('_','-')
+
+  lambdaName = stage + '-' + partyName + '-' + methodName.lower().replace('_','-')
   lambdaName = lambdaName.replace('_','-')
   lambdaName = lambdaName.replace('-id', '_id')
 
@@ -116,7 +121,7 @@ for sv, ln in stg_vars_updated.items():
   ln = ln.replace('-id', '_id')
   stg_vars[sv] = ln 
 
-#TODO generate stage description
+# generate stage description
 description = input('Enter description for the new stage: ')
 logger.inputTrace('Description', description)
 
@@ -127,7 +132,7 @@ if description == '':
 logger.generatedDebug('Stage Description',
             description)
 
-#TODO generate list of tags
+# generate list of tags
 tags ={
   'Project' : 'KeyManagement',
   'Class' : 'AD440 Th',
@@ -151,7 +156,7 @@ for n, v in tags.items():
   logger.generatedDebug('TAGs name', n)
   logger.generatedDebug('TAGs name', v)
 
-#TODO is cacheClusterEnabled
+#T is cacheClusterEnabled
 isCCEnabled = False
 isCCEnabled_get = input ('Do you want to enable cache cluster? (y/n) ')
 logger.inputTrace('Cache Cluster Enable', isCCEnabled_get)
