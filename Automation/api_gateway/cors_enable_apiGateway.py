@@ -3,8 +3,6 @@ import boto3
 import json
 import apiGatewayLogger as logger
 
-#TODO add OPTIONS if preflight not exist.
-
 def main():
   status_code_pattern = {'200': 'Default',
                     '201': 'Created',
@@ -19,17 +17,17 @@ def main():
             status_code_pattern[status_code] = '.*' + status_code_pattern[status_code] + '.*'
   logger.generatedDebug('Status Code Keywords', json.dumps(status_code_pattern))
   
-  # set logger
+  #* set logger
   logger.setLogger('api_gateway_cors_enable.log')
-  # get boto3 client
+  #* get boto3 client
   client = boto3.client('apigateway')
   
-  # get api key with default to prod
+  #* get api key with default to prod
   api_id = GetAPIId()
-  # get a dict of resources for the API {resource_name:resource_id,[methods]}
+  #* get a dict of resources for the API {resource_name:resource_id,[methods]}
   resources_dict = GetResources(client, api_id)
 
-  # if resource does not have OPTIONS method, add OPTIONS to resource for each
+  #* if resource does not have OPTIONS method, add OPTIONS to resource for each
   for resource in resources_dict:
     resource_id = resources_dict[resource][0]
     methods = resources_dict[resource][1]
@@ -38,7 +36,7 @@ def main():
       methods.append('OPTIONS')
       resources_dict[resource][1] = methods
 
-  # set Response Headers
+  #* set Response Headers
   response_headers = ['X-Requested-With', 'Access-Control-Allow-Headers',
                       'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods']
   resp_headers_methods = []
