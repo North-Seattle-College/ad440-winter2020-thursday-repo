@@ -33,6 +33,7 @@ def deploy_lambda_function(function_name, dir_name, runtime, handler, role_arn):
     try:
         return lambda_client().update_function_code(
             FunctionName=function_name,
+            Handler=handler,
             ZipFile=zip_file,
         )
     # If it doesn't exist, create it.
