@@ -1,5 +1,5 @@
 {
-  "name": "keymanagement API",
+  "name": "api-management",
   "version": "1.0.0",
   "description": "API for managing keybundles",
   "main": "index.js",
