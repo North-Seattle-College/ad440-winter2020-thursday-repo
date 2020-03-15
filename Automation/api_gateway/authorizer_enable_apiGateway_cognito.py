@@ -56,7 +56,7 @@ def GetAuthorizer():
   except:
     authorizer_ttl = 300
     print('Time to live must be numerical, it has been set to default 300s!')
-  logger.inputTrace('Authorizer Time To Live', authorizer_ttl)
+  logger.inputTrace('Authorizer Time To Live', str(authorizer_ttl))
   authorizer['TTL'] = authorizer_ttl
 
   return authorizer  
@@ -64,14 +64,14 @@ def GetAuthorizer():
 def GetUserPools():
   client = boto3.client('cognito-idp')
   userPool_lst = client.list_user_pools(
-    MaxResults=999
+    MaxResults = 60 #must be less or equal to 60
   )
   userPool_lst = userPool_lst['UserPools']
-  logger.generatedDebug('Cognito User Pools', json.dumps(userPool_lst))
+  logger.generatedDebug('Cognito User Pools', ','.join(str(x) for x in userPool_lst))
   print('List of all Cognito User Pools:')
   length = len(userPool_lst)
-  for userPool in userPool_lst:
-    print (str(length + 1)+'. '+userPool['Name'], end=' ')
+  for l in range(length):
+    print (str(l + 1)+'. '+userPool_lst[l]['Name'], end=' ')
   print(' ')
   selected_pools = input('Select user pools to be used by its number, seperated by comma (default is 1): ')
   if selected_pools == '':
@@ -82,7 +82,7 @@ def GetUserPools():
     except:
       selected_pools = [0]
       print ('Your selection must be numerical saperated by comma, revert to default user group!')
-  logger.inputTrace('User Pools selected:', **selected_pools)
+  logger.inputTrace('User Pools selected:', ','.join(str(x) for x in selected_pools))
   if any([num > length+1 for num in selected_pools]):
     print('Your selection is out of range!')
     GetUserPools()
@@ -149,14 +149,23 @@ def ConfigureAuthorizer(client, api_id, authorizer, resources_dict):
     methods = resources_dict[resource][1]
 
     for method in methods:
-      response = client.put_method(
+      response = client.update_method(
         restApiId = api_id,
         resourceId = resource_id,
         httpMethod = method,
-        authorizationType = authorizer['type'],
-        authorizerId = authorizer['id']
+        patchOperations=[{
+          'op': 'replace',
+          'path': '/authorizationType',
+          'value': authorizer['type']
+        },
+        {
+          'op': 'replace',
+          'path': '/authorizerId',
+          'value': authorizer['id']
+        }]
       )
       logger.runTrace('Authorizer is configured on', method)
+      print(response)
 
 if __name__ == "__main__":
     main()
