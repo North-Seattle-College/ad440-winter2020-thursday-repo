@@ -1,23 +1,26 @@
 #!/usr/bin/env python
 import boto3
 import argparse
-import set_user_attributes
+import re
 import list_user_groups
 
 
 # Method to add users to groups
-def add_to_group(username):
+def check_group_name(grp_name, username):
     group_dict = list_user_groups.group_dict
-    for group in group_dict:
-
-        if ('admin' in username) or \
-            ('emp' in username and 'Emp' in group) or \
-            ('key' in username and 'Key' in group):
-            response = client.admin_add_user_to_group(
-                UserPoolId=user_pool_id,
-                Username=username,
-                GroupName=group
-            )
+    if grp_name in group_dict:
+        response = client.admin_add_user_to_group(
+            UserPoolId=user_pool_id,
+            Username=username,
+            GroupName=grp_name
+        )
+    else:
+        print("'{}' doesn't match a valid Group Name.".format(grp_name))
+        print("'{}' was not added to a group.".format(username))
+        print("Valid Groups: ")
+        print('{:15}'.format('Group'), '{:>10}'.format('Precedence'))
+        for group in group_dict:
+            print('{:15}'.format(group), '{:>10}'.format(group_dict[group])) 
 
 # description text
 text = "Creats or deletes users via cognito and adds roles to user via cognito"
@@ -25,13 +28,12 @@ text = "Creats or deletes users via cognito and adds roles to user via cognito"
 # initiate the parser
 parser = argparse.ArgumentParser(description = text)
 group = parser.add_mutually_exclusive_group()
-group.add_argument("-c", "--create", help="create admin, employee & keyholder",
-                    action="store_true")
-group.add_argument("-u", "--user", help="create username entered")
-parser.add_argument("-d", "--delete", help="delete username entered")
-
-parser.add_argument("-a", "--add", help="add users to groups", action="store_true")
+group.add_argument("-n", "--new", help="create username entered")
+group.add_argument("-u", "--user", help="username for group update")
 parser.add_argument("-g", "--group", help="group to add")
+parser.add_argument("-r", "--remove", help="group to remove")
+parser.add_argument("-e", "--email", help='user email for new user')
+group.add_argument("-d", "--delete", help="delete username entered")
 
 # read argument from the command line
 args = parser.parse_args()
@@ -39,60 +41,66 @@ args = parser.parse_args()
 user_pool_id = 'us-west-2_xV6TGf7xl'
 password=''
 
+email_exp = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
+
 # create cognito client
 client = boto3.client('cognito-idp')
+email = ''
 
-if args.create or args.user:
-    if args.create:
-        # Bulk create all users
-        user_dict = {'admin2':'9VZd@fakemail.com',
-                     'employee2':'lUrq@fakemail.com',
-                     'keyholder2':'N2qb@fakemail.com'}
+if args.new:
+    # For individual user creation in lowercase
+    one_user = args.new.lower()
+    if args.email and email_exp.match(args.email):
+        email = args.email
     else:
-        # For individual user creation in lowercase
-        one_user = args.user.lower()
-        email = input("Enter email address: ")
-        user_dict = {one_user:email}
+        while not email_exp.match(email) and email != 'q':
+            email = input("Please enter a valid email address or 'q' to quit: ")
+            
     try:
-        # Password will replace temp password set in next method
-        password = input("Enter permanent password: ")
-        
         # Creates new user, email address, and temp password
-        for username in user_dict:
-            response = client.admin_create_user(
-                UserPoolId=user_pool_id,
-                Username=username,
-                UserAttributes=[
-                    {
-                        'Name': 'email',
-                        'Value': user_dict[username],
-                    },
-                ],
-                ForceAliasCreation=False,
-                DesiredDeliveryMediums=[
-                    'EMAIL'
-                ],
-            )
-            
-            # Calls methods to verify email and replace temp password
-            set_user_attributes.set_password(user_pool_id, username, password)
-            set_user_attributes.verify_email(user_pool_id, username)
-            
-            # If add option selected, add users to groups
-            if args.add and args.group:
-                response = client.admin_add_user_to_group(
-                    UserPoolId=user_pool_id,
-                    Username=username,
-                    GroupName=args.group
-                )
-            elif args.add:
-                add_to_group(username)
-                
 
+        response = client.admin_create_user(
+            UserPoolId=user_pool_id,
+            Username=one_user,
+            UserAttributes=[
+                {
+                    'Name': 'email',
+                    'Value': email,
+                },
+            ],
+            ForceAliasCreation=False,
+            DesiredDeliveryMediums=[
+                'EMAIL'
+            ],
+        )
 
+        # If add option selected, add users to groups
+        if args.group:
+            group_name = args.group
+            check_group_name(group_name, one_user)
+            
     except Exception as error:
         print(error)
 
+elif args.user:
+    curr_user = args.user
+    try:
+        if args.group:
+                group_name = args.group
+                check_group_name(group_name, curr_user)           
+        elif args.remove:     
+            group_name = args.remove
+            response = client.admin_remove_user_from_group(
+                UserPoolId=user_pool_id,
+                Username=curr_user,
+                GroupName=group_name
+            )      
+        else:
+            print("No action taken, add -g <groupname> or -r <groupname> at command line.")
+            
+    except Exception as error:
+            print(error)
+    
 # Deletes user listed on the command line        
 elif args.delete:
     del_user = args.delete
@@ -114,4 +122,6 @@ elif args.delete:
     
     except Exception as error:
         print(error)
-    
+
+else:
+    print("No action taken")
