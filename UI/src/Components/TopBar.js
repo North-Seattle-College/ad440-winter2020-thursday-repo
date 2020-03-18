@@ -1,9 +1,9 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import './TopBar.css';
-import logo from './UmanoPM-Logo.png';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./TopBar.css";
+//import logo from "./UmanoPM-Logo.png";
 
-import Home from './Home';
+import Home from "./Home";
 
 /**
  * Component to render the top bar
@@ -16,7 +16,7 @@ import Home from './Home';
  */
 export default class TopBar extends React.Component {
   constructor(props) {
-      super(props);
+    super(props);
   }
 
   /**
@@ -24,24 +24,24 @@ export default class TopBar extends React.Component {
    */
   render() {
     return (
-      <header className='TopBar'>
-        <div className='logo-flexbox'>
-          <img src={logo} alt='Logo' className='Logo' />
+      <header className="TopBar">
+        <div className="logo-flexbox">
+          {/* <img src={logo} alt="Logo" className="Logo" /> */}
         </div>
-        <div className='interactive-flexbox'>
-          <Link className='top-bar-link' to='/'>
+        <div className="interactive-flexbox">
+          <Link className="top-bar-link" to="/">
             Home
           </Link>
-          <Link className='top-bar-link' to='/account'>
+          <Link className="top-bar-link" to="/account">
             Account
           </Link>
-          <Link className='top-bar-link' to='/signout'>
+          <Link className="top-bar-link" to="/signout">
             Sign-Out
           </Link>
         </div>
       </header>
-    )
-  };
+    );
+  }
 }
 
 /* Rough definition of required click handler function
