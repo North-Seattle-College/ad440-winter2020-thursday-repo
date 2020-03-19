@@ -29,12 +29,14 @@ exports.handler = async (event, context) => {
                 statusCode: 500,
                 message:"Server Error !"
             };
+            return response.message;
         } else if (event.params.keybundle_id) { 
             console.debug('400 status returned: bad input.');
             response = {
                 statusCode: 400,
                 message:"Bad Request !"
             };
+            return response.message;
         } else {            
             // grab body data to update
             response.keybundle_id = parseInt(event.body.keybundle_id);
@@ -50,7 +52,7 @@ exports.handler = async (event, context) => {
                     statusCode: 400,
                     message:"Bad Request !"
                 };
-                return response;
+                return response.message;
             };
 
             // update keybundle data from RDS with query
@@ -77,16 +79,16 @@ exports.handler = async (event, context) => {
                     statusCode: 404,
                     message:"Not Found !"
                 };
-                return response;
+                return response.message;
             } else { // return requested info from successful query
                 console.log('FINAL RESPONSE: ', response);
                 return response[0];
             }
         }
     } catch (e) {
-        console.warn('\nServer Error !\nEXCEPTION: \n', e, '\n');
-        let response = { ERROR_MSG:e.message };
-        return response;
+        console.warn('\n\nEXCEPTION: \n', e, '\n');
+        let response = { ERROR_MSG:'Server Error ' + e.message };
+        return response.ERROR_MSG;
     }
 };
 
