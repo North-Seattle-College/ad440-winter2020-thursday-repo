@@ -4,13 +4,13 @@
 
 import React from 'react';
 import './SideBar.css'
-import {Link} from 'react-router-dom';
+import {BrowserRouter, Route, Link} from 'react-router-dom';
 //import { slide as Menu } from 'react-burger-menu';
 //import Home from "./Account";
 //import AddKey from "./AddKey";
 //import FormAddKey from "./FormAddKey";
 //import Logout from "./Logout";
-
+import AddProperty from "./AddProperty"
 /**
  * Component to display the side bar
  *
@@ -28,14 +28,14 @@ export default class SideBar extends React.Component {
 
   render() {
     return (
+      <BrowserRouter>
       <nav className='SideBar'>
         <Link className='sideMenuItem' to='/'>
           Home
         </Link>
         <br />
-        <Link className='sideMenuItem' to='/addproperty'>
-          Add Property
-        </Link>
+        <Route exact path='/addproperty' render={() => <AddProperty title="Add Property" />}/>
+
         <br />
         <Link className='sideMenuItem' to='/addkey'>
           Add Key
@@ -50,6 +50,7 @@ export default class SideBar extends React.Component {
         </Link>
         <br />
       </nav>
+      </BrowserRouter>
     );
   }
 }

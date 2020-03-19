@@ -10,16 +10,16 @@ import './WorkingArea.css'
 import Home from './Home';
 import AddProperty from './AddProperty';
 import AddKey from './AddKey';
-import AddPerson from './AddKeyholder';
+//import AddPerson from './AddKeyholder';
 import CheckoutKey from './CheckoutKey';
-import Account from './Account';
+import { Account } from './Account';
 
 /**
  * Component to handle route switching and display
  * other components that provide working forms
  *
  * Required props: none
- * 
+ *
  * Accepted props: none
  *
  * @author Quincy Powell <Quincy.Powell@gmail.com>
@@ -34,9 +34,7 @@ export default function WorkingArea() {
         <Route path='/addkey'>
           <AddKey />
         </Route>
-        <Route path='/addkeyholder'>
-          <AddPerson />
-        </Route>
+      
         <Route path='/checkoutkey'>
           <CheckoutKey />
         </Route>

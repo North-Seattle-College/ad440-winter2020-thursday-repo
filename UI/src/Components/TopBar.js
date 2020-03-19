@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import './TopBar.css';
-import logo from './UmanoPM-Logo.png';
+//import logo from './UmanoPM-Logo.png';
 
 import Home from './Home';
 
@@ -26,7 +26,7 @@ export default class TopBar extends React.Component {
     return (
       <header className='TopBar'>
         <div className='logo-flexbox'>
-          <img src={logo} alt='Logo' className='Logo' />
+          <img  alt='Logo' className='Logo' />
         </div>
         <div className='interactive-flexbox'>
           <Link className='top-bar-link' to='/'>
