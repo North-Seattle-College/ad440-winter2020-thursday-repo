@@ -30,7 +30,7 @@ exports.handler = async (event, context) => {
                 message:"Server Error !"
             };
             return response.message;
-        } else if (event.params.keybundle_id) { 
+        } else if (!event.params.keybundle_id) { 
             console.debug('400 status returned: bad input.');
             response = {
                 statusCode: 400,
