@@ -21,6 +21,7 @@ exports.handler = async (event, context) => {
             keybundle_due_date: null,
         };
         const date = new Date(Date.now());
+        let keybundle_id = parseInt(event.params.keybundle_id);
 
         // check method & inputs in path or return error
         if (event.method != 'PUT') {
@@ -30,7 +31,7 @@ exports.handler = async (event, context) => {
                 message:"Server Error !"
             };
             return response.message;
-        } else if (!event.params.keybundle_id) { 
+        } else if (keybundle_id == '') { 
             console.debug('400 status returned: bad input.');
             response = {
                 statusCode: 400,
@@ -46,7 +47,7 @@ exports.handler = async (event, context) => {
             response.keybundle_due_date = toSqlDatetime(date.addDays(14));
             
             // check for inputs match
-            if (event.params.keybundle_id != response.keybundle_id) {
+            if (keybundle_id != response.keybundle_id) {
                 console.debug('400 status returned: bad input.');
                 response = {
                     statusCode: 400,
