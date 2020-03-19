@@ -1,24 +1,20 @@
 {
-  "name": "update_keybundle",
+  "name": "put-keybundle",
   "version": "1.0.0",
-  "description": "Update keybundle data with PUT request when checking it in or out",
+  "description": "Update keybundle with PUT request",
   "main": "update_keybundle.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "github.com/"
-  },
   "keywords": [
-    "key-mgmt"
+    "update",
+    "keybundle",
+    "put",
+    "key"
   ],
-  "author": "Thursday",
-  "license": "Apache-2.0",
+  "author": "d",
+  "license": "ISC",
   "dependencies": {
-    "mysql": "^2.18.1"
+    "serverless-mysql": "^1.5.3"
   }
 }
