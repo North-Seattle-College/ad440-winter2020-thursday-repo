@@ -134,7 +134,7 @@ def get_lambda_name_from_directory(dir_name):
     dir_name_components.pop(0)
     # determine which environment we are deploying to based on branch
     branch = ""
-    if os.getenv('TRAVIS_BRANCH') == 'master':
+    if os.getenv('TRAVIS_BRANCH') == 'feature-sprint5-mattyplo-test':
         branch = 'prod'
     else:
         branch = 'dev'
