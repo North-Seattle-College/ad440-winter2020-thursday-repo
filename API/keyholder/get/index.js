@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
   database : process.env.RDS_DATABASE
 
 });
-console.trace("Api for get keyholder started...")
+console.trace("Api for get keyholder started...") //a comment to test the travis api deployement for dev branch
 exports.handler = (event, context, callback) => {
   
   // allows for using callbacks as finish/error-handlers
