@@ -1,5 +1,5 @@
 import React from 'react';
-//import ReactLogo from './React-icon.svg'
+import {reactLogo} from '../staticResources'
 import './Footer.css'
 
 export default function Footer() {
@@ -8,7 +8,7 @@ export default function Footer() {
       <div className='flex-react-logo'>
         <p className='flex-react-logo'>Developed using</p>
         <a href='https://reactjs.org/' target="_blank">
-          <img  alt='React logo' className='react-logo' />
+          <img src={reactLogo} alt='React logo' className='react-logo' />
         </a>
       </div>
       <div className='flex-license'>
