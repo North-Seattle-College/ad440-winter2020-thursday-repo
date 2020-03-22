@@ -7,8 +7,8 @@ import list_user_groups
 
 # Method to add or remove users to/from groups
 def update_group_name(grp_name, username, add):
-    group_dict = list_user_groups.group_dict
-    if grp_name in group_dict:
+    grp_dict = list_user_groups.group_dict
+    if grp_name in grp_dict:
         if add:
             response = client.admin_add_user_to_group(
                 UserPoolId=user_pool_id,
@@ -18,21 +18,23 @@ def update_group_name(grp_name, username, add):
         else:
             response = client.admin_remove_user_from_group(
                 UserPoolId=user_pool_id,
-                Username=curr_user,
+                Username=username,
                 GroupName=group_name
             ) 
             
     else:
         print("'{}' doesn't match a valid Group Name.".format(grp_name))
-        print("'{}' was not added to a group.".format(username))
-        list_group_precedences(group_dict)
+        print("Group name entered must be an exact match.")
+        print("'{}' was not added to or removed from a group.".format(username))
+        list_groups_precedences(grp_dict)
 
+# method to display the keys and values of a dictionary in two columns
 def list_groups_precedences(grp_dict):
         print("\nValid Groups:\n")
         print('{:15}'.format('Group'), '{:>10}'.format('Precedence'))
         print('__________________________')
         for group in grp_dict:
-            print('{:15}'.format(group), '{:>10}'.format(group_dict[group])) 
+            print('{:15}'.format(group), '{:>10}'.format(grp_dict[group])) 
             
 # description text
 text = "Creates or deletes users via Cognito and adds roles to user via Cognito"
@@ -49,12 +51,16 @@ group2.add_argument("-r", "--remove", help="group to remove")
 parser.add_argument("-e", "--email", help='user email for new user')
 parser.add_argument("-l", "--list", action="store_true", 
                     help="displays list of groups with precedences")
+parser.add_argument("-p", "--pool", help='user-pool-id, keyzapp id used by default')
 
 # read argument from the command line
 args = parser.parse_args()
 
-user_pool_id = 'us-west-2_xV6TGf7xl'
-password=''
+if args.pool:
+    user_pool_id = args.pool
+else:
+    # assign user pool id for keyzapp user-pool-id.
+    user_pool_id = 'us-west-2_xV6TGf7xl'
 
 email_exp = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
 
@@ -62,8 +68,9 @@ email_exp = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
 client = boto3.client('cognito-idp')
 email = ''
 
+# code for creating a new user
 if args.new:
-    # For individual user creation in lower case
+    # All user names will be created in lower case
     one_user = args.new.lower()
     if args.email and email_exp.match(args.email):
         email = args.email
@@ -72,8 +79,6 @@ if args.new:
             email = input("Please enter a valid email address or 'q' to quit: ")
             
     try:
-        # Creates new user, email address, and temp password
-
         response = client.admin_create_user(
             UserPoolId=user_pool_id,
             Username=one_user,
@@ -89,7 +94,7 @@ if args.new:
             ],
         )
 
-        # If add option selected, add users to groups
+        # If add option selected, add user to group
         if args.group:
             group_name = args.group
             update_group_name(group_name, one_user, True)
@@ -97,17 +102,18 @@ if args.new:
     except Exception as error:
         print(error)
 
+# Code to add or remove a users from a group        
 elif args.user:
-    curr_user = args.user
+    curr_user = args.user.lower()
     try:
         if args.group:
                 group_name = args.group
                 update_group_name(group_name, curr_user, True)           
         elif args.remove:     
             group_name = args.remove
-            update_group_name(group_name, one_user, False)
+            update_group_name(group_name, curr_user, False)
         else:
-            print("No action taken, add -g <groupname> or -r <groupname> at command line.")
+            print("No action taken, add -g {groupname} or -r {groupname} at command line.")
             
     except Exception as error:
             print(error)
@@ -134,9 +140,11 @@ elif args.delete:
     except Exception as error:
         print(error)
 
+# If no user created or group added or removed        
 else:
-    print("No action taken")
-    
+    print("User Pool not updated")
+
+# Prints a list of all groups and there corresponding precedences
 if args.list:
     group_dict = list_user_groups.group_dict
     list_groups_precedences(group_dict)
