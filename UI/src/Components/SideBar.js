@@ -21,39 +21,35 @@ import AddProperty from "./AddProperty"
  * @author Perla Reyes-Herrera
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
-export default class SideBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <BrowserRouter>
-      <nav className='SideBar'>
-        <Link className='sideMenuItem' to='/'>
-          Home
-        </Link>
-        <br />
-        <Route exact path='/addproperty' render={() => <AddProperty title="Add Property" />}/>
-
-        <br />
-        <Link className='sideMenuItem' to='/addkey'>
-          Add Key
-        </Link>
-        <br />
-        <Link className='sideMenuItem' to='/addkeyholder'>
-          Add Person
-        </Link>
-        <br />
-        <Link className='sideMenuItem' to='/checkoutkey'>
-          Checkout Key
-        </Link>
-        <br />
-      </nav>
-      </BrowserRouter>
-    );
-  }
-}
+export default function SideBar () {
+  return (
+    <BrowserRouter>
+    <nav className='SideBar'>
+      <Link className='sideMenuItem' to='/'>
+        <div>Dashbord</div>
+      </Link>
+      <br />
+      {/*<Route exact path='/addproperty' render={() => <AddProperty title="Add Property" />}/>*/}
+      <Link className='sideMenuItem' to='/addproperty'>
+        Add Property
+      </Link>
+      <br />
+      <Link className='sideMenuItem' to='/addkey'>
+        Add Key
+      </Link>
+      <br />
+      <Link className='sideMenuItem' to='/addkeyholder'>
+        Add Person
+      </Link>
+      <br />
+      <Link className='sideMenuItem' to='/checkoutkey'>
+        Checkout Key
+      </Link>
+      <br />
+    </nav>
+    </BrowserRouter>
+  );
+};
 
 
 /*

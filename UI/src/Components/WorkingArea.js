@@ -7,7 +7,7 @@ import {
 import './WorkingArea.css'
 
 // import custom components
-import Home from './Home';
+import Dashbord from './Dashbord';
 import AddProperty from './AddProperty';
 import AddKey from './AddKey';
 //import AddPerson from './AddKeyholder';
@@ -41,9 +41,13 @@ export default function WorkingArea() {
         <Route path='/account'>
           <Account />
         </Route>
+        {/*ToDo: make the dashbord route /dashbord and the / route the auth page */}
         <Route path='/'>
-          <Home />
+          <Dashbord />
         </Route>
+        {/* <Route path='/'>
+          <Login />
+        </Route> */}
       </Switch>
     </div>
   );

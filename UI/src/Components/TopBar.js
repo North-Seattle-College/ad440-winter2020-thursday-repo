@@ -3,8 +3,6 @@ import {Link} from 'react-router-dom';
 import './TopBar.css';
 import {companyLogo} from '../staticResources';
 
-import Home from './Home';
-
 /**
  * Component to render the top bar
  *
