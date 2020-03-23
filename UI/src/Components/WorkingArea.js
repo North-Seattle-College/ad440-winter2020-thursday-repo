@@ -31,6 +31,7 @@ export default function WorkingArea() {
         <Route path='/addproperty'>
           <AddProperty />
         </Route>
+
         <Route path='/addkey'>
           <AddKey />
         </Route>
@@ -38,13 +39,16 @@ export default function WorkingArea() {
         <Route path='/checkoutkey'>
           <CheckoutKey />
         </Route>
+
         <Route path='/account'>
           <Account />
         </Route>
+
         {/*ToDo: make the dashbord route /dashbord and the / route the auth page */}
         <Route path='/'>
           <Dashbord />
         </Route>
+        
         {/* <Route path='/'>
           <Login />
         </Route> */}
