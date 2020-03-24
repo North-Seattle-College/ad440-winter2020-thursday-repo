@@ -20,8 +20,8 @@ import {default as apiurlbase} from '../apiurlbase'
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default function CheckoutKey ({
-  propKeyholderId = 0,
-  propKeybundleId = 0
+  propKeyholderId = null,
+  propKeybundleId = null
 }) {
     /**
      * Generate a PUT request to our API to checkout a key
@@ -94,7 +94,7 @@ export default function CheckoutKey ({
     // form data states
     const [keybundleId, setKeybundleId] = useState(propKeybundleId);
     const [keyholderId, setKeyholderId] = useState(propKeyholderId);
-    const [propertyId, setPropertyId] = useState(0);
+    const [propertyId, setPropertyId] = useState(null);
     const [dueBackDate, setDueBackDate] = useState(
       new Date().toISOString().substr(0,10)
     );
@@ -108,19 +108,19 @@ export default function CheckoutKey ({
           <legend>Check-out keys:</legend>
           <label>
             Key ID (tag):
-            <input type="text" value={keybundleId}
+            <input type="number" value={keybundleId}
               onChange={(event) => setKeybundleId} />
           </label>
           <br />
           <label>
             Checkout to:
-            <input type="text" value={keyholderId}
+            <input type="number" value={keyholderId}
               onChange={(event) => setKeyholderId} />
           </label>
           <br />
           <label>
             Property ID:
-            <input type="text" value={propertyId}
+            <input type="number" value={propertyId}
               onChange={(event) => setPropertyId} />
           </label>
           <br />

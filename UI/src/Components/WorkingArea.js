@@ -10,7 +10,7 @@ import './WorkingArea.css'
 import Dashbord from './Dashbord';
 import AddProperty from './AddProperty';
 import AddKey from './AddKey';
-//import AddPerson from './AddKeyholder';
+import AddKeyholder from './AddKeyholder';
 import CheckoutKey from './CheckoutKey';
 import { Account } from './Account';
 
@@ -43,6 +43,10 @@ export default function WorkingArea() {
         <Route path='/account'>
           <Account />
         </Route>
+
+        <route path='/addkeyholder'>
+          <AddKeyholder />
+        </route>
 
         {/*ToDo: make the dashbord route /dashbord and the / route the auth page */}
         <Route path='/'>
