@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,12 +7,12 @@ import {
 import './WorkingArea.css'
 
 // import custom components
-import Home from './Home';
+import Dashbord from './Dashbord';
 import AddProperty from './AddProperty';
 import AddKey from './AddKey';
-//import AddPerson from './AddKeyholder';
+import AddKeyholder from './AddKeyholder';
 import CheckoutKey from './CheckoutKey';
-import { Account } from './Account';
+import Account from './Account';
 
 /**
  * Component to handle route switching and display
@@ -31,6 +31,7 @@ export default function WorkingArea() {
         <Route path='/addproperty'>
           <AddProperty />
         </Route>
+
         <Route path='/addkey'>
           <AddKey />
         </Route>
@@ -38,12 +39,23 @@ export default function WorkingArea() {
         <Route path='/checkoutkey'>
           <CheckoutKey />
         </Route>
+
         <Route path='/account'>
           <Account />
         </Route>
+
+        <route path='/addkeyholder'>
+          <AddKeyholder />
+        </route>
+
+        {/*ToDo: make the dashbord route /dashbord and the / route the auth page */}
         <Route path='/'>
-          <Home />
+          <Dashbord />
         </Route>
+        
+        {/* <Route path='/'>
+          <Login />
+        </Route> */}
       </Switch>
     </div>
   );
