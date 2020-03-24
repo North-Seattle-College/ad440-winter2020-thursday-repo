@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 // import FormAddKey from "./FormAddKey";
 // import AddProperty from "./AddProperty";
 
@@ -13,101 +13,49 @@ import React from "react";
  * @author Han Kuo
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
-export default class AddKey extends React.Component {
-  constructor(props) {
-    super(props);
+export default function AddKey () {
+  // event handlers
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    //ToDo: implement API call
   }
+  const handleCancel = (event) => {
+    //ToDo: implement cancellation
+  }
+  // refs for form data
+  const keybundleId = useRef();
+  const keybundleStatus = useRef();
+  const keybundlePropertyId = useRef();
+  const keybundleKeyholderId = useRef();
 
-  render() {
-    return (
-      <div>
-        <h2>Add Key</h2>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <form onSubmit={handleSubmit} >
+        <legend>Add a key</legend>
+        <label>
+          Key ID (tag):
+          <input type="number" ref={keybundleId} />
+        </label>
+        <br />
+        <label>
+          Status:
+          <input type="number" ref={keybundleStatus} />
+        </label>
+        <br />
+        <label>
+          Property:
+          <input type="number" ref={keybundlePropertyId} />
+        </label>
+        <br />
+        <label>
+          Keyholder:
+          <input type="number" ref={keybundleKeyholderId} />
+        </label>
+        <br />
+        <input type="submit" value="Create Key" />
+        <input type="button" value="Cancel"
+          onClick={handleCancel} />
+      </form>
+    </div>
+  );
 }
-
-
-// export default class AddKey extends Component {
-//   state = {
-//     step: 1,
-//     id: "",
-//     property: "",
-//     keytype: "",
-//     name: "",
-//     address: "",
-//     city: "",
-//     state: "",
-//     zip: "",
-//     country: "",
-//     type: ""
-//   };
-
-//   // Proceed to next step
-//   nextStep = () => {
-//     const { step } = this.state;
-//     this.setState({
-//       step: step + 1
-//     });
-//   };
-
-//   // Go back to previous step
-//   prevStep = () => {
-//     const { step } = this.state;
-//     this.setState({
-//       step: step - 1
-//     });
-//   };
-
-//   // Handle changed fields
-//   handleChange = input => e => {
-//     this.setState({ [input]: e.target.value });
-//   };
-
-//   render() {
-//     const { step } = this.state;
-//     const {
-//       id,
-//       property,
-//       keytype,
-//       name,
-//       address,
-//       city,
-//       state,
-//       zip,
-//       country,
-//       type
-//     } = this.state;
-//     const values = {
-//       id,
-//       property,
-//       keytype,
-//       name,
-//       address,
-//       city,
-//       state,
-//       zip,
-//       country,
-//       type
-//     };
-//     switch (step) {
-//       case 1:
-//         return (
-//           <FormAddKey
-//             nextStep={this.nextStep}
-//             handleChange={this.handleChange}
-//             values={values}
-//           />
-//         );
-//       case 2:
-//         return (
-//           <FormAddProperty
-//             nextStep={this.nextStep}
-//             prevStep={this.prevStep}
-//             handleChange={this.handleChange}
-//             values={values}
-//           />
-//         );
-//     }
-//   }
-// }
