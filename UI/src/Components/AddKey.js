@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useState} from "react";
 // import FormAddKey from "./FormAddKey";
 // import AddProperty from "./AddProperty";
 
@@ -22,11 +22,11 @@ export default function AddKey () {
   const handleCancel = (event) => {
     //ToDo: implement cancellation
   }
-  // refs for form data
-  const keybundleId = useRef();
-  const keybundleStatus = useRef();
-  const keybundlePropertyId = useRef();
-  const keybundleKeyholderId = useRef();
+  // form data states
+  const [keybundleId, setKeybundleId] = useState(0);
+  const [keybundleStatus, setKeybundleStatus] = useState(0);
+  const [keybundlePropertyId, setKeybundlePropertyId] = useState(0);
+  const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(0);
 
   return (
     <div>
@@ -34,22 +34,26 @@ export default function AddKey () {
         <legend>Add a key</legend>
         <label>
           Key ID (tag):
-          <input type="number" ref={keybundleId} />
+          <input type="number" 
+            onChange={(event) => setKeybundleId(event.target.value)} />
         </label>
         <br />
         <label>
           Status:
-          <input type="number" ref={keybundleStatus} />
+          <input type="number" 
+            onChange={(event) => setKeybundleStatus(event.target.value)} />
         </label>
         <br />
         <label>
           Property:
-          <input type="number" ref={keybundlePropertyId} />
+          <input type="number" 
+            onChange={(event) => setKeybundlePropertyId(event.target.value)} />
         </label>
         <br />
         <label>
           Keyholder:
-          <input type="number" ref={keybundleKeyholderId} />
+          <input type="number" 
+            onChange={(event) => setKeybundleKeyholderId(event.target.value)} />
         </label>
         <br />
         <input type="submit" value="Create Key" />
