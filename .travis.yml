@@ -65,7 +65,7 @@ jobs:
       provider: s3
       access_key_id: "$AWS_ACCESS_KEY2_ID"
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: www-dev.2edusite.com. //for the purposes of using in demo it deploys it on production s3 bucket
+      bucket: www-dev.2edusite.com
       acl: bucket_owner_full_control
       region: us-west-2
       local_dir: build
