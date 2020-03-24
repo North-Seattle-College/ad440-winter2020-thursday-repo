@@ -1,20 +1,15 @@
 {
-  "name": "put-keybundle",
+  "name": "api-keybundle_id-put",
   "version": "1.0.0",
-  "description": "Update keybundle with PUT request",
-  "main": "update_keybundle.js",
+  "description": "lambda function for checkout keybundle by id",
+  "main": "index.js",
+  "dependencies": {
+    "serverless-mysql": "^1.5.3"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "update",
-    "keybundle",
-    "put",
-    "key"
-  ],
   "author": "d",
-  "license": "ISC",
-  "dependencies": {
-    "serverless-mysql": "^1.5.3"
-  }
+  "license": "ISC"
 }

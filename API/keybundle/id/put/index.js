@@ -12,82 +12,77 @@ const cnx = require('serverless-mysql')({
 });
 
 exports.handler = async (event, context) => {
+    let response = {
+        statusCode: 201,
+        headers: event.headers,
+        body: null,
+        message: null
+    };
     try {
-        let response = {
+        let bundleData = {
             keyholder_id: null,
             keybundle_id: null,
             keybundle_status_id: null,
             keybundle_checkout_date: null,
             keybundle_due_date: null,
         };
-        const date = new Date(Date.now());
+        let keybundle_id = parseInt(event.params.keybundle_id);
 
         // check method & inputs in path or return error
-        if (! event.method === 'PUT') {
-            console.error('500 returned');
-            response = {
-                statusCode: 500,
-                message:"Server Error !"
-            };
-        } else if (event.params.keybundle_id) { 
-            console.debug('400 status returned: bad input.');
-            response = {
-                statusCode: 400,
-                message:"Bad Request !"
-            };
+        if (event.method != 'PUT') {
+            return serverErrorResponse(response);
+        } else if (keybundle_id == '') { 
+            return badRequestResponse(response);
         } else {            
             // grab body data to update
-            response.keybundle_id = parseInt(event.body.keybundle_id);
-            response.keyholder_id = parseInt(event.body.keyholder_id);
-            response.keybundle_status_id = parseInt(event.body.keybundle_status_id);
-            response.keybundle_checkout_date = toSqlDatetime(date);
-            response.keybundle_due_date = toSqlDatetime(date.addDays(14));
+            bundleData.keybundle_id = parseInt(event.body.keybundle_id);
+            bundleData.keyholder_id = parseInt(event.body.keyholder_id);
+            bundleData.keybundle_status_id = parseInt(event.body.keybundle_status_id);
+            // if no date input, get today's date
+            let checkout_date = new Date(event.body.keybundle_checkout_date ? event.body.keybundle_checkout_date : Date.now());
+            bundleData.keybundle_checkout_date = toSqlDatetime(checkout_date);
+            let due_date = new Date(event.body.keybundle_due_date ? event.body.keybundle_due_date : checkout_date.addDays(14));
+            bundleData.keybundle_due_date = toSqlDatetime(due_date);
             
             // check for inputs match
-            if (event.params.keybundle_id != response.keybundle_id) {
-                console.debug('400 status returned: bad input.');
-                response = {
-                    statusCode: 400,
-                    message:"Bad Request !"
-                };
-                return response;
+            if (keybundle_id != bundleData.keybundle_id) {
+                return badRequestResponse(response);
             };
 
             // update keybundle data from RDS with query
             let query_data = [
-                response.keybundle_status_id,
-                response.keyholder_id,
-                response.keybundle_checkout_date,
-                response.keybundle_due_date,
-                response.keybundle_id,
+                bundleData.keybundle_status_id,
+                bundleData.keyholder_id,
+                bundleData.keybundle_checkout_date,
+                bundleData.keybundle_due_date,
+                bundleData.keybundle_id,
             ];
             let update_keybundle_query = "UPDATE keybundle SET keybundle_status_id=?,keyholder_id=?,keybundle_checkout_date=?,keybundle_due_date=? WHERE keybundle_id=?;";
-            console.log('\n\nDATA: ', update_keybundle_query, query_data);
+            console.info('\n\nDATA: ', update_keybundle_query, query_data);
             
             // db connection and run query or get error
             console.log('Connecting...');
-            response = await cnx.query(get_property_query, query_data);
+            let query_response = await cnx.query(update_keybundle_query, query_data);
             await cnx.end();
             
             // verify results
-            if (response.length < 1) {
-                console.trace();
-                console.debug('Queried not found + got: ', response);
-                response = {
-                    statusCode: 404,
-                    message:"Not Found !"
-                };
-                return response;
+            if (query_response.length < 1) {
+                return notFoundResponse(response);
             } else { // return requested info from successful query
-                console.log('FINAL RESPONSE: ', response);
-                return response[0];
+                console.debug('Feedback from database: ', query_response);
+                response.body = bundleData;
+                response.message = 'Created update for keybundle.';
+                console.info('FINAL RESPONSE: ', response);
             }
         }
     } catch (e) {
-        console.warn('\nServer Error !\nEXCEPTION: \n', e, '\n');
-        let response = { ERROR_MSG:e.message };
+        response = serverErrorResponse(response);
+        console.warn('\n\nEXCEPTION: \n', e, '\n');
+        response.message = { 'Server Error ERROR_MSG': e.message };
         return response;
     }
+    
+    return response;
 };
 
 // date.addDays(n) function will add n days to the Date being called
@@ -104,4 +99,26 @@ const toSqlDatetime = (inputDate) => {
         .toISOString()
         .slice(0, 19)
         .replace('T', ' ')
+}
+
+function notFoundResponse(response) {
+    console.trace();
+    console.debug('Queried not found + got: ', response);
+    response.statusCode = 404,
+    response.message = "Not Found !"
+    return response;
+}
+
+function serverErrorResponse(response) {
+    console.error('500 error returned');
+    response.statusCode = 500,
+    response.message = "Server Error !";
+    return response;
+}
+
+function badRequestResponse(response) {
+    console.debug('400 status returned: bad input.');
+    response.statusCode = 400;
+    response.message = "Bad Request !"
+    return response;
 }
