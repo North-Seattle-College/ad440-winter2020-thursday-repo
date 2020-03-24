@@ -1,7 +1,7 @@
 {
-  "name": "dev-property_id-keybundle-post",
+  "name": "postPropertyKeybundle",
   "version": "1.0.0",
-  "description": "",
+  "description": "post keybundle with property id",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
