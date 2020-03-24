@@ -1,8 +1,8 @@
 {
-  "name": "dev-property_id-keybundle-post",
+  "name": "deletekeybundle",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "deleteKeybundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
