@@ -23,10 +23,10 @@ export default function AddKey () {
     //ToDo: implement cancellation
   }
   // form data states
-  const [keybundleId, setKeybundleId] = useState(0);
-  const [keybundleStatus, setKeybundleStatus] = useState(0);
-  const [keybundlePropertyId, setKeybundlePropertyId] = useState(0);
-  const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(0);
+  const [keybundleId, setKeybundleId] = useState(null);
+  const [keybundleStatus, setKeybundleStatus] = useState(null);
+  const [keybundlePropertyId, setKeybundlePropertyId] = useState(null);
+  const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(null);
 
   return (
     <div>
@@ -34,25 +34,25 @@ export default function AddKey () {
         <legend>Add a key</legend>
         <label>
           Key ID (tag):
-          <input type="number" 
+          <input type="number" value={keybundleId}
             onChange={(event) => setKeybundleId(event.target.value)} />
         </label>
         <br />
         <label>
           Status:
-          <input type="number" 
+          <input type="number" value={keybundleStatus}
             onChange={(event) => setKeybundleStatus(event.target.value)} />
         </label>
         <br />
         <label>
           Property:
-          <input type="number" 
+          <input type="number" value={keybundlePropertyId}
             onChange={(event) => setKeybundlePropertyId(event.target.value)} />
         </label>
         <br />
         <label>
           Keyholder:
-          <input type="number" 
+          <input type="number" value={keybundleKeyholderId}
             onChange={(event) => setKeybundleKeyholderId(event.target.value)} />
         </label>
         <br />

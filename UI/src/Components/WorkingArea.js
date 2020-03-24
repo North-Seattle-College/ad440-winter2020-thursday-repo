@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,7 +12,7 @@ import AddProperty from './AddProperty';
 import AddKey from './AddKey';
 import AddKeyholder from './AddKeyholder';
 import CheckoutKey from './CheckoutKey';
-import { Account } from './Account';
+import Account from './Account';
 
 /**
  * Component to handle route switching and display
