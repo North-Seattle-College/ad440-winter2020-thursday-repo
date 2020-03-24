@@ -18,7 +18,7 @@ args = parser.parse_args()
 # name to assign to the Lambda function
 function_name = args.filename
 
-# requires Lamba name to follow the correct pattern
+# requires Lamba api name to follow the correct pattern
 feature_exp = re.compile(r"feature-sprint[1-6]-[a-zA-Z]{1,}$")
 devProd_exp = re.compile(r"dev|prod-[a-zA-Z]{1,}-[a-zA-Z]{1,}$")
 
