@@ -11,6 +11,7 @@ import { default as apiurlbase } from "../apiurlbase";
  * @author Han Kuo
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
+
 export default class AddKey extends React.Component {
   state = {
     key_id: "",
@@ -31,7 +32,7 @@ export default class AddKey extends React.Component {
     this.setState({ key_type: e.target.value });
   };
 
-  //Processes Add Property Form data when form submit button pressed
+  //Processes Add Key Form data when form submit button pressed
   handleSubmit = e => {
     e.preventDefault();
     console.log(this.state);
@@ -43,7 +44,7 @@ export default class AddKey extends React.Component {
     });
   };
 
-  //Generate a POST request to our API to add Property
+  //Generate a POST request to our API to add key
   componentDidMount() {
     fetch("https://api.2edusite.com/v1/keys", {
       method: "POST",
@@ -88,7 +89,7 @@ export default class AddKey extends React.Component {
         />
         <br />
         <br />
-        <label htmlFor="handlekeytypeChange">Enter Property Address</label>
+        <label htmlFor="handlekeytypeChange">Enter Key Type</label>
         <input
           id="handlekeytypeChange"
           name="handlekeytypeChange"
