@@ -13,18 +13,53 @@ import './AddKey.css';
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default function AddKey () {
+  
+  const createKey = (
+    keybundleId, // WTF API?
+    keybundleStatusId,
+    propertyId,
+    keyholderId = 1, // assume in office whan not overridden
+    keybundleCheckoutDate = null,
+    keybundleDueDate = null
+  ) => {
+    let strUrl = apiurlbase + 'property/' + propertyId + '/keybundle';
+    let strData = JSON.stringify({
+      'keybundle_id': keybundleId,
+      'keybundle_status_id': keybundleStatusId,
+      'property_id': propertyId,
+      'keyholder_id': keyholderId,
+      'keybundle_checkout_date': keybundleCheckoutDate,
+      'keybundle_due_date': keybundleDueDate
+    });
+    var formData = new FormData();
+    formData.append('json', strData);
+    let fetchInit = {
+      method: 'POST',
+      body: formData
+    }
+    debugger;
+    fetch(strUrl, fetchInit)
+      .then(res => res.json())
+      .then(data => {console.log('POST success: ', data)})
+      .catch(error => {console.error('POST failed: ', error)})
+  }
+
   // event handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    //let strUrl = apiurlbase + 
+    createKey(
+      keybundleId,
+      keybundleStatusId,
+      keybundlePropertyId,
+      keybundleKeyholderId
+    );
   }
   const handleCancel = (event) => {
     //ToDo: implement cancellation
   }
   // form data states
   const [keybundleId, setKeybundleId] = useState(null);
-  const [keybundleStatus, setKeybundleStatus] = useState(null);
+  const [keybundleStatusId, setKeybundleStatusId] = useState(null);
   const [keybundlePropertyId, setKeybundlePropertyId] = useState(null);
   const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(null);
 
@@ -40,8 +75,8 @@ export default function AddKey () {
         <br />
         <label>
           Status:
-          <input type="number" value={keybundleStatus}
-            onChange={(event) => setKeybundleStatus(event.target.value)} />
+          <input type="number" value={keybundleStatusId}
+            onChange={(event) => setKeybundleStatusId(event.target.value)} />
         </label>
         <br />
         <label>
