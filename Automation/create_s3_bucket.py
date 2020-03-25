@@ -19,7 +19,7 @@ parser.add_argument("filename", help="s3 filename")
 # read argument from the command line
 args = parser.parse_args()
 
-# name to assign to the s3 function
+# name to assign to the s3 bucket
 bucketname = args.filename
 
 #website_configuration
@@ -40,7 +40,7 @@ policy = {
     ]
 }
 
-# requires Lamba name to follow the correct pattern
+# requires bucket name to follow the correct pattern
 feature_exp = re.compile(r"feature-sprint[1-9]{1,}-[a-zA-Z]{1,}$")
 devProd_exp = re.compile(r"dev|prod-s3-[a-zA-Z]{1,}-[a-zA-Z]{1,}$")
 
