@@ -33,7 +33,7 @@ export default function CheckoutKey ({
       propKeybundleStatusId = matchingKey.keybundle_status_id;
     }
   }
-  debugger;
+  
   /**
    * Generate a PUT request to our API to checkout a key
    * @param keyholderId - the keyholder ID
@@ -41,21 +41,29 @@ export default function CheckoutKey ({
    * @param keybundleStatus - the keybundle status ID
    * @param dueBackDate - the date the key is expected back. Use ISO 8601
    */
-  const checkoutKey = (keyholderId, keybundleStatusId, keybundleId, checkoutDate, dueBackDate) => {
-    let strURL = apiurlbase + 'keybundle/' + String(keybundleId);
-    let strBody = JSON.stringify({
+  const checkoutKey = (
+    keyholderId,
+    keybundleStatusId,
+    keybundleId,
+    checkoutDate,
+    dueBackDate
+  ) => {
+    let strUrl = apiurlbase + 'keybundle/' + String(keybundleId);
+    let strData = JSON.stringify({
       'keyholder_id': keyholderId,
       'keybundle_status_id': keybundleStatusId,
       'keybundle_id': keybundleId,
       'keybundle_checkout_date': checkoutDate,
       'keybundle_due_date': dueBackDate
     });
+    let formData = new FormData();
+    formData.append('json', strData);
     let fetchInit = {
       method: 'PUT',
-      body: strBody,
+      body: formData,
     };
 
-    fetch(strURL, fetchInit)
+    fetch(strUrl, fetchInit)
       .then(res => res.json())
       .then(data => {console.log('PUT success: ', data)})
       .catch(error => {console.error('PUT failed: ', error)});
