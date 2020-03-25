@@ -6,33 +6,38 @@ import {default as apiurlbase} from '../apiurlbase'
 
 /**
  * Component to add property objects to the DB via API
- * 
+ *
  * Required props: none
- * 
+ *
  * Accepted props: none
- * 
+ *
  * @author Abby A.
  */
 export default class AddProperty extends React.Component {
   state = {
-    property_name: "",
-    property_type_id: 0,
-    property_address: "",
-    property_city: "",
-    property_state: "",
-    property_zip: "",
-    property_country: ""
+    //declare url
+    url: 'https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property',
+    //Store all property details
+    // AddProperty: [],
+    // property_name: "",
+    // property_type_id: 0,
+    // property_address: "",
+    // property_city: "",
+    // property_state: "",
+    // property_zip: "",
+    // property_country: ""
   }
-  // What we need to post
-  /*
-  "property_name": "string",
-  "property_type_id": 0,
-  "property_address": "string",
-  "property_city": "string",
-  "property_state": "string",
-  "property_zip": "string",
-  "property_country": "string"
-  */
+  //Define method AddProperty
+  async getAddProperty() {
+  //fetch data from url and convert to JSON data
+    const data = await fetch(this.state.url);
+  //test console to validate it is working
+    const JsonData = await data.json();
+    console.log(JsonData);
+  }
+  componentDidMount(){
+    this.getAddProperty();
+  }
   // this will update the state of textfields as the user adds input
   handlePropertyNameChange = (e) => {
     console.log(e.target.value)
@@ -77,42 +82,7 @@ export default class AddProperty extends React.Component {
     "property_zip": this.state.property_zip,
     "property_country": this.state.property_country
   });
-  //Generate a GET request to our API to get Property
-     var req = new XMLHttpRequest();
-            req.open('GET', strURL, true);
-            req.setRequestHeader('Content-Type',
-              'application/json;charset=UTF-8',
-              "Access-Control-Request-Method: GET",
-              'Access-Control-Allow-Origin: https://api.2edusite.com');
-            req.addEventListener('readystatechange',
-                                  this.handleReadyStateChange,
-                                  false);
-            req.send(strBody);
-          }
-    //Handles updates to form Add Property
-    handleReadyStateChange = (e) => {
-      console.log(e.target.response);
-  }
-  //Generate a POST request to our API to add Property
-  componentDidMount() {
-  		fetch('https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property', {
-  			method: 'POST',
-  			body: JSON.stringify({
-  				title: 'New title added',
-  				body: 'New body added. Hello body.',
-  				userId: 2
-  			}),
-  			headers: {
-  				"Content-type": "application/json; charset=UTF-8"
-  			}
-  		}).then(response => {
-  				return response.json()
-  			}).then(json => {
-  				this.setState({
-  					user:json
-  				});
-  			});
-  	}
+}
   render() {
     const { values, handleChange } = this.props;
     return (
@@ -143,19 +113,3 @@ export default class AddProperty extends React.Component {
     );
   }
 }
-
-
-// Dummy stub, delete later.
-//export default class AddProperty extends React.Component {
-  //   constructor(props) {
-  //     super(props);
-  //   }
-  
-  //   render() {
-  //     return(
-  //       <div>
-  //         <h2>Add Property</h2>
-  //       </div>
-  //     );
-  //   }
-  // }

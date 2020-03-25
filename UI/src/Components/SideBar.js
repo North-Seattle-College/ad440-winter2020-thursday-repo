@@ -72,7 +72,6 @@ export default props => {
       <a className="menu-item" href="/FormAddProperty">
         Add Property
       </a>
-
       <a className='menu-item' href='/testcomp'>
         Show Test Component
       </a>
