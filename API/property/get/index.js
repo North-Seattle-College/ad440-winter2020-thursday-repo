@@ -13,12 +13,45 @@ const mysql = require('serverless-mysql')({
 });
 
 exports.handler = async (event, context) => {
+    try {
+        let response = {
+            
+        };
+        
+        if (event.method != "GET") {
+            console.error("500 status returned: incorrect method call");
+            response = {
+                statusCode: 500,
+                errorMessage:"Server Error"
+            };
+            return context.fail(response.errorMessage);
+        } else {
+            //MYSQL query
+            let results = "SELECT * FROM property JOIN propertytype ON property.property_type_id=propertytype.property_type_id;"
+            response = await mysql.query(results);
+            await mysql.end();
 
-  //MYSQL query
-  let results = await mysql.query('SELECT * FROM property JOIN propertytype ON property.property_type_id=propertytype.property_type_id;')
+            
+            //verify results
+            if (response.length <1){
+                response = {
+                    statusCode: 404,
+                    errorMessage: "Not Found !"
+                };
+                return context.fail(response.errorMessage);
+                } else //return requested info from successful GET query 
+                {
+                    return response;
 
-  await mysql.end();
-
-  //return results
-  return results;
-} 
+                }
+                   
+        }
+    } catch (e) {
+        console.error(e.message);
+        let response = {
+            statusCode: 500,
+            errorMessage: "Server Error !" };
+        return context.fail(response.errorMessage);
+        }
+};
+  
