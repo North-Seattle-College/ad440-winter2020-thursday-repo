@@ -1,7 +1,6 @@
 import React, {useState} from "react";
-// import FormAddKey from "./FormAddKey";
-// import AddProperty from "./AddProperty";
-
+import {default as apiurlbase} from '../apiurlbase';
+import './AddKey.css';
 
 /**
  * Component to create keys
@@ -17,7 +16,8 @@ export default function AddKey () {
   // event handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    //ToDo: implement API call
+    
+    //let strUrl = apiurlbase + 
   }
   const handleCancel = (event) => {
     //ToDo: implement cancellation

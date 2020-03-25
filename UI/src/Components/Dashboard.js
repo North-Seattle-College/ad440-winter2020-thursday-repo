@@ -1,5 +1,6 @@
 import React from 'react';
-import './Dashbord.css';
+import {Link} from 'react-router-dom';
+import './Dashboard.css';
 import {default as apiurlbase} from '../apiurlbase'
 
 /**
@@ -17,8 +18,6 @@ export default class Dashbord extends React.Component {
     super(props);
     this.state = {
       searchText: '',
-      propertyData: [],
-      keybundleData: [],
     };
   }
 
@@ -30,37 +29,6 @@ export default class Dashbord extends React.Component {
       return Promise.reject(new Error(res.statusText));
     }
   }
-  // Function to explore the data structure provided by the API
-  examineJson = (data) => {
-    let localCopy = Object.assign({}, data);
-    //let index = 0;
-    //localCopy.map((dataentry, i) => {console.log(dataentry)});
-    //console.log(localCopy);
-    //console.log(localCopy[String(index)].property_address);
-    //console.log(typeof(localCopy));
-    //console.log(Array.isArray(localCopy));
-    //console.log(Object.keys(data));
-    //console.log(data[0].tostring());
-    return(localCopy);
-  }
-  // Function to convert to an Array
-  convertToArray = (data) => {
-    let dataAsArray = [];
-    let i = 0;
-
-  }
-
-  /**
-   * Get all the Property Id's, this is for early development & demo
-   */
-  getAllPropertyData = () => {
-    const strURL = apiurlbase + 'property';
-    fetch(strURL)
-      .then(this.checkStatus)
-      .then(res => res.json())
-      .then(data => this.setState({propertyData: data}))
-      .catch(error => console.error);
-  }
   
   /**
    * Get all the Keybundle Id's, this is for early development & demo
@@ -70,7 +38,7 @@ export default class Dashbord extends React.Component {
     fetch(strURL)
       .then(this.checkStatus)
       .then(res => res.json())
-      .then(data => this.setState({keybundleData: data}))
+      .then(data => this.props.setAllKeys(data))
       .catch(error => console.error);
   }
 
@@ -93,7 +61,13 @@ export default class Dashbord extends React.Component {
    */
   handleDataFetch = (event) => {
     this.getAllKeybundleData();
-    this.getAllPropertyData();
+  }
+
+  // lifecycle functions
+  componentDidMount() {
+    if (this.props.allKeys.length === 0) {
+      this.getAllKeybundleData();
+    }
   }
 
   /**
@@ -103,14 +77,16 @@ export default class Dashbord extends React.Component {
     // console.log(keybundle);
     // console.log(i);
     return(
-      <tr key={i}>
-        <td key={i+'id'}>{keybundle.keybundle_id}</td>
-        <td key={i+'stat'}>{keybundle.keybundle_status_id}</td>
-        <td key={i+'property'}>{keybundle.property_id}</td>
-        <td key={i+'keyholder'}>{keybundle.keyholder_id}</td>
-        <td key={i+'checkout'}>{keybundle.keybundle_checkout_date}</td>
-        <td key={i+'due'}>{keybundle.keybundle_due_date}</td>
-      </tr>
+      <Link to={`/checkoutkey/${keybundle.keybundle_id}`}>
+        <tr key={i}>
+          <td key={i+'id'}>{keybundle.keybundle_id}</td>
+          <td key={i+'stat'}>{keybundle.keybundle_status_id}</td>
+          <td key={i+'property'}>{keybundle.property_id}</td>
+          <td key={i+'keyholder'}>{keybundle.keyholder_id}</td>
+          <td key={i+'checkout'}>{keybundle.keybundle_checkout_date}</td>
+          <td key={i+'due'}>{keybundle.keybundle_due_date}</td>
+        </tr>
+      </Link>
     );
   }
 
@@ -144,11 +120,9 @@ export default class Dashbord extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.keybundleData.map(this.displayKeybundles)}
+              {this.props.allKeys.map(this.displayKeybundles)}
             </tbody>
           </table>
-          <h3>Property Data</h3>
-          <p>{String(this.state.propertyData)}</p>
         </div>
       </div>
     );

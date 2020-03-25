@@ -15,7 +15,7 @@ export default function SideBar () {
   return (
     <nav className='SideBar'>
       <Link className='sideMenuItem' to='/'>
-        Dashbord
+        Dashboard
       </Link>
       <br />
       {/*<Route exact path='/addproperty' render={() => <AddProperty title="Add Property" />}/>*/}

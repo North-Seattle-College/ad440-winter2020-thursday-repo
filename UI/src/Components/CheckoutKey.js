@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {default as apiurlbase} from '../apiurlbase'
+import {default as apiurlbase} from '../apiurlbase';
+import './CheckoutKey.css';
 
 /**
  * Provides component that will render a form and (eventually) provide
@@ -17,12 +18,22 @@ import {default as apiurlbase} from '../apiurlbase'
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default function CheckoutKey ({
+  allKeys = [],
   propKeybundleId = null,
   propKeybundleStatusId = null,
   propKeyholderId = null,
-  propDueBackDate = new Date().toISOString().substr(0,10),
-}) 
+  propDueBackDate = new Date().toISOString().substr(0,10), })
+ 
 {
+  if (allKeys.length > 0 && propKeybundleId !== null) {
+    let matchingKey = allKeys.find(({keyholder_id}) => {
+      return propKeybundleId === keyholder_id;
+    })
+    if (matchingKey) {
+      propKeybundleStatusId = matchingKey.keybundle_status_id;
+    }
+  }
+  debugger;
   /**
    * Generate a PUT request to our API to checkout a key
    * @param keyholderId - the keyholder ID
