@@ -1,50 +1,39 @@
-// delete keyholder by id
-
-const mysql = require('mysql');
-console.info("get request for keyholder");
-
-//connection credential for mySQl RDS db
-const connection = mysql.createConnection({
-  host     : process.env.RDS_HOSTNAME,
-  user     : process.env.RDS_USERNAME,
-  password : process.env.RDS_PASSWORD,
-  port     : process.env.RDS_PORT,
-  database : process.env.RDS_DATABASE
+const mysql = require('serverless-mysql')({
+  config: {
+    host     : process.env.RDS_HOSTNAME,
+    port     : process.env.RDS_PORT,
+    database : process.env.RDS_DATABASE,
+    user     : process.env.RDS_USERNAME,
+    password : process.env.RDS_PASSWORD
+  },
+  onError: (e) => { console.log('MYSQL Error:',e.message) },
 });
 
-exports.handler = (event, context, callback) => {
-    console.info('Getting reference to database connection')
-    // Get reference to database connection
-    var connection = mysql_connection();
-    console.debug('Requesting keyholder id: ' + event.params.keyholder_id.toString());
-    console.info("DELETE request for keyholder");
+exports.handler = async (event, context) => {
+    console.trace("DELETE keyholder by property id -- function starting --");
     
-    // Data validation for input parameters to use in query
-    if (isNumeric(event.params.keyholder_id)){
-        console.trace("valid keyholder-id")
+    queryParams = event.params.keyholder_id;
     
-        // write database query to get keyholder using the keyholder id
-        var query = "DELETE FROM keyholder WHERE keyholder_id = "
- 
-        // get query params
-        var keyholder_id = event.params.keyholder_id.toString();
-  
-        // wait for mysql server
-        connection.query(query, keyholder_id, (err, result)=> {
-            if (err) {
-                throw err;
-                console.trace('DELETE keyholder unsuccessful, pro lem connecting to database')
-            } else {
-                console.trace("keyholder queried successfully")
-                connection.end();
-                callback(null, 'DELETE keyholder successful: ' + keyholder_id)
-                console.trace('DELETE keyholder successful')
+    if (isNumeric(queryParams)) {
+        // Set keyholder query for delete
+        var delete_keyholder_query = 'DELETE FROM keyholder WHERE keyholder_id = ?;';
+        console.debug("Doing SQL: " + delete_keyholder_query);
+        try {
+            var delete_keyholder_query_response = await mysql.query(delete_keyholder_query, queryParams);
+            console.debug("SQL_server returned " + delete_keyholder_query_response);
+            return context.succeed(delete_keyholder_response);
+        } catch(error) {
+            console.trace('Returned 500 Server Error: Failed to delete keyholder');
+            return context.fail("Server Error " + error);
+        }
             
-            }
-        });
-    };
-
-};
+    } else {
+        console.trace('Returned 400 Bad Request');
+        return context.fail('Bad Request!');
+    }
+}
+    
+    
 
 function isNumeric(value) {
         return /^\d+$/.test(value);
