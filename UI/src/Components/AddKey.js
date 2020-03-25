@@ -41,7 +41,7 @@ export default function AddKey () {
     fetch(strUrl, fetchInit)
       .then(res => res.json())
       .then(data => {console.log('POST success: ', data)})
-      .catch(error => {console.error('POST failed: ', error)})
+      .catch(error => {console.error('POST failed: ', error)});
   }
 
   // event handlers
