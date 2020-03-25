@@ -49,7 +49,8 @@ if feature_exp.match(bucketname) or devProd_exp.match(bucketname):
 	#iam_role = create_iam_role.get_role_arn(bucketname)
 
 	try:
-		bucket = s3.Bucket(bucketname)
+		s3_ = boto3.resource('s3')
+		bucket = s3_.Bucket(bucketname)
 
 		if bucket.creation_date:
 			print('already exist')
