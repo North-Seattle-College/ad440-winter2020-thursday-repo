@@ -34,7 +34,13 @@ export default function AddKeyholder () {
   // event handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    //ToDo: implement DB update using API
+    createKeyholder(
+      firstName,
+      lastName,
+      email,
+      telephone,
+      keyholderType
+    );
   }
   const handleCancel = (event) => {
     //ToDo: implement cancellation
