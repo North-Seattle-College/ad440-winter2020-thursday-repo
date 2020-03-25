@@ -3,10 +3,44 @@ import './AddKeyholder.css'
 import {default as apiurlbase} from '../apiurlbase'
 
 export default function AddKeyholder () {
+  const createKeyholder = (
+    firstName,
+    lastName,
+    email,
+    telephone,
+    keyholderType
+  ) => {
+    let strUrl = apiurlbase + 'keyholder';
+    let strData = JSON.stringify({
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'phone': telephone,
+      'keyholder_type': keyholderType
+    });
+    let formData = new FormData();
+    formData.append('json', strData);
+    let fetchInit = {
+      method: 'POST',
+      body: formData
+    }
+
+    fetch(strUrl, fetchInit)
+      .then(res => res.json())
+      .then(data => {console.log('POST result: ', data)})
+      .catch(error => {console.error('POST failed: ', error)});
+  }
+
   // event handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    //ToDo: implement DB update using API
+    createKeyholder(
+      firstName,
+      lastName,
+      email,
+      telephone,
+      keyholderType
+    );
   }
   const handleCancel = (event) => {
     //ToDo: implement cancellation
@@ -53,7 +87,7 @@ export default function AddKeyholder () {
         </label>
         <br />
         <input type="submit" value="Add person to DB" />
-        <input type="button" value="Cancel" onclick={handleCancel} />
+        <input type="button" value="Cancel" onClick={handleCancel} />
       </form>
     </div>
   );
