@@ -31,13 +31,13 @@ export default function AddKey () {
       'keybundle_checkout_date': keybundleCheckoutDate,
       'keybundle_due_date': keybundleDueDate
     });
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append('json', strData);
     let fetchInit = {
       method: 'POST',
       body: formData
     }
-    debugger;
+    
     fetch(strUrl, fetchInit)
       .then(res => res.json())
       .then(data => {console.log('POST success: ', data)})

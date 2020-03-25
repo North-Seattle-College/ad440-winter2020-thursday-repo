@@ -41,7 +41,13 @@ export default function CheckoutKey ({
    * @param keybundleStatus - the keybundle status ID
    * @param dueBackDate - the date the key is expected back. Use ISO 8601
    */
-  const checkoutKey = (keyholderId, keybundleStatusId, keybundleId, checkoutDate, dueBackDate) => {
+  const checkoutKey = (
+    keyholderId,
+    keybundleStatusId,
+    keybundleId,
+    checkoutDate,
+    dueBackDate
+  ) => {
     let strUrl = apiurlbase + 'keybundle/' + String(keybundleId);
     let strData = JSON.stringify({
       'keyholder_id': keyholderId,
