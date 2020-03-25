@@ -16,6 +16,8 @@ def main():
     if pattern.lower() != 'default':
             status_code_pattern[status_code] = '.*' + status_code_pattern[status_code] + '.*'
   logger.generatedDebug('Status Code Keywords', json.dumps(status_code_pattern))
+
+  responseTemplates = {'application/json': '#set($inputRoot = $input.path(\'$\'))\n$input.json("$")\n#if($inputRoot.toString().contains("Created"))\n#set($context.responseOverride.status = 201)\n#end\n#if($inputRoot.toString().contains("No Content"))\n#set($context.responseOverride.status = 204)\n#end\n#if($inputRoot.toString().contains("Bad Request"))\n#set($context.responseOverride.status = 400)\n#end\n#if($inputRoot.toString().contains("Forbidden"))\n#set($context.responseOverride.status = 403)\n#end\n#if($inputRoot.toString().contains("Not Found"))\n#set($context.responseOverride.status = 404)\n#end\n#if($inputRoot.toString().contains("Not Allowed"))\n#set($context.responseOverride.status = 405)\n#end\n#if($inputRoot.toString().contains("Server Error"))\n#set($context.responseOverride.status = 500)\n#end'}
   
   #* set logger
   logger.setLogger('api_gateway_cors_enable.log')
@@ -51,7 +53,7 @@ def main():
   print(resp_headers_integration)
   XRW_val = "'*'"
   ACAH_val = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with'"
-  ACAO_val = "'https://2edusite.com'"
+  ACAO_val = "'https://2edusite.com'"#"'*'"
   
   headers_vals = (XRW_val, ACAH_val, ACAO_val)
 
@@ -61,7 +63,7 @@ def main():
   print('Method Parameters: ')
   print(method_respPara)
   
-  PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern)
+  PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern, responseTemplates)
   
   
   
@@ -137,7 +139,7 @@ def PutOPTIONSMethod(client, api_id, resource_id):
 
 
 
-def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern):
+def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern, responseTemplates):
   for resource in resources_dict:
     logger.runTrace('for resource', resource)
     resource_id = resources_dict[resource][0]
@@ -203,36 +205,60 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
           logger.runTrace('Integration deletion failed', 'Integration does not exist')
 
 
-        #* put Method Response Headers
-        response_put_method = client.put_method_response(
-          restApiId = api_id,
-          resourceId = resource_id,
-          httpMethod = method,
-          statusCode = status_code,
-          responseParameters = method_respPara
-        )
-        print(response_put_method)
-        logger.createInfo('Method Response', json.dumps(response_put_method))
+        # #* put Method Response Headers
+        # response_put_method = client.put_method_response(
+        #   restApiId = api_id,
+        #   resourceId = resource_id,
+        #   httpMethod = method,
+        #   statusCode = status_code,
+        #   responseParameters = method_respPara
+        # )
+        # print(response_put_method)
+        # logger.createInfo('Method Response', json.dumps(response_put_method))
         
-        #* put Integration Responses Header Mappings
-        if status_code_pattern[status_code].lower() == 'default':
-          response_put_integration = client.put_integration_response(
-            restApiId = api_id,
-            resourceId = resource_id,
-            httpMethod = method,
-            statusCode = status_code,
-            responseParameters = integration_respPara
-          )
-        else:
-          response_put_integration = client.put_integration_response(
-            restApiId = api_id,
-            resourceId = resource_id,
-            httpMethod = method,
-            statusCode = status_code,
-            selectionPattern = status_code_pattern[status_code],
-            responseParameters = integration_respPara
-          )
-        print(response_put_integration)
+        # #* put Integration Responses Header Mappings
+        # if status_code_pattern[status_code].lower() == 'default':
+        #   response_put_integration = client.put_integration_response(
+        #     restApiId = api_id,
+        #     resourceId = resource_id,
+        #     httpMethod = method,
+        #     statusCode = status_code,
+        #     responseParameters = integration_respPara,
+        #     responseTemplates = responseTemplates
+        #   )
+        # else:
+        #   response_put_integration = client.put_integration_response(
+        #     restApiId = api_id,
+        #     resourceId = resource_id,
+        #     httpMethod = method,
+        #     statusCode = status_code,
+        #     selectionPattern = status_code_pattern[status_code],
+        #     responseParameters = integration_respPara,
+        #   )
+        # print(response_put_integration)
+
+      #* alternative for status code handling, put only 200 Method Response Headers
+      response_put_method = client.put_method_response(
+        restApiId = api_id,
+        resourceId = resource_id,
+        httpMethod = method,
+        statusCode = '200',
+        responseParameters = method_respPara
+      )
+      print(response_put_method)
+      logger.createInfo('Method Response', json.dumps(response_put_method))
+      
+      #* alternative for status code handling, put only 200 Integration Responses Header Mappings, added response templates
+      response_put_integration = client.put_integration_response(
+        restApiId = api_id,
+        resourceId = resource_id,
+        httpMethod = method,
+        statusCode = '200',
+        responseParameters = integration_respPara,
+        responseTemplates = responseTemplates
+      )
+      print(response_put_integration)
+      logger.createInfo('Integration Response', json.dumps(response_put_integration))
 
 if __name__ == "__main__":
     main()
