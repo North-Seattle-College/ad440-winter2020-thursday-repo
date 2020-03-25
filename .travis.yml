@@ -6,7 +6,7 @@ node_js:
 jobs:
   include:
   - name: deploy_dev_prod_lambdas
-    if: branch IN (master, development, development-test)
+    if: branch IN (master, development)
     before_install:
       - pip install boto3 --user
       - pip install pynpm --user
@@ -54,7 +54,7 @@ jobs:
       only:
       - $TRAVIS_BRANCH
   - name: deploy_dev_s3
-    if: branch = development-test
+    if: branch = development
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
     - cd UI/
@@ -65,7 +65,7 @@ jobs:
       provider: s3
       access_key_id: "$AWS_ACCESS_KEY2_ID"
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: www-dev.2edusite.com # for the purposes of using in demo it deploys it on production s3 bucket
+      bucket: www.2edusite.com #for the purposes of using in demo it deploys it on production s3 bucket
       acl: bucket_owner_full_control
       region: us-west-2
       local_dir: build
