@@ -134,10 +134,12 @@ def get_lambda_name_from_directory(dir_name):
     dir_name_components.pop(0)
     # determine which environment we are deploying to based on branch
     branch = ""
-    if os.getenv('TRAVIS_BRANCH') == 'master':
+    # Sprint 5, the development branch is our production environment.
+    if os.getenv('TRAVIS_BRANCH') == 'development':
         branch = 'prod'
-    else:
-        branch = 'dev'
+    # Sprint 5, the development branch is now our production environment. 
+    # else:
+    #     branch = 'dev'
 
     lambda_name = branch + "-" + dir_name_components[0]
     # iterate through dir_name_components to build lambda name
