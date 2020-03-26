@@ -15,7 +15,7 @@ import './AddKey.css';
 export default function AddKey () {
   
   const createKey = (
-    keybundleId, // WTF API?
+    keybundleId, // Inconsistent with other POST requests
     keybundleStatusId,
     propertyId,
     keyholderId = 1, // assume in office whan not overridden
@@ -23,19 +23,18 @@ export default function AddKey () {
     keybundleDueDate = null
   ) => {
     let strUrl = apiurlbase + 'property/' + propertyId + '/keybundle';
-    let strData = JSON.stringify({
-      'keybundle_id': keybundleId,
-      'keybundle_status_id': keybundleStatusId,
-      'property_id': propertyId,
-      'keyholder_id': keyholderId,
-      'keybundle_checkout_date': keybundleCheckoutDate,
-      'keybundle_due_date': keybundleDueDate
+    let data = JSON.stringify({
+      "keybundle_id": keybundleId,
+      "keybundle_status_id": keybundleStatusId,
+      "property_id": propertyId,
+      "keyholder_id": keyholderId,
+      "keybundle_checkout_date": keybundleCheckoutDate,
+      "keybundle_due_date": keybundleDueDate
     });
-    let formData = new FormData();
-    formData.append('json', strData);
     let fetchInit = {
-      method: 'POST',
-      body: formData
+      method: "POST",
+      body: data,
+      headers: {"content-type": "application/json"}
     }
     
     fetch(strUrl, fetchInit)
@@ -47,21 +46,41 @@ export default function AddKey () {
   // event handlers
   const handleSubmit = (event) => {
     event.preventDefault();
+    //console.log(typeof(keybundleId));
+    if(typeof(keybundleId)==="string" || keybundleId instanceof String) {
+      setKeybundleId(parseInt(keybundleId, 10));
+    }
+    //console.log(typeof(keybundleStatusId));
+    if(typeof(keybundleStatusId)==="string" || keybundleStatusId instanceof String) {
+      setKeybundleStatusId(parseInt(keybundleStatusId, 10));
+    }
+    //console.log(typeof(keybundlePropertyId));
+    if(typeof(keybundlePropertyId)==="string" || keybundlePropertyId instanceof String) {
+      setKeybundlePropertyId(parseInt(keybundlePropertyId, 10));
+    }
+    //console.log(typeof(keybundleKeyholderId));
+    if(typeof(keybundleKeyholderId)==="string" || keybundleKeyholderId instanceof String) {
+      setKeybundleKeyholderId(parseInt(keybundleKeyholderId, 10));
+    }
     createKey(
       keybundleId,
       keybundleStatusId,
       keybundlePropertyId,
-      keybundleKeyholderId
+      keybundleKeyholderId,
+      keybundleCheckoutDate,
+      keybundleDueDate
     );
   }
-  const handleCancel = (event) => {
-    //ToDo: implement cancellation
-  }
+  // const handleCancel = (event) => {
+  //   //ToDo: implement cancellation
+  // }
   // form data states
   const [keybundleId, setKeybundleId] = useState(null);
   const [keybundleStatusId, setKeybundleStatusId] = useState(null);
   const [keybundlePropertyId, setKeybundlePropertyId] = useState(null);
   const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(null);
+  const [keybundleCheckoutDate, setKeybundleCheckoutDate] = useState(20200101);
+  const [keybundleDueDate, setKeybundleDueDate] = useState(20200101);
 
   return (
     <div>
@@ -92,8 +111,8 @@ export default function AddKey () {
         </label>
         <br />
         <input type="submit" value="Create Key" />
-        <input type="button" value="Cancel"
-          onClick={handleCancel} />
+        {/* <input type="button" value="Cancel"
+          onClick={handleCancel} /> */}
       </form>
     </div>
   );
