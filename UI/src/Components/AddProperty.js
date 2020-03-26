@@ -6,15 +6,16 @@ import {default as apiurlbase} from '../apiurlbase'
 
 /**
  * Component to add property objects to the DB via API
- * 
+ *
  * Required props: none
- * 
+ *
  * Accepted props: none
- * 
+ *
  * @author Abby A.
  */
 export default class AddProperty extends React.Component {
   state = {
+    prooerty_id:0,
     property_name: "",
     property_type_id: 0,
     property_address: "",
@@ -34,6 +35,10 @@ export default class AddProperty extends React.Component {
   "property_country": "string"
   */
   // this will update the state of textfields as the user adds input
+  handlePropertyId = (e) => {
+    console.log(e.target.value)
+    this.setState({property_id: e.target.value})
+  }
   handlePropertyNameChange = (e) => {
     console.log(e.target.value)
     this.setState({property_name: e.target.value})
@@ -69,6 +74,7 @@ export default class AddProperty extends React.Component {
     var strURL = apiurlbase
                    + 'property/';
     var strBody = JSON.stringify({
+    "property_id": this.state.property_id,
     "property_name": this.state.property_name,
     "property_type_id": this.state.property_type_id,
     "property_address": this.state.property_address,
@@ -95,7 +101,7 @@ export default class AddProperty extends React.Component {
   }
   //Generate a POST request to our API to add Property
   componentDidMount() {
-  		fetch('https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property', {
+  		fetch('https://cors-anywhere.herokuapp.com/https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property', {
   			method: 'POST',
   			body: JSON.stringify({
   				title: 'New title added',
@@ -117,6 +123,9 @@ export default class AddProperty extends React.Component {
     const { values, handleChange } = this.props;
     return (
       <form>
+        <label htmlFor="property_id">Enter Property id</label>
+        <input id="property_id" name="property_id" type="text" onChange={this.handlePropertyId} />
+        <br />
         <label htmlFor="property_name">Enter Property Name</label>
         <input id="property_name" name="property_name" type="text" onChange={this.handlePropertyNameChange} />
         <br />
@@ -150,7 +159,7 @@ export default class AddProperty extends React.Component {
   //   constructor(props) {
   //     super(props);
   //   }
-  
+
   //   render() {
   //     return(
   //       <div>
