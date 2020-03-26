@@ -14,7 +14,6 @@ console.log(props.allProperties);
   return (
     <div className={'modal-backdrop'} onClick={props.onClose}>
       <div className={'modal-body'} onClick={e => e.stopPropagation()}>
-        {/* {console.log(Array.isArray(props.allProperties))} */}
         {props.allProperties.allProperties.map(makeButton)}
       </div>
     </div>
