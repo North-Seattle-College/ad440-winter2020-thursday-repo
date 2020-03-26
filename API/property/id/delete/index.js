@@ -1,6 +1,3 @@
-//delete property by id
-
-//import package for fonnecting to the database
 const mysql = require('serverless-mysql')({
   config: {
     host     : process.env.RDS_HOSTNAME,
@@ -11,40 +8,66 @@ const mysql = require('serverless-mysql')({
   }
 });
 
-exports.handler = async (event, context) => {
-  
-  console.info("DELETE property by property_id -- function starting --");
-  console.debug("Requesting property_id: " + event.params.property_id.toString());
-
+exports.handler = async(event, context) => {
+    console.trace("DELETE property by property id -- function starting --")
     if (isNumeric(event.params.property_id)) {
-    console.trace("property_id is valid");
-    const query = "DELETE FROM property WHERE property_id = " + event.params.property_id.toString();
-  
-    // wait for mysql server 
-    let results = await mysql.query(query);
-    await mysql.end();
-   
-    if (results.affectedRows == 1) {
-      console.info("property deleted");
-      return {
-        statusCode: 200,
-        message: "property_id id=" + event.params.property_id.toString() + " deleted!"
-      };
-    } else if (results.affectedRows == 0) {
-      console.info("No property found");
-      return {
-        statusCode: 404,
-        message: "There is no property with this id!"
-      };
+        
+        
+        var delete_keybundles_query = "DELETE FROM keybundle WHERE property_id=" + event.params.property_id.toString();
+        console.debug("Doing SQL: " + delete_keybundles_query);
+        var delete_keybundles_response = await mysql.query(delete_keybundles_query);
+        try {
+            console.debug("SQL server returned " + delete_property_response);
+            var delete_property_query = "DELETE FROM property WHERE property_id =" + event.params.property_id.toString();
+            console.debug("Doing SQL: " + delete_property_query);
+            try {
+                var delete_property_response = await mysql.query(delete_property_query);
+                console.debug("SQL server returned " + delete_property_response);
+                console.trace("Returned 200: deleted property and associated keybundles");
+                if (delete_property_response.affectedRows == 1) {
+                    return context.succeed("Default property_id " + event.params.property_id + " deleted and " + delete_keybundles_response.affectedRows + " keybundles deleted");
+
+                }  else {
+                    console.trace("Returned 404 Not Found");
+                    return context.fail("Not Found ");
+                }
+            } catch (error) {
+                console.trace('Returned 500 Server Error: Failed to delete property ' + error);
+                return context.fail("Server Error " + error);
+            }
+        } catch (error) {
+            console.trace('Returned 500 Server Error: Failed to delete associated keybundles ' + error);
+            return context.fail("Server Error " + error);
+        }
+        
+        
+        // try {
+        //     var delete_property_response = await mysql.query(delete_property_query);
+        //     console.debug("SQL server returned " + delete_property_response);
+        //     if (delete_property_response.affectedRows == 1) {
+        //         var delete_keybundles_query = "DELETE FROM keybundle WHERE property_id=" + event.params.property_id.toString();
+        //         try {
+        //             var delete_keybundles_response = await mysql.query(delete_keybundles_query);
+        //             console.debug("SQL server returned " + delete_property_response);
+        //             console.trace("Returned 200: deleted property and associated keybundles");
+        //             return context.succeed("Default property_id" + event.params.property_id + " deleted and " + delete_keybundles.response.affectedRows + " keybundles deleted");
+        //         } catch (error) {
+        //             console.trace('Returned 500 Server Error: Failed to delete associated keybundles ' + error);
+        //             return context.fail("Server Error " + error);
+        //         }
+        //     } else {
+        //         console.trace("Returned 404 Not Found");
+        //         return context.fail("Not Found ");
+        //     }
+        // } catch (error) {
+        //     console.trace('Returned 500 Server Error: Failed to delete property ' + error);
+        //     return context.fail("Server Error " + error);
+        // }
+    } else {
+        console.trace('Returned 400 Bad Request');
+        return context.fail("Bad Request ");
     }
-  } else {
-    console.error("invalid property_id");
-    return {
-      statusCode: 400,
-      message: "Bad Request!"
-    };
-  }
-};
+}
 
 function isNumeric(value) {
         return /^\d+$/.test(value);
