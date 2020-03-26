@@ -1,0 +1,14 @@
+{
+  "name": "feature-sprint5-api-keybundle_id-get",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serverless-mysql": "^1.5.3"
+  }
+}
