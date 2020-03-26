@@ -86,9 +86,6 @@ export default function WorkingArea() {
         setGotData(true);
       })
       .catch(console.error)
-    // console.log(Array.isArray(allProperties));
-    // console.log(Array.isArray(allKeyholders));
-    // console.log(Array.isArray(allKeys));
   }
 
   const getKeys = () => {

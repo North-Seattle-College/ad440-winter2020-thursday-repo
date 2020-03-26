@@ -49,20 +49,15 @@ export default function AddKey (
   // event handlers
   const handleSubmit = (event) => {
     event.preventDefault();
-    debugger;
-    //console.log(typeof(keybundleId));
     if(typeof(keybundleId)==="string" || keybundleId instanceof String) {
       setKeybundleId(parseInt(keybundleId, 10));
     }
-    //console.log(typeof(keybundleStatusId));
     if(typeof(keybundleStatusId)==="string" || keybundleStatusId instanceof String) {
       setKeybundleStatusId(parseInt(keybundleStatusId, 10));
     }
-    //console.log(typeof(keybundlePropertyId));
     if(typeof(keybundlePropertyId)==="string" || keybundlePropertyId instanceof String) {
       setKeybundlePropertyId(parseInt(keybundlePropertyId, 10));
     }
-    //console.log(typeof(keybundleKeyholderId));
     if(typeof(keybundleKeyholderId)==="string" || keybundleKeyholderId instanceof String) {
       setKeybundleKeyholderId(parseInt(keybundleKeyholderId, 10));
     }
