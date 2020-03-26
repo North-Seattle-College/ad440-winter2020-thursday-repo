@@ -1,5 +1,7 @@
-import React from 'react';
-import {default as apiurlbase} from '../apiurlbase'
+import React, {useState} from 'react';
+import {default as apiurlbase} from '../apiurlbase';
+import './CheckoutKey.css';
+import SelectKeyholderModal from './SelectKeyholderModal';
 
 /**
  * Provides component that will render a form and (eventually) provide
@@ -11,171 +13,147 @@ import {default as apiurlbase} from '../apiurlbase'
  * Acceptted props:
  * keyholderId, the DB ID of a keyholder to check-out a keybundle to
  * keybundleId, the DB ID of a keybundle
- * propertyId, the DB ID of a property that the keybundle goes to
- *   Note: I'm not sure why we need propertyId. Seems redundant.
- *   but the API requires it.
  * dueBackDate, a date that will appear as the default due back date
  *   which must be given as an ISO 8601 date only string (ex: 2020-02-29)
  * 
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
-export default class CheckoutKey extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {keyholderId: this.props.keyholderId,
-                      keybundleId: this.props.keybundleId,
-                      propertyId: this.props.propertyId,
-                      dueBackDate: this.props.dueBackDate };
+export default function CheckoutKey ({
+  allKeys = [],
+  allKeyholders = [],
+  propKeybundleId = null,
+  propKeybundleStatusId = null,
+  propKeyholderId = null,
+  propDueBackDate = new Date().toISOString().substr(0,10), })
+{
+  // Fill the keybundleStatusId from existing data
+  if (allKeys.length > 0 && propKeybundleId !== null) {
+    let matchingKey = allKeys.find(({keybundle_id}) => {
+      return propKeybundleId === keybundle_id;
+    })
+    if (matchingKey) {
+      propKeybundleStatusId = matchingKey.keybundle_status_id;
     }
+  }
+  
+  /**
+   * Generate a PUT request to our API to checkout a key
+   * @param keyholderId - the keyholder ID
+   * @param keybundleStatusId - the status ID of the keybundle
+   * @param keybundleId - the keybundle ID
+   * @param checkoutDate - date the keybundle was checked out
+   * @param dueBackDate - the date the key is expected back. Use ISO 8601
+   */
+  const checkoutKey = (
+    keyholderId,
+    keybundleStatusId,
+    keybundleId,
+    checkoutDate,
+    dueBackDate
+  ) => {
+    let strUrl = apiurlbase + 'keybundle/' + String(keybundleId);
+    let strData = JSON.stringify({
+      'keyholder_id': keyholderId,
+      'keybundle_status_id': keybundleStatusId,
+      'keybundle_id': keybundleId,
+      'keybundle_checkout_date': checkoutDate,
+      'keybundle_due_date': dueBackDate
+    });
+    let formData = new FormData();
+    formData.append('json', strData);
+    let fetchInit = {
+      method: 'PUT',
+      body: formData,
+    };
 
-    /**
-     * Generate a PUT request to our API to checkout a key
-     * @param keyholderId - the keyholder ID as it appears in the DB
-     * @param keybundleId - the keybundle ID as it appears in the DB
-     * @param propertyId - the property ID as it appears in the DB
-     * @param dueBackDate - the date the key is expected back. Use ISO
-     */
-    checkoutKey = (keyholderId, keybundleId, propertyId, dueBackDate) => {
-        function handleReadyStateChange(e) {
-            // Tracking all the state changes for dev / debugging.
-            /* ToDo - reduce event states handled later for prod */
-            if (req.readyState === 0) {
-                console.log('getAllPropertyIds state 0' + String(e));
-            } else if (req.readyState === 1) {
-                console.log('getAllPropertyIds state 1' + String(e))
-            } else if (req.readyState === 2) {
-                console.log('getAllPropertyIds state 2' + String(e))
-            } else if (req.readyState === 3) {
-                console.log('getAllPropertyIds state 3' + String(e))
-            } else if (req.readyState === 4 && req.status === 200) {
-                console.log('getAllPropertyIds state 4' + String(e))
-                var res = JSON.parse(req.responseText);
-                alert(String(res))
-            }
-        }
+    fetch(strUrl, fetchInit)
+      .then(res => res.json())
+      .then(data => {console.log('PUT success: ', data)})
+      .catch(error => {console.error('PUT failed: ', error)});
+  }
 
-        var strURL = apiurlbase + 'keybundle/' + String(keybundleId);
-        var strBody = JSON.stringify({
-            'keyholder_id': keyholderId,
-            'property_id': propertyId,
-            'keybundle_id': keybundleId
-        });
-        
-        var req = new XMLHttpRequest();
-        req.open('PUT', strURL, true);
-        req.setRequestHeader('Content-Type',
-            'application/json;charset=UTF-8',
-            'Access-Control-Request-Method: PUT');
-        req.addEventListener('readystatechange',
-                              handleReadyStateChange,
-                              false);
-        req.send(strBody);
-    }
-
-    /**
-     * Processes the key checkout form data when form submit button pressed
-     */
-    handleSubmit = (event) => {
-        /* ToDo: implement keycheckout event handler in later sprint */
-        //alert('KeyCheckout form submit button pressed.');
-        this.checkoutKey(
-            this.state.keyholderId,
-            this.state.keybundleId,
-            this.state.propertyId,
-            this.state.dueBackDate
-        );
-        event.preventDefault();
-    }
+  // button handlers
+  const handleSubmit = (event) => {
+    event.preventDefault();  
+    /* ToDo: implement keycheckout event handler in later sprint */
+    //alert('KeyCheckout form submit button pressed.');
+    console.log(keyholderId);
+    console.log(keybundleStatusId)
+    console.log(keybundleId);
+    let checkoutDate = new Date().toISOString().substr(0,10);
+    console.log(checkoutDate);
+    console.log(dueBackDate);
     
-    /**
-     * Processes user initiated cancellation of this form.
-     */
-    handleCancel = () => {
-        /* ToDo: implement cancel behavior - cleanup anything necessary
-           then hide or destroy this element */
-        alert('cancel button pressed.');
-    }
+    checkoutKey(
+        keyholderId,
+        keybundleStatusId,
+        keybundleId,
+        checkoutDate,
+        dueBackDate
+    );
+  }
 
-    /**
-     * Handles updates to form field for Key ID
-     */
-    handleKeybundleIdChange = (event) => {
-        this.setState({keybundleId: event.target.value});
-    }
+  const handleCancel = () => {
+    /* ToDo: implement cancel behavior - cleanup anything necessary
+        then hide or destroy this element */
+    alert('cancel button pressed.');
+  }
 
-    /**
-     * Handles updates to form field for Checkout ID
-     */
-    handleCheckoutToChange = (event) => {
-        this.setState({keyholderId: event.target.value});
-    }
+  // form data states
+  const [keyholderId, setKeyholderId] = useState(propKeyholderId);
+  const [keybundleStatusId, setKeybundleStatusId] = useState(propKeybundleStatusId);
+  const [keybundleId, setKeybundleId] = useState(propKeybundleId);
+  const [dueBackDate, setDueBackDate] = useState(propDueBackDate);
+  const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
 
-    /**
-     * Handles updates to form field for Property ID
-     */
-    handlePropertyIdChange = (event) => {
-        this.setState({propertyId: event.target.value})
-    }
+  const togglePersonModalOpen = () => {
+    setIsPersonModalOpen(!isPersonModalOpen);
+  }
 
-    /**
-     * Handles updates to form field for date due back
-     */
-    handleDueBackChange = (event) => {
-        this.setState({dueBackDate: event.target.value});
-    }
+  const keyholderSelected = (key) => {
+    setKeyholderId(key.keyholder_id);
+    togglePersonModalOpen();
+  }
 
-    /**
-     * Get all the KeybundleId's, this is for early development & demo
-     */
-    getAllKeyholderIds = () => {
-        /* ToDo: Implement this when the API for it is written*/
-        console.log('Phasers on stun, good luck. Kirk out.')
-    }
-
-    /**
-     * Required render method for React to create and draw elements from components
-     */
-    render() {
-        return (
-            <div className='keyCheckout'>
-                <form onSubmit={this.handleSubmit} >
-                    <legend>Check-out keys:</legend>
-                    <label>
-                        Key ID (tag):
-                        <input type="text" value={this.state.keybundleId}
-                               onChange={this.handleKeybundleIdChange} />
-                    </label>
-                    <br />
-                    <label>
-                        Checkout to:
-                        <input type="text" value={this.state.keyholderId}
-                               onChange={this.handleCheckoutToChange} />
-                    </label>
-                    <br />
-                    <label>
-                        Property ID:
-                        <input type="text" value={this.state.propertyId}
-                               onChange={this.handlePropertyIdChange} />
-                    </label>
-                    <br />
-                    <label>
-                        Due back:
-                        <input type="date" value={this.state.dueBackDate}
-                            onChange={this.handleDueBackChange} />
-                    </label>
-                    <br />
-                    <input type="submit" value="Checkout key" />
-                    <input type="button" value="Cancel"
-                           onClick={this.handleCancel}/>
-                </form>
-                <button onClick={this.getAllPropertyIds}>
-                    Get all property information
-                </button>
-                <br />
-                <button onClick={this.getAllKeybundleIds}>
-                    Get all key bundle information
-                </button>
-            </div>
-        );
-    }
+  /**
+   * Provide the JSX
+   */
+  return (
+    <div className='keyCheckout'>
+      {(isPersonModalOpen) ? (<SelectKeyholderModal allKeyholders={allKeyholders}
+        onSelect={keyholderSelected}
+        onClose={togglePersonModalOpen}/>) : null }
+      <form onSubmit={handleSubmit} >
+        <legend>Check-out keys:</legend>
+        <label>
+          Key ID (tag):
+          <input type="number" value={keybundleId}
+            onChange={(event) => setKeybundleId(event.target.value)} />
+        </label>
+        <br />
+        <label>
+          Checkout to:
+          <input type="number" value={keyholderId}
+            onChange={(event) => setKeyholderId(event.target.value)} />
+        </label>
+        <button className="open-select-keyholder" onClick={togglePersonModalOpen}>Select Person</button>
+        <br />
+        <label>
+          Key status:
+          <input type="number" value={keybundleStatusId}
+            onChange={(event) => setKeybundleStatusId(event.target.value)} />
+        </label>
+        <br />
+        <label>
+          Due back:
+          <input type="date" value={dueBackDate}
+            onChange={(event) => setDueBackDate(event.target.value)} />
+        </label>
+        <br />
+        <input type="submit" value="Checkout key" />
+        <input type="button" value="Cancel"
+          onClick={handleCancel}/>
+      </form>
+    </div>
+  );
 }

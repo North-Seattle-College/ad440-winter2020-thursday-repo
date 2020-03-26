@@ -1,7 +1,6 @@
-import React from "react";
-// import FormAddKey from "./FormAddKey";
-// import AddProperty from "./AddProperty";
-
+import React, {useState} from "react";
+import {default as apiurlbase} from '../apiurlbase';
+import './AddKey.css';
 
 /**
  * Component to create keys
@@ -13,101 +12,89 @@ import React from "react";
  * @author Han Kuo
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
-export default class AddKey extends React.Component {
-  constructor(props) {
-    super(props);
+export default function AddKey () {
+  
+  const createKey = (
+    keybundleId, // WTF API?
+    keybundleStatusId,
+    propertyId,
+    keyholderId = 1, // assume in office whan not overridden
+    keybundleCheckoutDate = null,
+    keybundleDueDate = null
+  ) => {
+    let strUrl = apiurlbase + 'property/' + propertyId + '/keybundle';
+    let strData = JSON.stringify({
+      'keybundle_id': keybundleId,
+      'keybundle_status_id': keybundleStatusId,
+      'property_id': propertyId,
+      'keyholder_id': keyholderId,
+      'keybundle_checkout_date': keybundleCheckoutDate,
+      'keybundle_due_date': keybundleDueDate
+    });
+    let formData = new FormData();
+    formData.append('json', strData);
+    let fetchInit = {
+      method: 'POST',
+      body: formData
+    }
+    
+    fetch(strUrl, fetchInit)
+      .then(res => res.json())
+      .then(data => {console.log('POST success: ', data)})
+      .catch(error => {console.error('POST failed: ', error)});
   }
 
-  render() {
-    return (
-      <div>
-        <h2>Add Key</h2>
-      </div>
+  // event handlers
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    createKey(
+      keybundleId,
+      keybundleStatusId,
+      keybundlePropertyId,
+      keybundleKeyholderId
     );
   }
+  const handleCancel = (event) => {
+    //ToDo: implement cancellation
+  }
+  // form data states
+  const [keybundleId, setKeybundleId] = useState(null);
+  const [keybundleStatusId, setKeybundleStatusId] = useState(null);
+  const [keybundlePropertyId, setKeybundlePropertyId] = useState(null);
+  const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(null);
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit} >
+        <legend>Add a key</legend>
+        <label>
+          Key ID (tag):
+          <input type="number" value={keybundleId}
+            onChange={(event) => setKeybundleId(event.target.value)} />
+        </label>
+        <br />
+        <label>
+          Status:
+          <input type="number" value={keybundleStatusId}
+            onChange={(event) => setKeybundleStatusId(event.target.value)} />
+        </label>
+        <br />
+        <label>
+          Property:
+          <input type="number" value={keybundlePropertyId}
+            onChange={(event) => setKeybundlePropertyId(event.target.value)} />
+        </label>
+        <br />
+        <label>
+          Keyholder:
+          <input type="number" value={keybundleKeyholderId}
+            onChange={(event) => setKeybundleKeyholderId(event.target.value)} />
+        </label>
+        <br />
+        <input type="submit" value="Create Key" />
+        <input type="button" value="Cancel"
+          onClick={handleCancel} />
+      </form>
+    </div>
+  );
 }
-
-
-// export default class AddKey extends Component {
-//   state = {
-//     step: 1,
-//     id: "",
-//     property: "",
-//     keytype: "",
-//     name: "",
-//     address: "",
-//     city: "",
-//     state: "",
-//     zip: "",
-//     country: "",
-//     type: ""
-//   };
-
-//   // Proceed to next step
-//   nextStep = () => {
-//     const { step } = this.state;
-//     this.setState({
-//       step: step + 1
-//     });
-//   };
-
-//   // Go back to previous step
-//   prevStep = () => {
-//     const { step } = this.state;
-//     this.setState({
-//       step: step - 1
-//     });
-//   };
-
-//   // Handle changed fields
-//   handleChange = input => e => {
-//     this.setState({ [input]: e.target.value });
-//   };
-
-//   render() {
-//     const { step } = this.state;
-//     const {
-//       id,
-//       property,
-//       keytype,
-//       name,
-//       address,
-//       city,
-//       state,
-//       zip,
-//       country,
-//       type
-//     } = this.state;
-//     const values = {
-//       id,
-//       property,
-//       keytype,
-//       name,
-//       address,
-//       city,
-//       state,
-//       zip,
-//       country,
-//       type
-//     };
-//     switch (step) {
-//       case 1:
-//         return (
-//           <FormAddKey
-//             nextStep={this.nextStep}
-//             handleChange={this.handleChange}
-//             values={values}
-//           />
-//         );
-//       case 2:
-//         return (
-//           <FormAddProperty
-//             nextStep={this.nextStep}
-//             prevStep={this.prevStep}
-//             handleChange={this.handleChange}
-//             values={values}
-//           />
-//         );
-//     }
-//   }
-// }
