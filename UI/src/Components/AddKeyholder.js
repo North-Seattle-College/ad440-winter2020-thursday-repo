@@ -11,18 +11,17 @@ export default function AddKeyholder () {
     keyholderType
   ) => {
     let strUrl = apiurlbase + 'keyholder';
-    let strData = JSON.stringify({
+    let data = {
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
       'phone': telephone,
       'keyholder_type': keyholderType
-    });
-    let formData = new FormData();
-    formData.append('json', strData);
+    };
     let fetchInit = {
       method: 'POST',
-      body: formData
+      body: data,
+      headers: {'content-type': 'application/json'}
     }
 
     fetch(strUrl, fetchInit)

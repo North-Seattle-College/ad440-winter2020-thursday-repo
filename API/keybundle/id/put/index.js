@@ -1,101 +1,85 @@
 console.log("PUT keybundle :: function starting...");
 
-// mysql import and connection
-const mysql = require('mysql');
+// serverless mysql import and connection
+const cnx = require('serverless-mysql')({
+    config: {
+        host     : process.env.RDS_HOSTNAME,
+        user     : process.env.RDS_USERNAME,
+        password : process.env.RDS_PASSWORD,
+        port     : process.env.RDS_PORT,
+        database : process.env.RDS_DATABASE
+    }
+});
 
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context) => {
+    let response = {};
     try {
-        let response = {
+        let bundleData = {
             keyholder_id: null,
             keybundle_id: null,
             keybundle_status_id: null,
             keybundle_checkout_date: null,
             keybundle_due_date: null,
         };
-        const date = new Date(Date.now());
+        let keybundle_id = parseInt(event.params.keybundle_id);
 
-        if (event) {//.method === 'PUT') { TODO: change checks back from debug mode
-            if (1 != 1) { //.body.keybundle_id)) {
-                console.debug('400 status returned: bad input.');
-                response = {
-                    statusCode: 400,
-                    message:"Bad input!"
-                };
-            } else {
-                // allows for using callbacks as finish/error-handlers
-                context.callbackWaitsForEmptyEventLoop = false;
-                
-                // grab param data to update
-                response.keybundle_id = parseInt(event.body.keybundle_id);
-                response.keyholder_id = parseInt(event.body.keyholder_id);
-                response.keybundle_status_id = parseInt(event.body.keybundle_status_id);
-                response.keybundle_checkout_date = toSqlDatetime(date);
-                response.keybundle_due_date = toSqlDatetime(date.addDays(14));
-                
-                // check for inputs match
-                if (event.params.keybundle_id != response.keybundle_id) {
-                    console.debug('400 status returned: bad input.');
-                    response = {
-                        statusCode: 400,
-                        message:"Bad input!"
-                    };
-                    return response;
-                };
-
-                // update keybundle data from RDS with query
-                // TODO: check-in function do GET first
-                let query_data = [
-                    response.keybundle_status_id,
-                    response.keyholder_id,
-                    response.keybundle_checkout_date,
-                    response.keybundle_due_date,
-                    response.keybundle_id,
-                ];
-                let update_keybundle_query = "UPDATE keybundle SET keybundle_status_id=?,keyholder_id=?,keybundle_checkout_date=?,keybundle_due_date=? WHERE keybundle_id=?;";
-                console.log('\n\nDATA: ', update_keybundle_query, query_data);
-                
-                
-                const cnx = mysql.createConnection({
-                  host     : process.env.RDS_HOSTNAME,
-                  user     : process.env.RDS_temp_USERNAME,
-                  password : process.env.RDS_temp_PASSWORD,
-                  port     : process.env.RDS_PORT,
-                  database : process.env.RDS_DATABASE
-                });
-                console.log('Connecting...');
-                cnx.query(update_keybundle_query, query_data, (error, results, callback) => {
-                    if (error) {
-                        console.error('QUERY ERROR: ', error);
-                        console.trace();
-                        cnx.destroy();
-                        // throw error;
-                    } else {
-                        // connected!
-                        console.log('QUERY SUCCESS: ', results);
-                        // callback(null, results);
-                        cnx.end();
-                        console.info('OK: CONNECTION ENDED')
-                    }
-                });
-                response = {
-                    statusCode: 200,
-                    body: query_data
-                }
-            }
-        } else { 
-            console.error('500 returned');
-            response = {
-                statusCode: 500,
-                message:"Bad server!"
+        // check method & inputs in path or return error
+        if (event.method != 'PUT') {
+            return serverErrorResponse(response);
+        } else if (keybundle_id == '' || isNaN(keybundle_id) || keybundle_id < 0) { 
+            return badRequestResponse(response);
+        } else {            
+            // grab body data to update
+            bundleData.keybundle_id = parseInt(event.body.keybundle_id);
+            bundleData.keyholder_id = parseInt(event.body.keyholder_id);
+            bundleData.keybundle_status_id = parseInt(event.body.keybundle_status_id);
+            // if no date input, get today's date
+            let checkout_date = new Date(event.body.keybundle_checkout_date ? event.body.keybundle_checkout_date : Date.now());
+            bundleData.keybundle_checkout_date = toSqlDatetime(checkout_date);
+            let due_date = new Date(event.body.keybundle_due_date ? event.body.keybundle_due_date : checkout_date.addDays(14));
+            bundleData.keybundle_due_date = toSqlDatetime(due_date);
+            
+            // check for inputs match
+            if (keybundle_id != bundleData.keybundle_id) {
+                return badRequestResponse(response);
             };
-        };
-        console.log('FINAL RESPONSE: ', response);
-        return response;
+
+            // update keybundle data from RDS with query
+            let query_data = [
+                bundleData.keybundle_status_id,
+                bundleData.keyholder_id,
+                bundleData.keybundle_checkout_date,
+                bundleData.keybundle_due_date,
+                bundleData.keybundle_id,
+            ];
+            let update_keybundle_query = "UPDATE keybundle SET keybundle_status_id=?,keyholder_id=?,keybundle_checkout_date=?,keybundle_due_date=? WHERE keybundle_id=?;";
+            console.info('\n\nDATA: ', update_keybundle_query, query_data);
+            
+            // db connection and run query or get error
+            console.log('Connecting...');
+            let query_response = await cnx.query(update_keybundle_query, query_data);
+            await cnx.end();
+            
+            // verify results
+            if (query_response.affectedRows < 1) {
+                return notFoundResponse(response);
+            } else { // return requested info from successful query
+                console.debug('Feedback from database: ', query_response);
+                let get_updated_keybundle = "SELECT * FROM keybundle WHERE keybundle_id=?;";
+                query_data = [ bundleData.keybundle_id ];
+                response = await cnx.query(get_updated_keybundle, query_data);
+                await cnx.end();
+                console.info('FINAL RESPONSE: ', response);
+                return response[0];
+            }
+        }
     } catch (e) {
+        response = serverErrorResponse(response);
         console.warn('\n\nEXCEPTION: \n', e, '\n');
-        let response = { ERROR_MSG:e.message };
+        response.message = { 'ERROR_MSG': 'Server Error :: ' + e.message };
         return response;
     }
+    
 };
 
 // date.addDays(n) function will add n days to the Date being called
@@ -112,4 +96,23 @@ const toSqlDatetime = (inputDate) => {
         .toISOString()
         .slice(0, 19)
         .replace('T', ' ')
+}
+
+function notFoundResponse(response) {
+    console.trace();
+    console.debug('Queried not found + got: ', response);
+    response.message = "Not Found !"
+    return response;
+}
+
+function serverErrorResponse(response) {
+    console.error('500 error returned');
+    response.message = "Server Error !";
+    return response;
+}
+
+function badRequestResponse(response) {
+    console.debug('400 status returned: bad input.');
+    response.message = "Bad Request !"
+    return response;
 }

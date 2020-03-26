@@ -4,7 +4,7 @@ import boto3
 # import ast
 import apiGatewayLogger as logger
 
-""" THIS CODE IS USED TO GENERATE feature-sprint STAGE FOR KEY MANAGEMENT API GATEWAY"""
+""" THIS CODE IS USED TO GENERATE feature-sprint, dev, or v1 STAGE FOR KEY MANAGEMENT API GATEWAY"""
 
 # constants
 stg_var_name_lst = ['keybundle_GET',
@@ -34,13 +34,11 @@ for name in stg_var_name_lst:
 
 stg_vars = dict(zip(stg_var_name_lst, dev_stg_var_val_lst))
 
-api_team_roaster = ['kevin', 'dereje', 'yamato', 'anu', 'deya', 'sojung']
-
 # set logger
 logger.setLogger('api_gateway_stage_build.log')
 
 # get stage name
-stg_name = input('Enter new feature stage sprint number, or prod/dev: ')
+stg_name = input('Enter prod or dev, or feature stage sprint number: ')
 
 if stg_name not in ['prod', 'dev']:
   try:
@@ -50,6 +48,13 @@ if stg_name not in ['prod', 'dev']:
     
   stg_name = 'feature-sprint' + str(stg_name)
   logger.inputTrace('Stage Name', stg_name)
+
+stage = stg_name
+branch = stage
+if stg_name == 'prod':
+  ver = input('Enter version number for new production stage: ')
+  stage = 'v' + ver
+  stg_name = stg_name + '-' + stage
 
 # get api gateway id
 api_id = input('Enter API Gateway ID (press enter for default): ')
@@ -64,15 +69,28 @@ logger.stageInfo(api_id, stg_name )
 
 ## get stage varibles use for the stage
 
-print ('List of stage variables:')
-length = len(stg_var_name_lst)
-for l in range(length):
-  print(str(l+1)+'.'+ stg_var_name_lst[l], end=" ")
-print('')
-stg_vars_get = input('Enter method name, separate by comma, or all:')
-stg_vars_get = stg_vars_get.replace(" ", "")
-logger.inputTrace('Method Selection', stg_vars_get)
-stg_vars_get = stg_vars_get.split(',')
+if branch not in ['dev', 'prod']:
+  print ('List of stage variables:')
+  length = len(stg_var_name_lst)
+  for l in range(length):
+    print(str(l+1)+'.'+ stg_var_name_lst[l], end=" ")
+  print('')
+  stg_vars_get = input('Enter method name/number-responsible party, separate by comma, or type all for all: ')
+  stg_vars_get = stg_vars_get.replace(" ", "")
+  logger.inputTrace('Method Selection', stg_vars_get)
+  if stg_vars_get.lower() == 'all':
+    l = len(stg_var_name_lst)
+    stg_vars_get = []
+    for i in range(l):
+      stg_vars_get.append(str(i+1))
+  else:
+    stg_vars_get = stg_vars_get.split(',')
+else:
+  l = len(stg_var_name_lst)
+  stg_vars_get = []
+  for i in range(l):
+    stg_vars_get.append(str(i+1))
+
 stg_vars_updated = {}
 
 if stg_vars_get[0].lower() != 'all':
@@ -95,11 +113,32 @@ if stg_vars_get[0].lower() != 'all':
     lambdaName = lambdaName.replace('_','-')
     lambdaName = lambdaName.replace('-id', '_id')
 
-    stg_vars_updated[methodName] = lambdaName
-else:
-    for var in stg_var_name_lst:
-      methodName = var
-      lambdaName = stg_name + '-api-' + methodName.lower().replace('_','-').replace('-id', '_id')
+for pair in stg_vars_get:
+  methodName = ''
+  partyName = ''
+  pair = pair.split('-')
+  if pair[0].isnumeric():
+    methodNum = int(pair[0]) - 1
+    methodName = stg_var_name_lst[methodNum]
+  elif '_' in pair[0]:
+    pair[0] = pair[0].lower()
+    methodName = pair[0].split('_')
+    methodName = pair[0].replace(methodName[-1], methodName[-1].upper())
+    if methodName not in stg_var_name_lst:
+      logger.inputError('Method name you enter is not a known method')
+      os.abort()
+  else:
+    logger.inputError('Cannot identify the method number/name')
+
+  lambdaName = branch + '-' + methodName.lower().replace('_','-')
+
+  if branch not in ['dev', 'prod']:
+    partyName = 'api'
+    lambdaName = branch + '-' + partyName + '-' + methodName.lower().replace('_','-')
+  
+  lambdaName = lambdaName.replace('_','-')
+  lambdaName = lambdaName.replace('-id', '_id')
+
 
       stg_vars_updated[methodName] = lambdaName
 
@@ -111,7 +150,7 @@ for sv, ln in stg_vars_updated.items():
   ln = ln.replace('-id', '_id')
   stg_vars[sv] = ln 
 
-#TODO generate stage description
+# generate stage description
 description = input('Enter description for the new stage: ')
 logger.inputTrace('Description', description)
 
@@ -122,11 +161,11 @@ if description == '':
 logger.generatedDebug('Stage Description',
             description)
 
-#TODO generate list of tags
+# generate list of tags
 tags ={
   'Project' : 'KeyManagement',
   'Class' : 'AD440 Th',
-  'Purpose' : stg_name.split('-')[0]
+  'Purpose' : stg_name
 }
 
 print("Auto Generated Tags:")
@@ -146,7 +185,7 @@ for n, v in tags.items():
   logger.generatedDebug('TAGs name', n)
   logger.generatedDebug('TAGs name', v)
 
-#TODO is cacheClusterEnabled
+#T is cacheClusterEnabled
 isCCEnabled = False
 isCCEnabled_get = input ('Do you want to enable cache cluster? (y/n) ')
 logger.inputTrace('Cache Cluster Enable', isCCEnabled_get)
@@ -161,8 +200,7 @@ if isCCEnabled_get.lower() == 'y' or isCCEnabled_get.lower() == 'yes':
     cacheClusterSize = [.5,1.6,6.1,13.5,28.4,58.2,118,237]
     length = len(cacheClusterSize)
     for l in range(length):
-      l = l + 1
-      print(str(cacheClusterSize[l])+'GB,', end = " ")
+      print(str(l+1)+ '. ' + str(cacheClusterSize[l])+'GB ', end = " ")
     print("")
     ccSize_set = input('Select Cache Cluster Size: ')
     logger.inputTrace('Cache Cluster Size selection', ccSize_set)
@@ -172,7 +210,7 @@ if isCCEnabled_get.lower() == 'y' or isCCEnabled_get.lower() == 'yes':
       logger.inputError('Cache Cluster Size much be numeric, ')
       os.abort()
     if ccSize_set <= length:
-      ccSize_set = cacheClusterSize[ccSize_set]
+      ccSize_set = str(cacheClusterSize[ccSize_set])
       logger.generatedDebug('Cache Cluster Size', ccSize_set)
   else:
     logger.generatedDebug('Cache Cluster', 'False')
@@ -201,7 +239,7 @@ client = boto3.client('apigateway')
 if isCCEnabled:
   response = client.create_stage(
     restApiId = api_id,
-    stageName = stg_name,
+    stageName = stage,
     deploymentId = '0i626r',
     description = description,
     cacheClusterEnabled = isCCEnabled,
@@ -212,7 +250,7 @@ if isCCEnabled:
 else:
   response = client.create_stage(
     restApiId = api_id,
-    stageName = stg_name,
+    stageName = stage,
     deploymentId = '0i626r',
     description = description,
     variables = stg_vars,
