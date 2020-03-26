@@ -1,4 +1,31 @@
-* {
-  margin: 0px;
-  padding: 0px;
+.key-card-wrapper {
+  width: 80vw;
+  overflow-x: hidden;
+  /*overflow-y: scroll;*/
+}
+
+.key-card {
+  cursor: pointer;
+  background-color: white;
+  padding: 5px 10px;
+  margin-bottom: 0.7em;
+  margin-right: 0.7em;
+  display: inline-block;
+  width: 280px;
+}
+
+.key-card .kh-name {
+
+}
+
+.key-card .prop-name {
+
+}
+
+.key-card .prop-addy {
+
+}
+
+.key-card td:nth-child(1) {
+  padding-right: 0.5em;
 }
