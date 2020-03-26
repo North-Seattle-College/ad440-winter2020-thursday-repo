@@ -1,73 +1,62 @@
-//PUT Keyholder by id 
-console.trace("PUT keyholder by keyholder_id -- function starting --");
- 
-//node package for mysql connection
-const mysql = require('mysql');
+const mysql = require('serverless-mysql')({
+  config: {
+    host     : process.env.RDS_HOSTNAME,
+    port     : process.env.RDS_PORT,
+    database : process.env.RDS_DATABASE,
+    user     : process.env.RDS_USERNAME,
+    password : process.env.RDS_PASSWORD
+  },
+  onError: (e) => { console.log('MYSQL Error:',e.message) },
+});
 
-//credentials
-function mysql_connection(){
-    var params={
-      host     : process.env.RDS_HOST,
-      port     : process.env.RDS_PORT,
-      database : process.env.RDS_DATABASE,
-      user     : process.env.RDS_USERNAME,
-      password : process.env.RDS_PASSWORD
-    };
-    return mysql.createConnection(params);
-}
-//
-console.trace("PUT Keyholder by keyholder_id -- function starting --");
-console.info("Put request for keyholder by keyholder_id");
-
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context) => {
+  
+  console.trace("PUT keyholder -- function starting --");
+  if (validate(event) && isNumeric(event.params.property_id)) {
+    var queryParams = [
+    event.body.keyholder_id,
+    event.body.keyholder_first_name,
+    event.body.keyholder_last_name,
+    event.body.keyholder_email,
+    event.body.keyholder_phone,
+    event.body.keyholder_type_id
+    ];
     
-    //keyholder id to identify the eyholder for updating
-    let keyholder_id = event.params.keyholder_id.toString();
-    console.debug("keyholder_id: " + keyholder_id);
-    
-    var connection = mysql_connection();
-    console.trace("database connection established");
-    console.trace('connected as id ' + connection.threadId);
-
-    
-    //keyholder data for the update
-    let first_name=event.body.first_name;
-    let last_name=event.body.last_name;
-    let email=event.body.email;
-    let phone=event.body.phone;
-    let keyholder_type_id=event.body.keyholder_type_id;  
-    
-    let error = new Error("wrong datatype inside json");
-    if(typeof first_name != 'string' || 
-     typeof last_name !='string'   || 
-     typeof email != 'string'     ||
-     typeof phone != 'string'     ||
-     typeof keyholder_type_id != 'number'){
-     
-        context.fail(error);
-    }else{
-        console.debug("update input data: " + first_name, last_name, email, phone, keyholder_type_id);
-    
-        //mysql update statement
-        let sql = "UPDATE keyholder SET first_name =? , last_name =? , email =? , phone =? , keyholder_type_id =? WHERE keyholder_id = " + keyholder_id ;
-        
-        //mysql data to be filled inplace of the ?
-        let data = [first_name, last_name, email, phone, keyholder_type_id];
-        
-        connection.query(sql,data, (err, result) => {
-            console.trace("mysql query initiated");
-            if (err) {
-                console.error("error", err);
-                throw err;
-    
-            }
-            else{
-                console.info("keyholder updated" + result.message);
-                connection.end();
-                callback(null, result.message);
-            }
-        });
+    var put_keyholder_query = 'UPDATE keyholder SET keyholder_first_name=? , keyholder_last_name=? , keyholder_email=? , keyholder_phone=?, keyholder_type_id=? WHERE keyholder_id = ' + event.body.keyholder_id;
+    console.debug("Doing SQL: " + put_keyholder_query);
+    try {
+      var put_keyholder_response = await mysql.query(put_keyholder_query, queryParams);
+      console.debug("SQL server returned " + put_keyholder_response);
+    } catch(error) {
+      console.trace('Returned 500 Server Error: Failed to update keyholder');
+      return context.fail("Server Error " + error);
     }
-    console.trace("PUT keyholder by keyholder_id -- function end ");
-
+    var get_updated_row_query = 'SELECT * FROM keyholder WHERE keyholder_id=' + event.body.keyholder_id + ';';
+    console.debug("Doing SQL: " + get_updated_row_query);
+    var updatedKeyholderList = await mysql.query(get_updated_row_query);
+    console.debug("SQL server returned " + newKeybundleList);
+    let response = {
+      statusCode: 201,
+      body: newKeyholderList[0],
+      message: 'Updated !'
+    };
+    console.trace('Returned 201 Updated keyholder!');
+    return context.succeed(response, response.headers);
+  } else {
+    console.trace('Returned 400 Bad Request');
+    return context.fail("Bad Request !");
+  }
 };
+
+function validate(event) {
+  if (!isNumeric(event.body.keyholder_id)) {
+    return false;
+  }
+  if (!isNumeric(event.body.keyholder_type_id)) {
+    return false;
+  }
+  return true;
+}
+function isNumeric(value) {
+        return /^\d+$/.test(value);
+}
