@@ -13,13 +13,13 @@ import './AddProperty.css';
  * @Author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default function AddProperty () {
-  const [propertyName, setPropertyName] = useState();
-  const [propertyType, setPropertyType] = useState();
-  const [propertyAddress1, setPropertyAddress1] = useState();
-  const [propertyCity, setPropertyCity] = useState();
-  const [propertyState, setPropertyState] = useState();
-  const [propertyZip, setPropertyZip] = useState();
-  const [propertyCountry, setPropertyCountry] = useState();
+  const [propertyName, setPropertyName] = useState('');
+  const [propertyType, setPropertyType] = useState(null);
+  const [propertyAddress1, setPropertyAddress1] = useState('');
+  const [propertyCity, setPropertyCity] = useState('');
+  const [propertyState, setPropertyState] = useState('');
+  const [propertyZip, setPropertyZip] = useState('');
+  const [propertyCountry, setPropertyCountry] = useState('');
   
   // Process the POST request using fetch()
   const createProperty = (
@@ -32,22 +32,21 @@ export default function AddProperty () {
     propertyCountry
   ) => {
     let strUrl = apiurlbase + 'property';
-    let strData = JSON.stringify({
-      'property_name': propertyName,
-      'property_type_id': propertyType,
-      'property_address': propertyAddress1,
-      'property_city': propertyCity,
-      'property_state': propertyState,
-      'property_zip': propertyZip,
-      'property_country': propertyCountry
+    let data = JSON.stringify({
+      "property_name": propertyName,
+      "property_type_id": propertyType,
+      "property_address": propertyAddress1,
+      "property_city": propertyCity,
+      "property_state": propertyState,
+      "property_zip": propertyZip,
+      "property_country": propertyCountry
     });
-    let formData = new FormData();
-    formData.append('json', strData);
     let fetchInit = {
       method: 'POST',
-      body: strData
+      body: data,
+      headers: {'content-type': 'application/json'}
     };
-
+    debugger;
     fetch(strUrl, fetchInit)
       .then(res => res.json())
       .then(data => {console.log('POST result: ', data)})
@@ -57,6 +56,9 @@ export default function AddProperty () {
   //Processes Add Property Form data when form submit button pressed
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(typeof(propertyType)==="string") {
+      setPropertyType(parseInt(propertyType, 10));
+    }
     createProperty (
       propertyName,
       propertyType,
@@ -68,9 +70,9 @@ export default function AddProperty () {
     );
   }
 
-  const handleCancel = () => {
-    //ToDo: implement cancel behavior
-  }
+  // const handleCancel = () => {
+  //   //ToDo: implement cancel behavior
+  // }
     
   return (
     <form onSubmit={handleSubmit}>
@@ -103,7 +105,7 @@ export default function AddProperty () {
         onChange={(event) => setPropertyCountry(event.target.value)} />
       <br />
       <input type='submit' value="Add Property to DB" />
-      <input type='button' value='Cancel' onClick={handleCancel} />
+      {/* <input type='button' value='Cancel' onClick={handleCancel} /> */}
     </form>
   );
 }

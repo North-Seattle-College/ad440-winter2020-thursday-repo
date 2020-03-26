@@ -86,6 +86,9 @@ export default function WorkingArea() {
         setGotData(true);
       })
       .catch(console.error)
+    // console.log(Array.isArray(allProperties));
+    // console.log(Array.isArray(allKeyholders));
+    // console.log(Array.isArray(allKeys));
   }
 
   const getKeys = () => {
@@ -107,17 +110,20 @@ export default function WorkingArea() {
           <AddProperty />
         </Route>
 
-        <Route path='/addkey'>
-          <AddKey />
-        </Route>
+        <Route path='/addkey/'  render={() => {
+          return (<AddKey
+            allProperties={allProperties} />);
+        }} />
 
         <Route path='/checkoutkey/:propKeybundleId'  render={(props) => {
           return (<CheckoutKey propKeybundleId={parseInt(props.match.params.propKeybundleId, 10)}
             allKeys={allKeys}
             allKeyholders={allKeyholders} />);
         }} />
-        <Route path='/checkoutkey' allKeys={allKeys} render={() => {
-          return <CheckoutKey allKeys={allKeys} />;
+        <Route path='/checkoutkey/'  render={() => {
+          return (<CheckoutKey
+            allKeys={allKeys}
+            allKeyholders={allKeyholders} />);
         }} />
 
         <Route path='/account'>

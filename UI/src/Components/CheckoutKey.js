@@ -24,9 +24,9 @@ export default function CheckoutKey ({
   propKeybundleId = null,
   propKeybundleStatusId = null,
   propKeyholderId = null,
-  propDueBackDate = new Date().toISOString().substr(0,10), })
-{
-  // Fill the keybundleStatusId from existing data
+  propDueBackDate = new Date().toISOString().substr(0,10),
+}) {
+  // Fill the keybundleStatusId from existing data when passed that data
   if (allKeys.length > 0 && propKeybundleId !== null) {
     let matchingKey = allKeys.find(({keybundle_id}) => {
       return propKeybundleId === keybundle_id;
@@ -52,18 +52,17 @@ export default function CheckoutKey ({
     dueBackDate
   ) => {
     let strUrl = apiurlbase + 'keybundle/' + String(keybundleId);
-    let strData = JSON.stringify({
+    let data = JSON.stringify({
       'keyholder_id': keyholderId,
       'keybundle_status_id': keybundleStatusId,
       'keybundle_id': keybundleId,
       'keybundle_checkout_date': checkoutDate,
       'keybundle_due_date': dueBackDate
     });
-    let formData = new FormData();
-    formData.append('json', strData);
     let fetchInit = {
       method: 'PUT',
-      body: formData,
+      body: data,
+      headers: {'content-type': 'application/json'}
     };
 
     fetch(strUrl, fetchInit)
@@ -75,15 +74,7 @@ export default function CheckoutKey ({
   // button handlers
   const handleSubmit = (event) => {
     event.preventDefault();  
-    /* ToDo: implement keycheckout event handler in later sprint */
-    //alert('KeyCheckout form submit button pressed.');
-    console.log(keyholderId);
-    console.log(keybundleStatusId)
-    console.log(keybundleId);
     let checkoutDate = new Date().toISOString().substr(0,10);
-    console.log(checkoutDate);
-    console.log(dueBackDate);
-    
     checkoutKey(
         keyholderId,
         keybundleStatusId,
@@ -93,11 +84,11 @@ export default function CheckoutKey ({
     );
   }
 
-  const handleCancel = () => {
-    /* ToDo: implement cancel behavior - cleanup anything necessary
-        then hide or destroy this element */
-    alert('cancel button pressed.');
-  }
+  // const handleCancel = () => {
+  //   /* ToDo: implement cancel behavior - cleanup anything necessary
+  //       then hide or destroy this element */
+  //   alert('cancel button pressed.');
+  // }
 
   // form data states
   const [keyholderId, setKeyholderId] = useState(propKeyholderId);
@@ -106,7 +97,8 @@ export default function CheckoutKey ({
   const [dueBackDate, setDueBackDate] = useState(propDueBackDate);
   const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
 
-  const togglePersonModalOpen = () => {
+  const togglePersonModalOpen = (e) => {
+    e.preventDefault();
     setIsPersonModalOpen(!isPersonModalOpen);
   }
 
@@ -136,7 +128,8 @@ export default function CheckoutKey ({
           <input type="number" value={keyholderId}
             onChange={(event) => setKeyholderId(event.target.value)} />
         </label>
-        <button className="open-select-keyholder" onClick={togglePersonModalOpen}>Select Person</button>
+        <input type='button' value="Select Person" className="open-select-keyholder"
+          onClick={togglePersonModalOpen} />
         <br />
         <label>
           Key status:
@@ -151,8 +144,8 @@ export default function CheckoutKey ({
         </label>
         <br />
         <input type="submit" value="Checkout key" />
-        <input type="button" value="Cancel"
-          onClick={handleCancel}/>
+        {/* <input type="button" value="Cancel"
+          onClick={handleCancel}/> */}
       </form>
     </div>
   );

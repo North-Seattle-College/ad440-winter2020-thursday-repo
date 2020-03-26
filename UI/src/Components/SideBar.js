@@ -27,10 +27,10 @@ export default function SideBar () {
         Add Key
       </Link>
       <br />
-      <Link className='sideMenuItem' to='/addkeyholder'>
+      {/* <Link className='sideMenuItem' to='/addkeyholder'>
         Add Person
-      </Link>
-      <br />
+      </Link> 
+      <br /> */}
       <Link className='sideMenuItem' to='/checkoutkey'>
         Checkout Key
       </Link>
