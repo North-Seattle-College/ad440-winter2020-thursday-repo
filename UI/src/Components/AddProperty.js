@@ -45,7 +45,7 @@ export default function AddProperty () {
     formData.append('json', strData);
     let fetchInit = {
       method: 'POST',
-      body: formData
+      body: strData
     };
 
     fetch(strUrl, fetchInit)

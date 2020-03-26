@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {default as apiurlbase} from '../apiurlbase';
 import './CheckoutKey.css';
+import SelectKeyholderModal from './SelectKeyholderModal';
 
 /**
  * Provides component that will render a form and (eventually) provide
@@ -19,15 +20,16 @@ import './CheckoutKey.css';
  */
 export default function CheckoutKey ({
   allKeys = [],
+  allKeyholders = [],
   propKeybundleId = null,
   propKeybundleStatusId = null,
   propKeyholderId = null,
   propDueBackDate = new Date().toISOString().substr(0,10), })
- 
 {
+  // Fill the keybundleStatusId from existing data
   if (allKeys.length > 0 && propKeybundleId !== null) {
-    let matchingKey = allKeys.find(({keyholder_id}) => {
-      return propKeybundleId === keyholder_id;
+    let matchingKey = allKeys.find(({keybundle_id}) => {
+      return propKeybundleId === keybundle_id;
     })
     if (matchingKey) {
       propKeybundleStatusId = matchingKey.keybundle_status_id;
@@ -37,8 +39,9 @@ export default function CheckoutKey ({
   /**
    * Generate a PUT request to our API to checkout a key
    * @param keyholderId - the keyholder ID
+   * @param keybundleStatusId - the status ID of the keybundle
    * @param keybundleId - the keybundle ID
-   * @param keybundleStatus - the keybundle status ID
+   * @param checkoutDate - date the keybundle was checked out
    * @param dueBackDate - the date the key is expected back. Use ISO 8601
    */
   const checkoutKey = (
@@ -69,36 +72,31 @@ export default function CheckoutKey ({
       .catch(error => {console.error('PUT failed: ', error)});
   }
 
-  /**
-   * Processes the key checkout form data when form submit button pressed
-   */
+  // button handlers
   const handleSubmit = (event) => {
     event.preventDefault();  
     /* ToDo: implement keycheckout event handler in later sprint */
-      //alert('KeyCheckout form submit button pressed.');
-      console.log(keyholderId);
-      console.log(keybundleStatusId)
-      console.log(keybundleId);
-      let checkoutDate = new Date().toISOString().substr(0,10);
-      console.log(checkoutDate);
-      console.log(dueBackDate);
-      
-      checkoutKey(
-          keyholderId,
-          keybundleStatusId,
-          keybundleId,
-          checkoutDate,
-          dueBackDate
-      );
+    //alert('KeyCheckout form submit button pressed.');
+    console.log(keyholderId);
+    console.log(keybundleStatusId)
+    console.log(keybundleId);
+    let checkoutDate = new Date().toISOString().substr(0,10);
+    console.log(checkoutDate);
+    console.log(dueBackDate);
+    
+    checkoutKey(
+        keyholderId,
+        keybundleStatusId,
+        keybundleId,
+        checkoutDate,
+        dueBackDate
+    );
   }
 
-  /**
-   * Processes user initiated cancellation of this form.
-   */
   const handleCancel = () => {
-      /* ToDo: implement cancel behavior - cleanup anything necessary
-          then hide or destroy this element */
-      alert('cancel button pressed.');
+    /* ToDo: implement cancel behavior - cleanup anything necessary
+        then hide or destroy this element */
+    alert('cancel button pressed.');
   }
 
   // form data states
@@ -106,12 +104,25 @@ export default function CheckoutKey ({
   const [keybundleStatusId, setKeybundleStatusId] = useState(propKeybundleStatusId);
   const [keybundleId, setKeybundleId] = useState(propKeybundleId);
   const [dueBackDate, setDueBackDate] = useState(propDueBackDate);
+  const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
+
+  const togglePersonModalOpen = () => {
+    setIsPersonModalOpen(!isPersonModalOpen);
+  }
+
+  const keyholderSelected = (key) => {
+    setKeyholderId(key.keyholder_id);
+    togglePersonModalOpen();
+  }
 
   /**
    * Provide the JSX
    */
   return (
     <div className='keyCheckout'>
+      {(isPersonModalOpen) ? (<SelectKeyholderModal allKeyholders={allKeyholders}
+        onSelect={keyholderSelected}
+        onClose={togglePersonModalOpen}/>) : null }
       <form onSubmit={handleSubmit} >
         <legend>Check-out keys:</legend>
         <label>
@@ -125,6 +136,7 @@ export default function CheckoutKey ({
           <input type="number" value={keyholderId}
             onChange={(event) => setKeyholderId(event.target.value)} />
         </label>
+        <button className="open-select-keyholder" onClick={togglePersonModalOpen}>Select Person</button>
         <br />
         <label>
           Key status:
