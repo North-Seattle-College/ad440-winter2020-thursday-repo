@@ -97,7 +97,8 @@ export default function CheckoutKey ({
   const [dueBackDate, setDueBackDate] = useState(propDueBackDate);
   const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
 
-  const togglePersonModalOpen = () => {
+  const togglePersonModalOpen = (e) => {
+    e.preventDefault();
     setIsPersonModalOpen(!isPersonModalOpen);
   }
 
@@ -127,7 +128,8 @@ export default function CheckoutKey ({
           <input type="number" value={keyholderId}
             onChange={(event) => setKeyholderId(event.target.value)} />
         </label>
-        <button className="open-select-keyholder" onClick={togglePersonModalOpen}>Select Person</button>
+        <input type='button' value="Select Person" className="open-select-keyholder"
+          onClick={togglePersonModalOpen} />
         <br />
         <label>
           Key status:

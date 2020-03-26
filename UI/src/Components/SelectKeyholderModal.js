@@ -12,7 +12,8 @@ export default function SelectKeyholderModal (props) {
   return (
     <div className={'modal-backdrop'} onClick={props.onClose}>
       <div className={'modal-body'} onClick={e => e.stopPropagation()}>
-        {props.allKeyholders.map(makeButton)}
+      {console.log(Array.isArray(props.allKeyholders))}
+      {props.allKeyholders.map(makeButton)}
       </div>
     </div>
   );

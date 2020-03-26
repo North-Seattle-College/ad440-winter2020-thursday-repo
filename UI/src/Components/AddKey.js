@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {default as apiurlbase} from '../apiurlbase';
 import './AddKey.css';
+import SelectPropetyModal from './SelectPropertyModal';
 
 /**
  * Component to create keys
@@ -12,8 +13,10 @@ import './AddKey.css';
  * @author Han Kuo
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
-export default function AddKey () {
-  
+export default function AddKey (
+  allProperties = [],
+) {
+  // Make the API call to add a key to the DB
   const createKey = (
     keybundleId, // Inconsistent with other POST requests
     keybundleStatusId,
@@ -46,6 +49,7 @@ export default function AddKey () {
   // event handlers
   const handleSubmit = (event) => {
     event.preventDefault();
+    debugger;
     //console.log(typeof(keybundleId));
     if(typeof(keybundleId)==="string" || keybundleId instanceof String) {
       setKeybundleId(parseInt(keybundleId, 10));
@@ -74,16 +78,30 @@ export default function AddKey () {
   // const handleCancel = (event) => {
   //   //ToDo: implement cancellation
   // }
-  // form data states
+
+  const togglePropertyModalOpen = () => {
+    setIsPropertyModalOpen(!isPropertyModalOpen);
+  }
+
+  const propertySelected = (property) => {
+    setKeybundlePropertyId(property.property_id);
+    togglePropertyModalOpen();
+  }
+
+  // setup state
   const [keybundleId, setKeybundleId] = useState(null);
   const [keybundleStatusId, setKeybundleStatusId] = useState(null);
   const [keybundlePropertyId, setKeybundlePropertyId] = useState(null);
   const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(null);
   const [keybundleCheckoutDate, setKeybundleCheckoutDate] = useState(20200101);
   const [keybundleDueDate, setKeybundleDueDate] = useState(20200101);
-
+  const [isPropertyModalOpen, setIsPropertyModalOpen] = useState(false);
+  
   return (
     <div>
+      {(isPropertyModalOpen) ? (<SelectPropetyModal allProperties={allProperties}
+        onSelect={propertySelected}
+        onClose={togglePropertyModalOpen} />) : null }
       <form onSubmit={handleSubmit} >
         <legend>Add a key</legend>
         <label>
@@ -103,6 +121,8 @@ export default function AddKey () {
           <input type="number" value={keybundlePropertyId}
             onChange={(event) => setKeybundlePropertyId(event.target.value)} />
         </label>
+        <input type='button' value='Select Property' className='open-select-property'
+          onClick={togglePropertyModalOpen} />
         <br />
         <label>
           Keyholder:
