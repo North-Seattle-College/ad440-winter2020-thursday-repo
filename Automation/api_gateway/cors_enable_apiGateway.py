@@ -34,8 +34,8 @@ def main():
     resource_id = resources_dict[resource][0]
     methods = resources_dict[resource][1]
     if 'OPTIONS' not in methods:
-      PutOPTIONSMethod(client, api_id, resource_id)
       methods.append('OPTIONS')
+      PutOPTIONSMethod(client, api_id, resource_id)
       resources_dict[resource][1] = methods
 
   #* set Response Headers
@@ -53,7 +53,7 @@ def main():
   print(resp_headers_integration)
   XRW_val = "'*'"
   ACAH_val = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with'"
-  ACAO_val = "'https://2edusite.com'"#"'*'"
+  ACAO_val = "'https://www.2edusite.com'"#"'*'"
   
   headers_vals = (XRW_val, ACAH_val, ACAO_val)
 
@@ -125,7 +125,8 @@ def PutOPTIONSMethod(client, api_id, resource_id):
     restApiId = api_id,
     resourceId = resource_id,
     httpMethod = 'OPTIONS',
-    type = 'MOCK'
+    type = 'MOCK',
+    requestTemplates = {'application/json': '{"statusCode": 200}'} #this is needed so options will return 200
   )
   logger.generatedDebug('OPTIONS Integration set type', 'MOCK')
 
@@ -167,8 +168,8 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
       #* Get status codes
       response_get_method = client.get_method(
         restApiId = api_id,
-          resourceId = resource_id,
-          httpMethod = method
+        resourceId = resource_id,
+        httpMethod = method
       )
       logger.generatedDebug('Method Detail', json.dumps(response_get_method))
       method_responses = response_get_method['methodResponses']
@@ -176,8 +177,8 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
       status_codes = list(method_responses.keys())
       logger.runTrace('Status Codes', json.dumps(status_codes))
 
-      #* if status codes not include 200 add 200
-      if '200' not in status_codes:
+      #* if status codes not include 200 add 200, as long as it is not OPTIONS
+      if '200' not in status_codes and method != 'OPTIONS':
         status_codes.append('200')
 
       for status_code in status_codes:

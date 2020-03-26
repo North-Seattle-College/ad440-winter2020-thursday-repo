@@ -85,7 +85,8 @@ def SetIntegrationType(client, api_id, resource_id, method, integration_type, la
       restApiId = api_id,
       resourceId = resource_id,
       httpMethod = method,
-      type = integration_type
+      type = integration_type,
+      requestTemplates = {'application/json': '{"statusCode": 200}'}
     )
   else:
     uri = 'arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:061431082068:function:${}/invocations'
