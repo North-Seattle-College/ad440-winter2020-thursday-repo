@@ -47,9 +47,11 @@ export default function AddKey() {
     formData.append("json", strData);
     let fetchInit = {
       method: "POST",
-      headers: {
-        Accept: "application/json, text/plain",
-        "Content-Type": "application/json;charset=UTF-8"
+      config: {
+        headers: {
+          Authorization: "bearer ${token}",
+          "Content-Type": "application/json"
+        }
       },
       body: formData
     };
