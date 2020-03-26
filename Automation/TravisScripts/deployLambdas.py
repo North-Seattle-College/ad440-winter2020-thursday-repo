@@ -135,9 +135,9 @@ def get_lambda_name_from_directory(dir_name):
     # determine which environment we are deploying to based on branch
     branch = ""
     # Sprint 5, the development branch is our production environment.
-    if os.getenv('TRAVIS_BRANCH') == 'development':
+    if os.getenv('TRAVIS_BRANCH') == 'mp-test':
         branch = 'prod'
-    # Sprint 5, the development branch is now our production environment. 
+    # Sprint 5, the development branch is now our production environment.
     # else:
     #     branch = 'dev'
 
