@@ -70,29 +70,53 @@ export default class AddKey extends React.Component {
 
     //ToDo: implement cancellation
   }
+  // async postData(){
+  //
+  //   try{
+  //     let result = await fetch ('https://api.2edusite.com/keybundle/', {
+  //       method: 'post',
+  //       mode: 'no-cors',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         keybundleId : "",
+  //         keybundleStatus: null,
+  //         keybundlePropertyId: 0,
+  //         keybundleKeyholderId: 0,
+  //     })
+  //   });
+  //     console.log(result)
+  //   }catch(e){
+  //     console.log(e);
+  //   }
+  // }
   //Generate a POST request to our API to add Property
   componentDidMount() {
-      fetch('https://cors-anywhere.herokuapp.com/https://api.2edusite.com/keybundle/', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: 'New title added',
-          body: 'New body added. Hello body.',
-          userId: 2
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        }
-      }).then(response => {
-          return response.json()
-        }).then(json => {
-          this.setState({
-            user:json
-          });
-        });
-    }
+  		fetch('https://cors-anywhere.herokuapp.com/https://api.2edusite.com/keybundle/', {
+  			method: 'POST',
+  			body: JSON.stringify({
+            keybundleId : 0,
+            keybundleStatus: null,
+            keybundlePropertyId: 0,
+            keybundleKeyholderId: 0,
+  			}),
+  			headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+  			}
+  		}).then(response => {
+  				return response.json()
+  			}).then(json => {
+  				this.setState({
+  					user:json
+  				});
+  			});
+  	}
 
   render (){
-    const { values, handleChange } = this.props;
+    const { values, postData } = this.props;
     return(
       <div>
         <form>
@@ -121,7 +145,7 @@ export default class AddKey extends React.Component {
               onChange={this.handlekebundleKeyholderId} />
           </label>
           <br />
-          <button onClick={this.handleSubmit}>Submit</button>
+          <button onClick={this.postData}>Submit</button>
           <button onClick={this.handleCancel}>cancel</button>
         </form>
       </div>

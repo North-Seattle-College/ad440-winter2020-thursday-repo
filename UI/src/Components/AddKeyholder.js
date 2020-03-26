@@ -20,7 +20,7 @@ export default function AddKeyholder () {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} >
+      <form>
         <legend>Add a person</legend>
         <label>
           First Name:

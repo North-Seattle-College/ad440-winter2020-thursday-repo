@@ -15,14 +15,15 @@ import {default as apiurlbase} from '../apiurlbase'
  */
 export default class AddProperty extends React.Component {
   state = {
-    prooerty_id:0,
+    property_id:0,
     property_name: "",
     property_type_id: 0,
     property_address: "",
     property_city: "",
     property_state: "",
     property_zip: "",
-    property_country: ""
+    property_country: "",
+    property_type:""
   }
   // What we need to post
   /*
@@ -67,6 +68,10 @@ export default class AddProperty extends React.Component {
     console.log(e.target.value)
     this.setState({property_country: e.target.value})
   }
+  handlePropertyType = (e) => {
+    console.log(e.target.value)
+    this.setState({property_type: e.target.value})
+  }
   //Processes Add Property Form data when form submit button pressed
   handleSubmit = (e) => {
     e.preventDefault()
@@ -81,7 +86,9 @@ export default class AddProperty extends React.Component {
     "property_city": this.state.property_city,
     "property_state": this.state.property_state,
     "property_zip": this.state.property_zip,
-    "property_country": this.state.property_country
+    "property_country": this.state.property_country,
+    "property_type": this.state.property_type,
+
   });
   //Generate a GET request to our API to get Property
      var req = new XMLHttpRequest();
@@ -99,17 +106,51 @@ export default class AddProperty extends React.Component {
     handleReadyStateChange = (e) => {
       console.log(e.target.response);
   }
+  // async postData(){
+  //
+  //   try{
+  //     let result = await fetch ('https://cors-anywhere.herokuapp.com/https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property', {
+  //       method: 'post',
+  //       mode: 'no-cors',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         property_id:0,
+  //         property_name: "",
+  //         property_type_id: 0,
+  //         property_address: "",
+  //         property_city: "",
+  //         property_state: "",
+  //         property_zip: "",
+  //         property_country: "",
+  //         property_type:"",
+  //     })
+  //   });
+  //     console.log(result)
+  //   }catch(e){
+  //     console.log(e);
+  //   }
+  // }
   //Generate a POST request to our API to add Property
   componentDidMount() {
   		fetch('https://cors-anywhere.herokuapp.com/https://github.com/North-Seattle-College/ad440-winter2020-thursday-repo/wiki/API-POST-Property', {
   			method: 'POST',
   			body: JSON.stringify({
-  				title: 'New title added',
-  				body: 'New body added. Hello body.',
-  				userId: 2
+            property_id:0,
+            property_name: "",
+            property_type_id: 0,
+            property_address: "",
+            property_city: "",
+            property_state: "",
+            property_zip: "",
+            property_country: "",
+            property_type:"",
   			}),
   			headers: {
-  				"Content-type": "application/json; charset=UTF-8"
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
   			}
   		}).then(response => {
   				return response.json()
@@ -146,6 +187,9 @@ export default class AddProperty extends React.Component {
         <br />
         <label htmlFor="property_country">Enter Property country</label>
         <input id="property_country" name="property_country" type="property_country" onChange={this.handlePropertyCountryChange} />
+        <br />
+        <label htmlFor="property_country">Enter Property type</label>
+        <input id="property_type" name="property_type" type="property_type" onChange={this.handlePropertyType} />
         <br />
         <button onClick={this.handleSubmit}>Submit</button>
       </form>
