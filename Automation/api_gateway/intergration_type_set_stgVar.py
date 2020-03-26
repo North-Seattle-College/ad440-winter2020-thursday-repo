@@ -14,6 +14,8 @@ def main():
   resources_dict = GetResources(client, api_id)
   #* set integration type as lambda
   integration_type = 'AWS'
+
+  requestTemplates = {'application/json': '{\n  "body" : $input.json("$"),\n  "headers": {\n    #foreach($header in $input.params().header.keySet())\n    "$header": "$util.escapeJavaScript($input.params().header.get($header))" #if($foreach.hasNext),#end\n\n    #end\n  },\n  "method": "$context.httpMethod",\n  "params": {\n    #foreach($param in $input.params().path.keySet())\n    "$param": "$util.escapeJavaScript($input.params().path.get($param))" #if($foreach.hasNext),#end\n\n    #end\n  },\n  "query": {\n    #foreach($queryParam in $input.params().querystring.keySet())\n    "$queryParam": "$util.escapeJavaScript($input.params().querystring.get($queryParam))" #if($foreach.hasNext),#end\n\n    #end\n  }  \n}'}
   
   for name, value in resources_dict.items():
     logger.runTrace('For resource ', name)
@@ -23,11 +25,12 @@ def main():
     for method in methods:
       logger.runTrace('on method', method)
 
-      lambda_func = '${stageVariables.' + name + '_' + method.upper() + '}'
+      lambda_func = '${stageVariables.' + name + '_' + method.upper()+'}'
       logger.runTrace('stage varialbe is', lambda_func)
       #set integration with lambda function
 
-      SetIntegrationType(client, api_id, resource_id, method, integration_type, lambda_func)
+      SetIntegrationType(client, api_id, resource_id, method, integration_type, lambda_func, requestTemplates)
+
   
 def GetAPIId():
   api_id = input('Enter API Gateway ID (press enter for default): ')
@@ -72,7 +75,7 @@ def GetResources(client, api_id):
   logger.generatedDebug('API Resource Dictionary', json.dumps(resources_dict))
   return resources_dict
 
-def SetIntegrationType(client, api_id, resource_id, method, integration_type, lambda_func):
+def SetIntegrationType(client, api_id, resource_id, method, integration_type, lambda_func, requestTemplates):
   if method.upper() == 'OPTIONS': # for OPTIONS methods set to MOCK
     integration_type = 'MOCK'
     logger.runTrace('integration type', integration_type)
@@ -81,7 +84,8 @@ def SetIntegrationType(client, api_id, resource_id, method, integration_type, la
       restApiId = api_id,
       resourceId = resource_id,
       httpMethod = method,
-      type = integration_type
+      type = integration_type,
+      requestTemplates = {'application/json': '{"statusCode": 200}'}
     )
   else:
     uri = 'arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:061431082068:function:${}/invocations'
@@ -92,7 +96,8 @@ def SetIntegrationType(client, api_id, resource_id, method, integration_type, la
       httpMethod = method,
       type = integration_type,
       integrationHttpMethod = 'POST', # ! looks like integrationHttpMethod can only be POST for lambda
-      uri = uri
+      uri = uri,
+      requestTemplates = requestTemplates
     )
   print(json.dumps(response))
 

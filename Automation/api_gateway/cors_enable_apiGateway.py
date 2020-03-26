@@ -3,44 +3,47 @@ import boto3
 import json
 import apiGatewayLogger as logger
 
-#TODO add OPTIONS if preflight not exist.
-
 def main():
   status_code_pattern = {'200': 'Default',
                     '201': 'Created',
                     '204': 'No Content',
                     '400': 'Bad Request',
                     '404': 'Not Found',
+                    '403': 'Forbidden',
                     '405': 'Not Allowed',
                     '500': 'Server Error'}
   for status_code, pattern in status_code_pattern.items():
     if pattern.lower() != 'default':
-            status_code_pattern[status_code] = status_code_pattern[status_code]+'.*'
+            status_code_pattern[status_code] = '.*' + status_code_pattern[status_code] + '.*'
   logger.generatedDebug('Status Code Keywords', json.dumps(status_code_pattern))
+
+  responseTemplates = {'application/json': '#set($inputRoot = $input.path(\'$\'))\n$input.json("$")\n#if($inputRoot.toString().contains("Created"))\n#set($context.responseOverride.status = 201)\n#end\n#if($inputRoot.toString().contains("No Content"))\n#set($context.responseOverride.status = 204)\n#end\n#if($inputRoot.toString().contains("Bad Request"))\n#set($context.responseOverride.status = 400)\n#end\n#if($inputRoot.toString().contains("Forbidden"))\n#set($context.responseOverride.status = 403)\n#end\n#if($inputRoot.toString().contains("Not Found"))\n#set($context.responseOverride.status = 404)\n#end\n#if($inputRoot.toString().contains("Not Allowed"))\n#set($context.responseOverride.status = 405)\n#end\n#if($inputRoot.toString().contains("Server Error"))\n#set($context.responseOverride.status = 500)\n#end'}
   
-  # set logger
+  #* set logger
   logger.setLogger('api_gateway_cors_enable.log')
-  # get boto3 client
+  #* get boto3 client
   client = boto3.client('apigateway')
   
-  # get api key with default to prod
+  #* get api key with default to prod
   api_id = GetAPIId()
-  # get a dict of resources for the API {resource_name:resource_id,[methods]}
+  #* get a dict of resources for the API {resource_name:resource_id,[methods]}
   resources_dict = GetResources(client, api_id)
 
-  # if resource does not have OPTIONS method, add OPTIONS to resource for each
+  #* if resource does not have OPTIONS method, add OPTIONS to resource for each
   for resource in resources_dict:
     resource_id = resources_dict[resource][0]
     methods = resources_dict[resource][1]
     if 'OPTIONS' not in methods:
-      PutOPTIONSMethod(client, api_id, resource_id)
       methods.append('OPTIONS')
+      PutOPTIONSMethod(client, api_id, resource_id)
       resources_dict[resource][1] = methods
-  # set Response Headers
+
+  #* set Response Headers
   response_headers = ['X-Requested-With', 'Access-Control-Allow-Headers',
                       'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods']
   resp_headers_methods = []
   resp_headers_integration = []
+
   for header in response_headers:
     resp_headers_methods.append('method.response.header.'+header)
     resp_headers_integration.append('integration.response.header.'+header)
@@ -50,7 +53,7 @@ def main():
   print(resp_headers_integration)
   XRW_val = "'*'"
   ACAH_val = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with'"
-  ACAO_val = "'https://2edusite.com'"
+  ACAO_val = "'https://www.2edusite.com'"#"'*'"
   
   headers_vals = (XRW_val, ACAH_val, ACAO_val)
 
@@ -60,7 +63,7 @@ def main():
   print('Method Parameters: ')
   print(method_respPara)
   
-  PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern)
+  PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern, responseTemplates)
   
   
   
@@ -102,8 +105,8 @@ def GetResources(client, api_id):
       resource = resource[-1]
 
     if type(resource) == str:
-      temp_tuple = (resource_id, methods)
-      resources_dict[resource] = temp_tuple
+      temp_lst = [resource_id, methods]
+      resources_dict[resource] = temp_lst
   logger.generatedDebug('API Resource Dictionary', json.dumps(resources_dict))
   return resources_dict
 
@@ -113,12 +116,31 @@ def PutOPTIONSMethod(client, api_id, resource_id):
   response_put_option = client.put_method(
     restApiId = api_id,
     resourceId = resource_id,
-    httpMethods = 'OPTIONS',
+    httpMethod = 'OPTIONS',
     authorizationType = 'NONE' #NONE for open access, COGNITO_USER_POOLS for cognito
   )
   logger.generatedDebug('OPTIONS Method created', json.dumps(response_put_option))
 
-def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern):
+  response_put_integration = client.put_integration(
+    restApiId = api_id,
+    resourceId = resource_id,
+    httpMethod = 'OPTIONS',
+    type = 'MOCK',
+    requestTemplates = {'application/json': '{"statusCode": 200}'} #this is needed so options will return 200
+  )
+  logger.generatedDebug('OPTIONS Integration set type', 'MOCK')
+
+  response_put_method_response = client.put_method_response(
+    restApiId = api_id,
+    resourceId = resource_id,
+    httpMethod = 'OPTIONS',
+    statusCode = '200'
+  )
+  logger.generatedDebug('OPTIONS Method Response set status Code', '200')
+
+
+
+def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_headers_methods, headers_vals, status_code_pattern, responseTemplates):
   for resource in resources_dict:
     logger.runTrace('for resource', resource)
     resource_id = resources_dict[resource][0]
@@ -146,14 +168,18 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
       #* Get status codes
       response_get_method = client.get_method(
         restApiId = api_id,
-          resourceId = resource_id,
-          httpMethod = method
+        resourceId = resource_id,
+        httpMethod = method
       )
       logger.generatedDebug('Method Detail', json.dumps(response_get_method))
       method_responses = response_get_method['methodResponses']
       logger.runTrace('Method Responses', json.dumps(method_responses))
       status_codes = list(method_responses.keys())
       logger.runTrace('Status Codes', json.dumps(status_codes))
+
+      #* if status codes not include 200 add 200, as long as it is not OPTIONS
+      if '200' not in status_codes and method != 'OPTIONS':
+        status_codes.append('200')
 
       for status_code in status_codes:
         logger.runTrace('for status code', status_code)
@@ -202,7 +228,8 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
             resourceId = resource_id,
             httpMethod = method,
             statusCode = status_code,
-            responseParameters = integration_respPara
+            responseParameters = integration_respPara,
+            responseTemplates = responseTemplates
           )
         else:
           response_put_integration = client.put_integration_response(
@@ -214,6 +241,29 @@ def PutCORSResponds(client, api_id, resources_dict, method_respPara, resp_header
             responseParameters = integration_respPara
           )
         print(response_put_integration)
+
+      # #* alternative for status code handling, put only 200 Method Response Headers
+      # response_put_method = client.put_method_response(
+      #   restApiId = api_id,
+      #   resourceId = resource_id,
+      #   httpMethod = method,
+      #   statusCode = '200',
+      #   responseParameters = method_respPara
+      # )
+      # print(response_put_method)
+      # logger.createInfo('Method Response', json.dumps(response_put_method))
+      
+      # #* alternative for status code handling, put only 200 Integration Responses Header Mappings, added response templates
+      # response_put_integration = client.put_integration_response(
+      #   restApiId = api_id,
+      #   resourceId = resource_id,
+      #   httpMethod = method,
+      #   statusCode = '200',
+      #   responseParameters = integration_respPara,
+      #   responseTemplates = responseTemplates
+      # )
+      # print(response_put_integration)
+      # logger.createInfo('Integration Response', json.dumps(response_put_integration))
 
 if __name__ == "__main__":
     main()

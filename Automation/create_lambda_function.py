@@ -20,6 +20,7 @@ env_name = args.environment
 # requires Lamba name to follow the correct pattern
 sprint_exp = re.compile(r"[0-9]$")
 
+
 # list of resources and methods
 resource_method_lst = ['keybundle-get',
                     'keybundle_id-get',

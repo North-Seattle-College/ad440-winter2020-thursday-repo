@@ -24,8 +24,6 @@ def main():
                     'property_id_keybundle_POST'
                     ]
   
-  api_team_roaster = ['kevin', 'dereje', 'yamato', 'anu', 'deya', 'sojung']
-  
   #set logger
   logger.setLogger('api_gateway_lambda_stage_variable_enable.log')
   #set client for api
@@ -265,13 +263,20 @@ def GetFeatureStageFuncs(stg_var_name_lst):
   for l in range(length):
     print(str(l+1)+'.'+ stg_var_name_lst[l], end=" ")
   print('')
-  stg_vars_get = input('Enter method name/number to enable, separate by comma, or enter all:')
+
+  stg_vars_get = input('Enter method name/number-responsible party, separate by comma, or type all for all:')
+
   stg_vars_get = stg_vars_get.replace(" ", "")
   logger.inputTrace('Method Selection', stg_vars_get)
-  stg_vars_get = stg_vars_get.split(',')
+  if stg_vars_get.lower() == 'all':
+    l = len(stg_var_name_lst)
+    stg_vars_get = []
+    for i in range(l):
+      stg_vars_get.append(str(i+1))
+  else:
+    stg_vars_get = stg_vars_get.split(',')
   stg_vars_updated = {}
 
-  
   if stg_vars_get[0].lower() != 'all':
     for var in stg_vars_get:
       methodName = ''
