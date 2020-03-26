@@ -21,7 +21,7 @@ export default function AddKey() {
     keybundleCheckoutDate = null,
     keybundleDueDate = null
   ) => {
-    let strUrl = "https://api.2edusite.com/dev/keybundle/1";
+    let strUrl = apiurlbase + "property/" + propertyId + "/keybundle";
     let strData = JSON.stringify({
       keybundle_id: keybundleId,
       keybundle_status_id: keybundleStatusId,
@@ -31,9 +31,26 @@ export default function AddKey() {
       keybundle_due_date: keybundleDueDate
     });
     let formData = new FormData();
+
+    //Set up the fetch in different way
+    // fetch(strUrl,{
+    //     method: 'post',
+    //     body:formData
+    // }).then(function(response){
+    //     return response.text();
+    // }).then(function(text){
+    //     console.log(text)
+    // }).catch(function(error){
+    //   console.error(error);
+    // })
+
     formData.append("json", strData);
     let fetchInit = {
       method: "POST",
+      headers: {
+        Accept: "application/json, text/plain",
+        "Content-Type": "application/json;charset=UTF-8"
+      },
       body: formData
     };
 
