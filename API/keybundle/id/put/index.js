@@ -12,12 +12,7 @@ const cnx = require('serverless-mysql')({
 });
 
 exports.handler = async (event, context) => {
-    let response = {
-        statusCode: 201,
-        headers: event.headers,
-        body: null,
-        message: null
-    };
+    let response = {};
     try {
         let bundleData = {
             keyholder_id: null,
@@ -31,7 +26,7 @@ exports.handler = async (event, context) => {
         // check method & inputs in path or return error
         if (event.method != 'PUT') {
             return serverErrorResponse(response);
-        } else if (keybundle_id == '') { 
+        } else if (keybundle_id == '' || isNaN(keybundle_id) || keybundle_id < 0) { 
             return badRequestResponse(response);
         } else {            
             // grab body data to update
@@ -66,23 +61,25 @@ exports.handler = async (event, context) => {
             await cnx.end();
             
             // verify results
-            if (query_response.length < 1) {
+            if (query_response.affectedRows < 1) {
                 return notFoundResponse(response);
             } else { // return requested info from successful query
                 console.debug('Feedback from database: ', query_response);
-                response.body = bundleData;
-                response.message = 'Created update for keybundle.';
+                let get_updated_keybundle = "SELECT * FROM keybundle WHERE keybundle_id=?;";
+                query_data = [ bundleData.keybundle_id ];
+                response = await cnx.query(get_updated_keybundle, query_data);
+                await cnx.end();
                 console.info('FINAL RESPONSE: ', response);
+                return response[0];
             }
         }
     } catch (e) {
         response = serverErrorResponse(response);
         console.warn('\n\nEXCEPTION: \n', e, '\n');
-        response.message = { 'Server Error ERROR_MSG': e.message };
+        response.message = { 'ERROR_MSG': 'Server Error :: ' + e.message };
         return response;
     }
     
-    return response;
 };
 
 // date.addDays(n) function will add n days to the Date being called
@@ -104,21 +101,18 @@ const toSqlDatetime = (inputDate) => {
 function notFoundResponse(response) {
     console.trace();
     console.debug('Queried not found + got: ', response);
-    response.statusCode = 404,
     response.message = "Not Found !"
     return response;
 }
 
 function serverErrorResponse(response) {
     console.error('500 error returned');
-    response.statusCode = 500,
     response.message = "Server Error !";
     return response;
 }
 
 function badRequestResponse(response) {
     console.debug('400 status returned: bad input.');
-    response.statusCode = 400;
     response.message = "Bad Request !"
     return response;
 }
