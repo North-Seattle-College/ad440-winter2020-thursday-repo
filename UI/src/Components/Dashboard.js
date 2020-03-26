@@ -96,6 +96,7 @@ export default class Dashbord extends React.Component {
    */
   render() {
     return(
+      <h1>Key Checkout</h1>
       <div className='Dashbord'>
         <div className='SearchForm'>
           <form onSubmit={this.handleSearch} >
