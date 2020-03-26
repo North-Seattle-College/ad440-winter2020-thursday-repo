@@ -30,8 +30,7 @@ def main():
       #set integration with lambda function
 
       SetIntegrationType(client, api_id, resource_id, method, integration_type, lambda_func, requestTemplates)
-  #TODO get methods 
-  #TODO set Integration
+
   
 def GetAPIId():
   api_id = input('Enter API Gateway ID (press enter for default): ')

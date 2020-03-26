@@ -93,6 +93,25 @@ else:
 
 stg_vars_updated = {}
 
+if stg_vars_get[0].lower() != 'all':
+  for var in stg_vars_get:
+    methodName = ''
+    if var.isnumeric():
+      methodNum = int(var) - 1
+      methodName = stg_var_name_lst[methodNum]
+    elif '_' in var:
+      var = var.lower()
+      methodName = var.split('_')
+      methodName = var.replace(methodName[-1], methodName[-1].upper())
+      if methodName not in stg_var_name_lst:
+        logger.inputError('Method name you enter is not a known method')
+        os.abort()
+    else:
+      logger.inputError('Cannot identify the method number/name')
+    
+    lambdaName = stg_name + '-api-' + methodName.lower().replace('_','-')
+    lambdaName = lambdaName.replace('_','-')
+    lambdaName = lambdaName.replace('-id', '_id')
 
 for pair in stg_vars_get:
   methodName = ''
@@ -120,7 +139,8 @@ for pair in stg_vars_get:
   lambdaName = lambdaName.replace('_','-')
   lambdaName = lambdaName.replace('-id', '_id')
 
-  stg_vars_updated[methodName] = lambdaName
+
+      stg_vars_updated[methodName] = lambdaName
 
 for sv, ln in stg_vars_updated.items():
   logger.generatedDebug('Stage Variables', sv)
