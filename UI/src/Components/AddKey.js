@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-// import FormAddKey from "./FormAddKey";
-// import AddProperty from "./AddProperty";
+import { default as apiurlbase } from "../apiurlbase";
+import "./AddKey.css";
 
 /**
  * Component to create keys
@@ -13,17 +13,56 @@ import React, { useState } from "react";
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default function AddKey() {
+  const createKey = (
+    keybundleId, // WTF API?
+    keybundleStatusId,
+    propertyId,
+    keyholderId = 1, // assume in office whan not overridden
+    keybundleCheckoutDate = null,
+    keybundleDueDate = null
+  ) => {
+    let strUrl = "https://api.2edusite.com/dev/keybundle/1";
+    let strData = JSON.stringify({
+      keybundle_id: keybundleId,
+      keybundle_status_id: keybundleStatusId,
+      property_id: propertyId,
+      keyholder_id: keyholderId,
+      keybundle_checkout_date: keybundleCheckoutDate,
+      keybundle_due_date: keybundleDueDate
+    });
+    let formData = new FormData();
+    formData.append("json", strData);
+    let fetchInit = {
+      method: "POST",
+      body: formData
+    };
+
+    fetch(strUrl, fetchInit)
+      .then(res => res.json())
+      .then(data => {
+        console.log("POST success: ", data);
+      })
+      .catch(error => {
+        console.error("POST failed: ", error);
+      });
+  };
+
   // event handlers
   const handleSubmit = event => {
     event.preventDefault();
-    //ToDo: implement API call
+    createKey(
+      keybundleId,
+      keybundleStatusId,
+      keybundlePropertyId,
+      keybundleKeyholderId
+    );
   };
   const handleCancel = event => {
     //ToDo: implement cancellation
   };
   // form data states
   const [keybundleId, setKeybundleId] = useState(null);
-  const [keybundleStatus, setKeybundleStatus] = useState(null);
+  const [keybundleStatusId, setKeybundleStatusId] = useState(null);
   const [keybundlePropertyId, setKeybundlePropertyId] = useState(null);
   const [keybundleKeyholderId, setKeybundleKeyholderId] = useState(null);
 
@@ -44,8 +83,8 @@ export default function AddKey() {
           Status:
           <input
             type="number"
-            value={keybundleStatus}
-            onChange={event => setKeybundleStatus(event.target.value)}
+            value={keybundleStatusId}
+            onChange={event => setKeybundleStatusId(event.target.value)}
           />
         </label>
         <br />

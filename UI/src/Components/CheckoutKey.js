@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {default as apiurlbase} from '../apiurlbase'
+import {default as apiurlbase} from '../apiurlbase';
+import './CheckoutKey.css';
 
 /**
  * Provides component that will render a form and (eventually) provide
@@ -17,12 +18,22 @@ import {default as apiurlbase} from '../apiurlbase'
  * @author Quincy Powell <Quincy.Powell@gmail.com>
  */
 export default function CheckoutKey ({
+  allKeys = [],
   propKeybundleId = null,
   propKeybundleStatusId = null,
   propKeyholderId = null,
-  propDueBackDate = new Date().toISOString().substr(0,10),
-}) 
+  propDueBackDate = new Date().toISOString().substr(0,10), })
+ 
 {
+  if (allKeys.length > 0 && propKeybundleId !== null) {
+    let matchingKey = allKeys.find(({keyholder_id}) => {
+      return propKeybundleId === keyholder_id;
+    })
+    if (matchingKey) {
+      propKeybundleStatusId = matchingKey.keybundle_status_id;
+    }
+  }
+  
   /**
    * Generate a PUT request to our API to checkout a key
    * @param keyholderId - the keyholder ID
@@ -30,21 +41,29 @@ export default function CheckoutKey ({
    * @param keybundleStatus - the keybundle status ID
    * @param dueBackDate - the date the key is expected back. Use ISO 8601
    */
-  const checkoutKey = (keyholderId, keybundleStatusId, keybundleId, checkoutDate, dueBackDate) => {
-    let strURL = apiurlbase + 'keybundle/' + String(keybundleId);
-    let strBody = JSON.stringify({
+  const checkoutKey = (
+    keyholderId,
+    keybundleStatusId,
+    keybundleId,
+    checkoutDate,
+    dueBackDate
+  ) => {
+    let strUrl = apiurlbase + 'keybundle/' + String(keybundleId);
+    let strData = JSON.stringify({
       'keyholder_id': keyholderId,
       'keybundle_status_id': keybundleStatusId,
       'keybundle_id': keybundleId,
       'keybundle_checkout_date': checkoutDate,
       'keybundle_due_date': dueBackDate
     });
+    let formData = new FormData();
+    formData.append('json', strData);
     let fetchInit = {
       method: 'PUT',
-      body: strBody,
+      body: formData,
     };
 
-    fetch(strURL, fetchInit)
+    fetch(strUrl, fetchInit)
       .then(res => res.json())
       .then(data => {console.log('PUT success: ', data)})
       .catch(error => {console.error('PUT failed: ', error)});

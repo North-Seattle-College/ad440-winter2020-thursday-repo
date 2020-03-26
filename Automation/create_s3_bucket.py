@@ -19,7 +19,7 @@ parser.add_argument("filename", help="s3 filename")
 # read argument from the command line
 args = parser.parse_args()
 
-# name to assign to the s3 function
+# name to assign to the s3 bucket
 bucketname = args.filename
 
 #website_configuration
@@ -40,7 +40,7 @@ policy = {
     ]
 }
 
-# requires Lamba name to follow the correct pattern
+# requires bucket name to follow the correct pattern
 feature_exp = re.compile(r"feature-sprint[1-9]{1,}-[a-zA-Z]{1,}$")
 devProd_exp = re.compile(r"dev|prod-s3-[a-zA-Z]{1,}-[a-zA-Z]{1,}$")
 
@@ -49,7 +49,8 @@ if feature_exp.match(bucketname) or devProd_exp.match(bucketname):
 	#iam_role = create_iam_role.get_role_arn(bucketname)
 
 	try:
-		bucket = s3.Bucket(bucketname)
+		s3_ = boto3.resource('s3')
+		bucket = s3_.Bucket(bucketname)
 
 		if bucket.creation_date:
 			print('already exist')
