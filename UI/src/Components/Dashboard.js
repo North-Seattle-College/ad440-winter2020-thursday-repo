@@ -95,10 +95,9 @@ export default class Dashbord extends React.Component {
    * Render method required for React
    */
   render() {
-    return(
-     <react.fragment>
-      <h1>Key Checkout</h1>
+    return(  
       <div className='Dashbord'>
+        <h1>Key Checkout</h1>
         <div className='SearchForm'>
           <form onSubmit={this.handleSearch} >
             <input type='submit' value='Search:' />
@@ -127,7 +126,6 @@ export default class Dashbord extends React.Component {
           </table>
         </div>
       </div>
-     </react.fragment>
     );
   }
 }
