@@ -96,6 +96,7 @@ export default class Dashbord extends React.Component {
    */
   render() {
     return(
+     <react.fragment>
       <h1>Key Checkout</h1>
       <div className='Dashbord'>
         <div className='SearchForm'>
@@ -126,6 +127,7 @@ export default class Dashbord extends React.Component {
           </table>
         </div>
       </div>
+     </react.fragment>
     );
   }
 }
