@@ -14,9 +14,9 @@ Deploy to stage in aws console. You may also want to check stage settings like t
 # Rebuild API
 - import swagger form [apiteam swagger](https://app.swaggerhub.com/apis/UnTamedLaw/keymanagement/4.0?loggedInWithGitHub=true)
 
-- run intergration_type_set_stgVar.py (yes misspelled)
+- don't run intergration_type_set_stgVar.py (yes misspelled)
 
-  This will set all methods to lambda integration (not lambda proxy integration) and update the integration request mapping.
+  This will set all methods to lambda integration (not lambda proxy integration) and update the integration request mapping. But for some reason it will delete all response status codes for all methods. Only run if it is fixed, and/or you need to add stage variables in bulk for new methods. (Then use export swagger to get around the issue.)
 
 - run lambda_stage_variable_enable_apiGateway.py for all existing stages.
 
