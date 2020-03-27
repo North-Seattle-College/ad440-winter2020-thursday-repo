@@ -10,33 +10,12 @@ const cnx = require('serverless-mysql')({
         database : process.env.RDS_DATABASE
     }
 });
-const jwt = require('jsonwebtoken');
 
 exports.handler = async (event, context, callback) => {
     try {
         let response = {
             property_id: null
         };
-        let headers = event.headers;
-        console.info('headers: ', headers);
-        
-        // middleware auth TODO: connect & move
-        if (event) {
-            const poolOk = 'cognito_userpool_admin';
-            let token = headers.Authorization;
-            // let idPool = context.identity.cognitoIdentityPoolId;
-            console.info('received token: ', token);
-            // console.info('identity pool: ', idPool);
-            // get the decoded payload and header ignoring signature, no secretOrPrivateKey needed
-            let decoded = jwt.decode(token, {complete: true});
-            if (decoded) {
-                console.info('decoded header: ', decoded.header);
-                console.info('decoded payload: ', decoded.payload);
-                response['headers'] = { 'Authorization': decoded };
-            } else { 
-                response['headers'] = { 'Authorization': token }; 
-            }
-        }
         let pid = event.params.property_id;
         // check methods and params or get error status code returned
         if (event.method != 'GET') {
