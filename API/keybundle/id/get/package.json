@@ -1,18 +1,14 @@
 {
-  "name": "api-management",
+  "name": "feature-sprint5-api-keybundle_id-get",
   "version": "1.0.0",
-  "description": "API for managing keybundles",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "API team",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "jsonwebtoken": "^8.5.1",
-    "serverless-mysql": "^1.5.3",
-    "mysql": "^2.18.1",
-    "express": "^4.17.1"
+    "serverless-mysql": "^1.5.3"
   }
 }
