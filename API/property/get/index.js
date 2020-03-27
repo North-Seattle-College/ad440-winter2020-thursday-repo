@@ -32,14 +32,14 @@ exports.handler = (event, context, callback) => {
     var query = "SELECT count(*) as numRows FROM property";
     var numRows;
 
-    console.trace("connecting to the database to get the number of rows")
+    console.trace("Connecting to the database to get the number of rows");
     connection.query(query, (err, res) => {
     if (err){
         console.error("Database Error");
         return context.fail("Server Error" + err);
     }else{
         numRows = res[0].numRows;
-        console.trace("Number of Rows: " + numRows)
+        console.trace("Number of Rows: " + numRows);
         
         // set default value for record per page to number of rows in property table
         // set default skip value to be zero
@@ -60,7 +60,8 @@ exports.handler = (event, context, callback) => {
             return context.fail("Server Error " + err);
         }
         else{
-            console.log("Property Added!" + result);
+            console.info("Success" );
+            console.info(result);
             connection.end();
             callback(null, result);
         }
