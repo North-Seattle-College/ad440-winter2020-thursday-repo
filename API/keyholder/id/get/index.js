@@ -1,4 +1,3 @@
-
 const mysql = require('mysql');
 console.info("get request  keyholder by id ");
 //connection credential for mySQl RDS db
