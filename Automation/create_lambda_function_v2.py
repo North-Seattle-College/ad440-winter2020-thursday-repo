@@ -29,11 +29,11 @@ def main():
   
   enviromentalVariables = {
     'Variables': {
-      'RDS_DATABASE': 'keymanagement',
+      'RDS_DATABASE': '',
       'RDS_HOSTNAME': '',
       'RDS_PASSWORD': '',
-      'RDS_PORT': '3306',
-      'RDS_USERNAME': 'anuslorah'
+      'RDS_PORT': '',
+      'RDS_USERNAME': ''
     }
   }
 
