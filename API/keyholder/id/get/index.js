@@ -1,3 +1,4 @@
+
 const mysql = require('mysql');
 console.info("get request  keyholder by id ");
 //connection credential for mySQl RDS db
@@ -61,4 +62,5 @@ exports.handler = (event, context, callback) => {
        console.info("result sent to url");
     })
  
+
 };
