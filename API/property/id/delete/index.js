@@ -9,7 +9,7 @@ const mysql = require('serverless-mysql')({
 });
 
 exports.handler = async(event, context) => {
-    console.trace("DELETE property by property id -- function starting --")
+    console.trace("DELETE property by property id -- function starting --");
     if (isNumeric(event.params.property_id)) {
         
         
@@ -40,34 +40,11 @@ exports.handler = async(event, context) => {
             return context.fail("Server Error " + error);
         }
         
-        
-        // try {
-        //     var delete_property_response = await mysql.query(delete_property_query);
-        //     console.debug("SQL server returned " + delete_property_response);
-        //     if (delete_property_response.affectedRows == 1) {
-        //         var delete_keybundles_query = "DELETE FROM keybundle WHERE property_id=" + event.params.property_id.toString();
-        //         try {
-        //             var delete_keybundles_response = await mysql.query(delete_keybundles_query);
-        //             console.debug("SQL server returned " + delete_property_response);
-        //             console.trace("Returned 200: deleted property and associated keybundles");
-        //             return context.succeed("Default property_id" + event.params.property_id + " deleted and " + delete_keybundles.response.affectedRows + " keybundles deleted");
-        //         } catch (error) {
-        //             console.trace('Returned 500 Server Error: Failed to delete associated keybundles ' + error);
-        //             return context.fail("Server Error " + error);
-        //         }
-        //     } else {
-        //         console.trace("Returned 404 Not Found");
-        //         return context.fail("Not Found ");
-        //     }
-        // } catch (error) {
-        //     console.trace('Returned 500 Server Error: Failed to delete property ' + error);
-        //     return context.fail("Server Error " + error);
-        // }
     } else {
         console.trace('Returned 400 Bad Request');
         return context.fail("Bad Request ");
     }
-}
+};
 
 function isNumeric(value) {
         return /^\d+$/.test(value);
