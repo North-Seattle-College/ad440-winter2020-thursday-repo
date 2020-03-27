@@ -83,6 +83,7 @@ export default class Dashbord extends React.Component {
     }
     return(
       <div className='Dashbord'>
+        <h1>Enter Search Text</h1>
         <div className='SearchForm'>
           <form onSubmit={this.handleSearch} >
             <input type='submit' value='Search:' />
