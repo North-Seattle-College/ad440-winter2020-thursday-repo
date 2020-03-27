@@ -30,8 +30,8 @@ def main():
   enviromentalVariables = {
     'Variables': {
       'RDS_DATABASE': 'keymanagement',
-      'RDS_HOSTNAME': 'feature-sprint1-db-anuslorah.cdoppv3cxrqp.us-west-2.rds.amazonaws.com',
-      'RDS_PASSWORD': 'h78dff45lOEby',
+      'RDS_HOSTNAME': '',
+      'RDS_PASSWORD': '',
       'RDS_PORT': '3306',
       'RDS_USERNAME': 'anuslorah'
     }
