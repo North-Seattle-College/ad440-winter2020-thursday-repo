@@ -26,13 +26,12 @@ console.trace("Get All Property-- function starting --");
 exports.handler = (event, context, callback) => {
     
     var connection = mysql_connection();
-    console.trace("Successfully connected to the database");
-
+    console.trace("mySql Connection Attempt");
     //Query to know number of rows in the property database
     var query = "SELECT count(*) as numRows FROM property";
     var numRows;
 
-    console.trace("Connecting to the database to get the number of rows");
+    console.trace("Attempting to connect to the database to get the number of rows");
     connection.query(query, (err, res) => {
     if (err){
         console.error("Database Error");
