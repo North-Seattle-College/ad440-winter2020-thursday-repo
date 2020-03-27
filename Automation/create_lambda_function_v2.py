@@ -26,6 +26,16 @@ def main():
                       'property_id_keybundle_GET',
                       'property_id_keybundle_POST'
                       ]
+  
+  enviromentalVariables = {
+    'Variables': {
+      'RDS_DATABASE': 'keymanagement',
+      'RDS_HOSTNAME': 'feature-sprint1-db-anuslorah.cdoppv3cxrqp.us-west-2.rds.amazonaws.com',
+      'RDS_PASSWORD': 'h78dff45lOEby',
+      'RDS_PORT': '3306',
+      'RDS_USERNAME': 'anuslorah'
+    }
+  }
 
   # read argument from the command line
   print(text)
@@ -38,7 +48,7 @@ def main():
 
   print('Lambda Functions to be created', *lambda_lst)
 
-  # iam_role to a pre-existing IAM role "Lambda_Role
+  # iam_role to a pre-existing IAM role "Lambda_Role"
   iam_role = 'arn:aws:iam::061431082068:role/Lambda_Role'
 
   lambda_client = boto3.client('lambda')
@@ -61,6 +71,7 @@ def main():
           Timeout=15,
           VpcConfig={
           },
+          Environment  = enviromentalVariables
       )
       print(response)
     
