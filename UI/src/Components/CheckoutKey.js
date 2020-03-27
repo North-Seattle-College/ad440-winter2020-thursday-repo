@@ -97,8 +97,7 @@ export default function CheckoutKey ({
   const [dueBackDate, setDueBackDate] = useState(propDueBackDate);
   const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
 
-  const togglePersonModalOpen = (e) => {
-    e.preventDefault();
+  const togglePersonModalOpen = () => {
     setIsPersonModalOpen(!isPersonModalOpen);
   }
 

@@ -44,9 +44,8 @@ export default function AddProperty () {
     let fetchInit = {
       method: 'POST',
       body: data,
-      headers: {'content-type': 'application/json'}
+      headers: {'Content-Type': 'application/json'}
     };
-    debugger;
     fetch(strUrl, fetchInit)
       .then(res => res.json())
       .then(data => {console.log('POST result: ', data)})

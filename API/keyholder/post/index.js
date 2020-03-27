@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-
+console.info("Post keyholder strted");
 // connection credential for mySQl RDS db
 const connection = mysql.createConnection({
   host     : process.env.RDS_HOSTNAME,
@@ -14,19 +14,21 @@ exports.handler = (event, context, callback) => {
   
   // allows for using callbacks as finish/error-handlers
   context.callbackWaitsForEmptyEventLoop = false;
-  
+  console.trace("varaible for json body intialized")
   var first_name=event.body.first_name;
   var last_name=event.body.last_name;
   var email=event.body.email;
   var phone=event.body.phone;
-  var keyholder_type=event.body.keyholder_type;
- 
+  var keyholder_type_id=event.body.keyholder_type_id;
+  
+  console.trace("Query params list created")
+
   var queryParams = [
     first_name,
     last_name,
     email,
     phone,
-    keyholder_type
+    keyholder_type_id
   ]; 
   
   var error = new Error("wrong datatype inside json");
@@ -36,10 +38,9 @@ exports.handler = (event, context, callback) => {
   if(typeof first_name != 'string' || 
      typeof last_name !='string'   || 
      typeof email != 'string'     ||
-     typeof phone != 'string'     ||
-     typeof keyholder_type != 'string'){
-     
-    context.fail(error);
+     typeof phone != 'string'       ){
+    console.error(error);
+    context.fail("Bad Request " + error);
 
 
  // SQL query to insert into keyholder table
@@ -47,14 +48,13 @@ exports.handler = (event, context, callback) => {
  
  }else{
     var query = "INSERT INTO keyholder (first_name, last_name, email, phone, keyholder_type_id)" + 
-               "VALUES ( ?,?,?,?, (SELECT keyholder_type_id FROM keyholdertype WHERE keyholder_type = ? )  );"
+               "VALUES ( ?,?,?,?, (SELECT keyholder_type_id FROM keyholdertype WHERE keyholder_type_id = ? )  );"
   
     connection.query(query,queryParams, (err, res) => {
       if (err) {
-        throw err
+        context.fail("Server Error " + error);
       }
-      callback(null,res);
+      callback(null,"Inserted keyholder_id: "+res.insertId);
     })
  }
-//
  };

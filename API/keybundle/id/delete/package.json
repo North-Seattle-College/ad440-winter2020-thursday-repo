@@ -1,18 +1,15 @@
 {
-  "name": "api-management",
+  "name": "api-keybundle_id-put",
   "version": "1.0.0",
-  "description": "API for managing keybundles",
+  "description": "lambda function for checkout keybundle by id",
   "main": "index.js",
+  "dependencies": {
+    "serverless-mysql": "^1.5.3"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "API team",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "jsonwebtoken": "^8.5.1",
-    "serverless-mysql": "^1.5.3",
-    "mysql": "^2.18.1",
-    "express": "^4.17.1"
-  }
+  "author": "d",
+  "license": "ISC"
 }
