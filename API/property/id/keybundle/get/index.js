@@ -55,7 +55,7 @@ exports.handler = async (event, context, callback) => {
                 return context.fail(response);
             } else { // return requested info from successful query
                 console.log('FINAL RESPONSE: ', response);
-                return context.succeed(response[0]);
+                return context.succeed(response);
             }
         }
         
