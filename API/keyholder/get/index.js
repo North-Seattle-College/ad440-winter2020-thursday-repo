@@ -20,7 +20,8 @@ exports.handler = (event, context, callback) => {
   connection.query('SELECT count(*) as numRows FROM keyholder;', (err, res) => {
     if (err) {
       console.error("problem with database ")
-      throw err
+      return context.fail(" Server Error" + err);
+
       
     }
     console.trace("connected to database")
@@ -47,7 +48,7 @@ exports.handler = (event, context, callback) => {
     connection.query(query, (err, res) => {   
       if (err) {
         console.error("problem with database ")
-        throw err
+        return context.fail(" Server Error" + err);
       }
       console.trace("connected to database")
       callback(null,res);
