@@ -1,15 +1,19 @@
 {
-  "name": "api-management",
+  "name": "postkeyholder",
   "version": "1.0.0",
-  "description": "API for managing keybundles",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "API team",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "serverless-mysql": "^1.5.3"
+
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+
   }
 }
