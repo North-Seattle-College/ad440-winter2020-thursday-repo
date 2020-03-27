@@ -5,62 +5,14 @@ node_js:
 - node
 jobs:
   include:
-  - name: deploy_s3_dev
+  - name: deploy_dev_prod_lambdas
+    if: branch IN (master, development)
     before_install:
-    - cd UI/												#repo location
-    script:															#terminal commands to run npm
-    - npm run build 												#build build file 
-    deploy:
-      skip_cleanup: true											#dont remove build files
-      provider: s3													#Login to aws with credentials
-      access_key_id: "$AWS_ACCESS_KEY2_ID"
-      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: www-dev.2edusite.com									#denotes bucket name to deploy to
-      acl: bucket_owner_full_control
-      region: us-west-2
-      local_dir: build												#deploy only build directory
-      on:
-        repo: North-Seattle-College/ad440-winter2020-thursday-repo	#start deployment branch anytime a pull or push
-        branch: development
-  - name: deploy_s3_prod
-    before_install:
-    - cd UI											
-    script:															
-    - npm run build 												
-    deploy:
-      skip_cleanup: true											
-      provider: s3													
-      access_key_id: "$AWS_ACCESS_KEY2_ID"
-      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: www.2edusite.com							
-      acl: bucket_owner_full_control
-      region: us-west-2
-      local_dir: build												
-      on:
-        repo: North-Seattle-College/ad440-winter2020-thursday-repo	
-        branch: master       
-  - name: deploy_s3_feature
-    before_install:						
-    - pip install --upgrade --user pip
-    - pip install --user boto3
-    - cd UI
-    script:															
-    - npm run build 	
-    - ./../Automation/create_s3_bucket.py $TRAVIS_BRANCH
-    deploy:
-      skip_cleanup: true											
-      provider: s3													
-      access_key_id: "$AWS_ACCESS_KEY2_ID"
-      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: $TRAVIS_BRANCH								
-      acl: bucket_owner_full_control
-      region: us-west-2
-      local_dir: build												
-      on:
-        repo: North-Seattle-College/ad440-winter2020-thursday-repo
-        all_branches: true
-  - name: deploy_lambdas
-    if: branch =~ /^feature-sprint[0-9]-(anu|dereje|deya|kevin|sojung|yamato)/
+      - pip install boto3 --user
+      - pip install pynpm --user
+    script: ./Automation/TravisScripts/deployLambdas.py
+  - name: deploy_feature-lambdas
+    if: branch =~ /^feature-sprint[0-9]-api/
     before_install:
     - PATH_TO_LAMBDA=$(./Automation/TravisScripts/setPathToLambda.sh)
     - cd $PATH_TO_LAMBDA
@@ -79,7 +31,8 @@ jobs:
     branches:
       only:
       - $TRAVIS_BRANCH
-  - name: deploy_s3
+  - name: deploy_prod_s3
+    if: branch = master
     before_install:
     - "./Automation/TravisScripts/build_env.sh"
     - cd UI/
@@ -90,13 +43,35 @@ jobs:
       provider: s3
       access_key_id: "$AWS_ACCESS_KEY2_ID"
       secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
-      bucket: feature-sprint2-mattyplo
+      bucket: www.2edusite.com
       acl: bucket_owner_full_control
       region: us-west-2
       local_dir: build
       on:
         repo: North-Seattle-College/ad440-winter2020-thursday-repo
-        branch: feature-sprint3-mattyplo
+        branch: $TRAVIS_BRANCH
     branches:
       only:
-      - feature-sprint3-mattyplo
+      - $TRAVIS_BRANCH
+  - name: deploy_dev_s3
+    if: branch = development
+    before_install:
+    - "./Automation/TravisScripts/build_env.sh"
+    - cd UI/
+    script:
+    - npm run build
+    deploy:
+      skip_cleanup: true
+      provider: s3
+      access_key_id: "$AWS_ACCESS_KEY2_ID"
+      secret_access_key: "$AWS_SECRET_ACCESS_KEY2"
+      bucket: www-dev.2edusite.com
+      acl: bucket_owner_full_control
+      region: us-west-2
+      local_dir: build
+      on:
+        repo: North-Seattle-College/ad440-winter2020-thursday-repo
+        branch: $TRAVIS_BRANCH
+    branches:
+      only:
+      - $TRAVIS_BRANCH
