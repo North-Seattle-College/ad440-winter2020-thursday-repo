@@ -1,0 +1,40 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  border-style: solid;
+  border-width: 2px;
+  margin-left: 12px;
+  margin-right: 12px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  justify-content: center;
+}
+
+.flex-react-logo {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-right: 8px;
+}
+
+.flex-license {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 8px;
+  padding-right: 4px;
+}
+
+.react-logo {
+  height: 50px;
+  width: 50px;
+}
